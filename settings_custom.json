@@ -1,0 +1,57 @@
+[
+    {
+        "type": "string",
+        "title": "Serial Port",
+        "desc": "Set the serial port on which a device is connected",
+        "section": "serial",
+        "key": "port"
+    },
+    {
+        "type": "options",
+        "title": "Device",
+        "desc": "Device",
+        "section": "serial",
+        "options": ["TecpelDMM8061", "KernPCB", "XLS200"],
+        "key": "device"
+    },
+    {
+        "type": "title",
+        "title": "Multibox-Settings"
+    },
+    {
+        "type": "options",
+        "title": "Subdevice 1",
+        "desc": "Only applicable when a multibox-device like the XLS200 is used.",
+        "section": "serial",
+        "options": ["None", "TecpelDMM8061", "KernPCB"],
+        "key": "subdevice1"
+    },
+    {
+        "type": "options",
+        "title": "Subdevice 2",
+        "desc": "Only applicable when a multibox-device like the XLS200 is used.",
+        "section": "serial",
+        "options": ["None", "TecpelDMM8061", "KernPCB"],
+        "key": "subdevice2"
+    },
+    {
+        "type": "options",
+        "title": "Subdevice 3",
+        "desc": "Only applicable when a multibox-device like the XLS200 is used.",
+        "section": "serial",
+        "options": ["None", "TecpelDMM8061", "KernPCB"],
+        "key": "subdevice3"
+    },
+        {
+        "type": "title",
+        "title": "KernPCB-Settings"
+    },
+        {
+        "type": "options",
+        "title": "Type of Value",
+        "desc": "Does not work, when behind a multibox-device. (If behind a multibox-device unstable is used)",
+        "section": "serial",
+        "options": ["stable", "unstable"],
+        "key": "kernPcbTypeOfValue"
+    }
+]

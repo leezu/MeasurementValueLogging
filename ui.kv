@@ -1,0 +1,40 @@
+<MesswertScreen>:
+    lbl: lbl
+    tgl_btn: tgl_btn
+
+    FloatLayout:
+        size: root.width, root.height
+
+        Label:
+            id: lbl
+
+            size_hint: (0.5, 0.2)
+            pos_hint: {'x': 0.25, 'y':0.5}
+
+            text: root.value
+            font_size: 50
+
+        BoxLayout:
+            size_hint: (1,0.1)
+            pos_hint: {'x':0, 'y':0}
+
+            ToggleButton:
+                id: tgl_btn
+
+                text: "Start" if self.state is "normal" else "Stop"
+                on_press: root.startStop()
+
+            Button:
+                text: "Settings"
+                on_press:
+                    from kivy.uix.popup import Popup
+                    from kivy.uix.label import Label
+                    if tgl_btn.state == "down": Popup(title='Warning', content=Label(text="Stop the measurement to open the settings screen!"), size_hint=(None, None), size=(400,100),).open()
+                    else: root.manager.transition.direction = "left"; root.manager.current = "settings"
+
+<SettingsScreen>:
+    settings: settings
+
+    Settings:
+        id: settings
+        on_close: root.manager.transition.direction = "right"; root.manager.current = "main"
