@@ -545,12 +545,12 @@ class KernPCB(Device):
         string = None
 
         def getDisplayedValue(self):
-            if 'Error' in self._value:
+            if 'Error' in self.string:
                 return "ERROR"
             else:
-                v = float(self._value[2:12])
+                v = float(self.string[2:12])
 
-                if self._value[1] is "-":
+                if self.string[1] is "-":
                     v *= -1
 
                 return str(v)
