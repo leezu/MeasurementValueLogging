@@ -74,10 +74,12 @@ class Device(object):
 
     def isAvailable(self):
         """Returns the device status (available or not)"""
+
         return self._ser.isOpen()
 
     def getRawValue(self):
         """Return a Value object."""
+
         raise NotImplementedError
     
     def getString(self, starttime):
@@ -86,6 +88,7 @@ class Device(object):
         This can be very useful for command line output
 
         """
+
         raise NotImplementedError
 
 class MultiboxDevice(Device):
@@ -118,14 +121,17 @@ class Value(object):
 
     Device classes must implement their own value subclass with at least the
     methods defined in this base class.
+
     """
 
     def getDisplayedValue(self):
         """Returns the displayed value (as a number)"""
+
         raise NotImplementedError
 
     def getUnit(self):
         """returns the unit (e.g. "g" (gram) or "V" (volt))"""
+
         raise NotImplementedError
 
     def getFactor(self):
@@ -134,6 +140,7 @@ class Value(object):
         For example 10^(-3) for the milli prefix.
 
         """
+
         raise NotImplementedError
 
 
@@ -153,6 +160,7 @@ class TecpelDMM8061(Device):
     class __Value(Value):
         class __Digit:
             """Represents one digit on the screen"""
+
             a = 0
             b = 0
             c = 0
@@ -166,7 +174,9 @@ class TecpelDMM8061(Device):
                 """Returns a decimal digit.
 
                 If there is no correct digit stored (e.g. overload), 0 is returned
+
                 """
+
                 if (self.a and self.b and self.c and self.d and self.e and self.f and self.g):
                     return 8
                 elif (self.a and self.b and self.c and self.d and self.e and self.f):
@@ -303,6 +313,7 @@ class TecpelDMM8061(Device):
 
     def _testBit(self, b, number):
         """Return the numberED bit in b"""
+
         if (b & (1 << number)) > 0:
             return 1
         elif (b & (1 << number)) == 0:
@@ -540,6 +551,25 @@ class XLS200(MultiboxDevice):
 class KernPCB(Device):
     _baudrate = 9600
     _timeout = 1
+    _typeOfValue = "unstable"
+
+
+    def __init__(self, ser, typeOfValue="unstable"):
+        super(KernPCB, self).__init__(ser)
+
+        if typeOfValue in ["stable", "unstable"]:
+            self._typeOfValue = typeOfValue
+        else:
+            raise Exception("Invalid typeOfValue")
+
+    @classmethod
+    def openRS232(cls, port, typeOfValue="unstable"):
+        import serial
+
+        ser = serial.Serial()
+        ser.port = port
+        
+        return cls(ser, typeOfValue)
 
     class __Value(Value):
         string = None
@@ -569,12 +599,12 @@ class KernPCB(Device):
             elif type == "prefix":
                 return ""
 
-    def getRawValue(self, typeOfValue="stable"):
+    def getRawValue(self):
         assert self.isAvailable()
 
         result = self.__Value()
 
-        if typeOfValue is "stable":
+        if self._typeOfValue == "stable":
             while True:
                 self._ser.write("s")
                 s = self._ser.read(size = 18)
@@ -587,7 +617,7 @@ class KernPCB(Device):
                 except IndexError:
                     pass
 
-        elif typeOfValue is "unstable":
+        elif self._typeOfValue == "unstable":
             while True:
                 self._ser.write("w")
                 s = self._ser.read(size = 18)
@@ -601,21 +631,18 @@ class KernPCB(Device):
                     pass
 
     def setTara(self):
+        """Set taring.
+
+        For more information see device manual.
+
+        """
+
         assert self.isAvailable()
 
-        # Set taring
         return self._ser.write("t") # Should be 1 if write succeeds
 
-    def getString(self, starttime, typeOfValue="stable"):
+    def getString(self, starttime):
         import time
 
-        if typeOfValue is "stable":
-            return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue(typeOfValue="stable").string[:16])
-            # dont print the CR and LF at the end of the string (this would result in an unwanted newline in output)
-
-        elif typeOfValue is "unstable":
-            return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue(typeOfValue="unstable").string[:16])
-            # dont print the CR and LF at the end of the string (this would result in an unwanted newline in output)
-
-        else:
-            raise Exception("typeOfValue has to be 'stable' or 'unstable'")
+        return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue().string[:16])
+        # dont print the CR and LF at the end of the string (this would result in an unwanted newline in output)
