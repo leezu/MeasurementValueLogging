@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class Device:
+class Device(object):
     """This class is the base device class.
 
     Subclasses must define at least the methods defined in this base class
@@ -113,7 +113,7 @@ class MultiboxDevice(Device):
         raise NotImplementedError
 
 
-class Value:
+class Value(object):
     """This class represents one measurement result.
 
     Device classes must implement their own value subclass with at least the
@@ -441,7 +441,7 @@ class XLS200(MultiboxDevice):
     _in3 = None
 
     def __init__(self, ser):
-        super().__init__(ser)
+        super(XLS200, self).__init__(ser)
 
         self._changeInput(input = 1)
 
