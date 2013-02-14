@@ -1,4 +1,4 @@
-<MesswertScreen>:
+<MesswertWidget>:
     lbl: lbl
     tgl_btn: tgl_btn
 
@@ -30,11 +30,4 @@
                     from kivy.uix.popup import Popup
                     from kivy.uix.label import Label
                     if tgl_btn.state == "down": Popup(title='Warning', content=Label(text="Stop the measurement to open the settings screen!"), size_hint=(None, None), size=(400,100),).open()
-                    else: root.manager.transition.direction = "left"; root.manager.current = "settings"
-
-<SettingsScreen>:
-    settings: settings
-
-    Settings:
-        id: settings
-        on_close: root.manager.transition.direction = "right"; root.manager.current = "main"
+                    else: app.open_settings()

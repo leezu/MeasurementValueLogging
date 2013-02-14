@@ -3,9 +3,6 @@
 import kivy
 from kivy.app import App
 from kivy.uix.widget import Widget
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
-from kivy.config import ConfigParser
-from kivy.uix.settings import Settings
 from kivy.properties import ObjectProperty
 
 import threading
@@ -14,11 +11,11 @@ from devices import TecpelDMM8061, XLS200, KernPCB
 
 
 class GetRawValueThread(threading.Thread):
-    def __init__(self, config, stop_event):
+    def __init__(self, stop_event):
         threading.Thread.__init__(self)
         self.daemon = True
         self.stop_event = stop_event
-        self.config = config
+        self.config = App.get_running_app().config
         self.device = None
         self.value = "Please wait"
 
@@ -77,12 +74,7 @@ class GetRawValueThread(threading.Thread):
         self.value = val[:-1]
 
 
-kivy.lang.Builder.load_file('ui.kv')
-
-config = ConfigParser()
-config.read('settings.ini')
-
-class MesswertScreen(Screen):
+class MesswertWidget(Widget):
     value_standard = "Press 'Start' to begin"
     value = kivy.properties.StringProperty(value_standard)
 
@@ -94,7 +86,7 @@ class MesswertScreen(Screen):
 
         if self.tgl_btn.state == "down":
             self.thread_stop = threading.Event()
-            self.thread = GetRawValueThread(config, self.thread_stop)
+            self.thread = GetRawValueThread(self.thread_stop)
             self.thread.start()
 
             Clock.schedule_once(self.updateValue)
@@ -111,21 +103,86 @@ class MesswertScreen(Screen):
         self.value = str(self.thread.value)
 
 
-class SettingsScreen(Screen):
-    pass
-
 class MesswertApp(App):
+    use_kivy_settings = False
+
+    def build_config(self, config):
+        config.setdefaults('serial', {
+            'port' : '/dev/ttyUSB0',
+            'device' : 'TecpelDMM8061',
+            'subdevice1' : 'None',
+            'subdevice2' : 'None',
+            'subdevice3' : 'None',
+            'kernpcbtypeofvalue' : 'unstable'
+            })
+
+    def build_settings(self, settings):
+        jsondata = """
+            [
+                {
+                    "type": "string",
+                    "title": "Serial Port",
+                    "desc": "Set the serial port on which a device is connected",
+                    "section": "serial",
+                    "key": "port"
+                },
+                {
+                    "type": "options",
+                    "title": "Device",
+                    "desc": "Device",
+                    "section": "serial",
+                    "options": ["TecpelDMM8061", "KernPCB", "XLS200"],
+                    "key": "device"
+                },
+                {
+                    "type": "title",
+                    "title": "Multibox-Settings"
+                },
+                {
+                    "type": "options",
+                    "title": "Subdevice 1",
+                    "desc": "Only applicable when a multibox-device like the XLS200 is used.",
+                    "section": "serial",
+                    "options": ["None", "TecpelDMM8061", "KernPCB"],
+                    "key": "subdevice1"
+                },
+                {
+                    "type": "options",
+                    "title": "Subdevice 2",
+                    "desc": "Only applicable when a multibox-device like the XLS200 is used.",
+                    "section": "serial",
+                    "options": ["None", "TecpelDMM8061", "KernPCB"],
+                    "key": "subdevice2"
+                },
+                {
+                    "type": "options",
+                    "title": "Subdevice 3",
+                    "desc": "Only applicable when a multibox-device like the XLS200 is used.",
+                    "section": "serial",
+                    "options": ["None", "TecpelDMM8061", "KernPCB"],
+                    "key": "subdevice3"
+                },
+                    {
+                    "type": "title",
+                    "title": "KernPCB-Settings"
+                },
+                    {
+                    "type": "options",
+                    "title": "Type of Value",
+                    "desc": "Does not work, when behind a multibox-device. (If behind a multibox-device unstable is used)",
+                    "section": "serial",
+                    "options": ["stable", "unstable"],
+                    "key": "kernPcbTypeOfValue"
+                }
+            ]
+
+        """
+
+        settings.add_json_panel('Serial Settings', self.config, data=jsondata)
+
+
     def build(self):
-        sm = ScreenManager(transition=SlideTransition())
-        
-        sm.add_widget(MesswertScreen(name='main'))
-        sm.add_widget(SettingsScreen(name='settings'))
-
-        sm.get_screen("settings").settings.add_json_panel('Serial Settings',
-            config, 'settings_custom.json')
-        sm.get_screen("settings").settings.add_kivy_panel()
-
-        return sm
+        return MesswertWidget()
 
 if __name__ == "__main__":
     MesswertApp().run()
