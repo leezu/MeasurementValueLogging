@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from devices import TecpelDMM8061, XLS200, KernPCB
+from devices.devices import TecpelDMM8061, XLS200, KernPCB
 
 def main():
     import argparse

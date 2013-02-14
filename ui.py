@@ -7,10 +7,10 @@ from kivy.properties import ObjectProperty
 
 import threading
 
-from devices import TecpelDMM8061, XLS200, KernPCB
+from devices.devices import TecpelDMM8061, XLS200, KernPCB
 
 
-class GetRawValueThread(threading.Thread):
+class GetValueThread(threading.Thread):
     def __init__(self, stop_event):
         threading.Thread.__init__(self)
         self.daemon = True
@@ -86,7 +86,7 @@ class MesswertWidget(Widget):
 
         if self.tgl_btn.state == "down":
             self.thread_stop = threading.Event()
-            self.thread = GetRawValueThread(self.thread_stop)
+            self.thread = GetValueThread(self.thread_stop)
             self.thread.start()
 
             Clock.schedule_once(self.updateValue)
