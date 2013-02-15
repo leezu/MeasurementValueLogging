@@ -221,7 +221,7 @@ class MesswertApp(App):
         """
 
         settings.add_json_panel('General Settings', self.config, data=general_settings)
-        settings.add_json_panel('Multibox Settings', self.config, data=xls200_settings)
+        settings.add_json_panel('XLS200 Settings', self.config, data=xls200_settings)
         settings.add_json_panel('KernPCB Settings', self.config, data=kernpcb_settings)
 
 
