@@ -31,20 +31,20 @@ class GetValueThread(threading.Thread):
             self.device = XLS200.openRS232(self.config.get("general", "port"))
 
             if self.config.get("xls200", "subdevice1") != "None":
-                self.device.openDevice(eval(self.config.get("xls200", "subdevice1")), input = 1)
+                self.device.openDevice(eval(self.config.get("xls200", "subdevice1")), input = 1,
+                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
 
             if self.config.get("xls200", "subdevice2") != "None":
-                self.device.openDevice(eval(self.config.get("xls200", "subdevice2")), input = 2)
+                self.device.openDevice(eval(self.config.get("xls200", "subdevice2")), input = 2,
+                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
 
             if self.config.get("xls200", "subdevice3") != "None":
-                self.device.openDevice(eval(self.config.get("xls200", "subdevice3")), input = 3)
-
-        elif self.config.get("general", "device") == "KernPCB":
-            self.device = KernPCB.openRS232(self.config.get("general", "port"),
+                self.device.openDevice(eval(self.config.get("xls200", "subdevice3")), input = 3,
                 typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
 
         else:
-            self.device = eval(self.config.get("general", "device")).openRS232(self.config.get("general", "port"))
+            self.device = eval(self.config.get("general", "device")).openRS232(self.config.get("general", "port"),
+                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
 
     def updateValue(self):
         strval = "\n"
@@ -224,7 +224,7 @@ class MesswertApp(App):
                 {
                     "type": "options",
                     "title": "Type of Value",
-                    "desc": "Does not work, when behind a multibox-device. (If behind a multibox-device unstable is used)",
+                    "desc": "See device manual",
                     "section": "kernpcb",
                     "options": ["stable", "unstable"],
                     "key": "kernPcbTypeOfValue"

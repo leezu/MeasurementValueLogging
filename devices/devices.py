@@ -18,7 +18,7 @@ class Device(object):
     # (e.g. one of three devices, which are behind a multibox)
     _timeout = None # timeout value for reading from serial device
 
-    def __init__(self, ser):
+    def __init__(self, ser, *args, **kwargs):
         """Setup a device as new or subdevice.
 
         Assign ser to self._ser and if ser is already openend (the device is a sub device)
@@ -27,6 +27,8 @@ class Device(object):
 
         To setup the device as a subdevice simply pass the serial connection to the class constructor.
         To setup the device as a new device one has to use the openRS232 classmethod.
+
+        Subclasses may use more positional or keyword arguments.
 
         """
 
@@ -52,7 +54,7 @@ class Device(object):
             self._ser.close()
 
     @classmethod
-    def openRS232(cls, port):
+    def openRS232(cls, port, *args, **kwargs):
         """Create a new serial connection and create a new object with it.
 
         One has to pass the port argument, which must be a valid argument following to
@@ -70,7 +72,7 @@ class Device(object):
         ser = serial.Serial()
         ser.port = port
         
-        return cls(ser)
+        return cls(ser, *args, **kwargs)
 
     def isAvailable(self):
         """Returns the device status (available or not)"""
@@ -100,8 +102,12 @@ class MultiboxDevice(Device):
 
     """
 
-    def openDevice(self, deviceClass, input = 1):
-        """Open a device of deviceClass on input X"""
+    def openDevice(self, deviceClass, input = 1, *args, **kwargs):
+        """Open a device of deviceClass on input X
+
+        *args and **kwargs are passed on to the devices __init__ methods.
+
+        """
 
         raise NotImplementedError
 
@@ -451,7 +457,7 @@ class XLS200(MultiboxDevice):
     _in2 = None
     _in3 = None
 
-    def __init__(self, ser):
+    def __init__(self, ser, *args, **kwargs):
         super(XLS200, self).__init__(ser)
 
         self._changeInput(input = 1)
@@ -481,17 +487,17 @@ class XLS200(MultiboxDevice):
             self._ser.baudrate = self._in3._baudrate
             self._ser.timeout = self._in3._timeout
 
-    def openDevice(self, deviceClass, input = 1):
+    def openDevice(self, deviceClass, input=1, *args, **kwargs):
         assert self.isAvailable()
 
         if input == 1:
-            self._in1 = deviceClass(self._ser)
+            self._in1 = deviceClass(self._ser, *args, **kwargs)
 
         elif input == 2:
-            self._in2 = deviceClass(self._ser)
+            self._in2 = deviceClass(self._ser, *args, **kwargs)
 
         elif input == 3:
-            self._in3 = deviceClass(self._ser)
+            self._in3 = deviceClass(self._ser, *args, **kwargs)
 
         else:
             raise Exception("Input has to be in rage of 1 to 3")
@@ -557,7 +563,7 @@ class KernPCB(Device):
     _typeOfValue = "unstable"
 
 
-    def __init__(self, ser, typeOfValue="unstable"):
+    def __init__(self, ser, typeOfValue="unstable", *args, **kwargs):
         super(KernPCB, self).__init__(ser)
 
         if typeOfValue in ["stable", "unstable"]:
@@ -566,13 +572,13 @@ class KernPCB(Device):
             raise Exception("Invalid typeOfValue")
 
     @classmethod
-    def openRS232(cls, port, typeOfValue="unstable"):
+    def openRS232(cls, port, *args, **kwargs):
         import serial
 
         ser = serial.Serial()
         ser.port = port
         
-        return cls(ser, typeOfValue)
+        return cls(ser, *args, **kwargs)
 
     class __Value(Value):
         string = None
