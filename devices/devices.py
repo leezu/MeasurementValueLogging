@@ -467,16 +467,19 @@ class XLS200(MultiboxDevice):
             self._ser.setRTS(level=False)
             self._ser.setDTR(level=True)
             self._ser.baudrate = self._in1._baudrate
+            self._ser.timeout = self._in1._timeout
 
         if input == 2 and self._in2 is not None:
             self._ser.setRTS(level=True)
             self._ser.setDTR(level=False)
             self._ser.baudrate = self._in2._baudrate
+            self._ser.timeout = self._in2._timeout
 
         if input == 3 and self._in3 is not None:
             self._ser.setRTS(level=False)
             self._ser.setDTR(level=False)
             self._ser.baudrate = self._in3._baudrate
+            self._ser.timeout = self._in3._timeout
 
     def openDevice(self, deviceClass, input = 1):
         assert self.isAvailable()
