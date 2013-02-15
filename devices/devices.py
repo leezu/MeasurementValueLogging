@@ -21,14 +21,15 @@ class Device(object):
     def __init__(self, ser, *args, **kwargs):
         """Setup a device as new or subdevice.
 
-        Assign ser to self._ser and if ser is already openend (the device is a sub device)
-        do nothing. Otherwise set the in the class defined attributes and open the serial connection.
-        If the connection has to be setup new, _ownSer flag is set.
+        Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
+        set the in the class defined attributes and open the serial connection.
+        If the connection has to be openend, _ownSer flag is set.
 
         To setup the device as a subdevice simply pass the serial connection to the class constructor.
         To setup the device as a new device one has to use the openRS232 classmethod.
 
         Subclasses may use more positional or keyword arguments.
+        It is safe to pass arbitrary *args and **kwargs.
 
         """
 
@@ -458,6 +459,13 @@ class XLS200(MultiboxDevice):
     _in3 = None
 
     def __init__(self, ser, in1=None, in2=None, in3=None, *args, **kwargs):
+        """Via in{1,2,3} subdevices can be specified.
+
+        This is completely optional and the same result can be achieved
+        by calling openDevice() later.
+
+        """
+
         super(XLS200, self).__init__(ser)
 
         if in1:
