@@ -17,7 +17,8 @@ class GetValueThread(threading.Thread):
         self.stop_event = stop_event
         self.config = App.get_running_app().config
         self.device = None
-        self.value = "Please wait"
+        self.strval = "Please wait"
+        self.rawvals = () # tuple of value objects
 
     def run(self):
         self.openDevice()
@@ -46,45 +47,56 @@ class GetValueThread(threading.Thread):
             self.device = eval(self.config.get("general", "device")).openRS232(self.config.get("general", "port"))
 
     def updateValue(self):
-        val = "\n"
+        strval = "\n"
+        rawvals = []
 
         if isinstance(self.device, XLS200):
             if self.config.get("xls200", "subdevice1") != "None":
-                rawval = self.device.getRawValue(input = 1)
-                val += (str(rawval.getDisplayedValue()) + " " +
-                    str(rawval.getFactor(type = "prefix")) +
-                    str(rawval.getUnit()) + "\n")
+                rv = self.device.getRawValue(input = 1)
+                strval += (str(rv.getDisplayedValue()) + " " +
+                    str(rv.getFactor(type = "prefix")) +
+                    str(rv.getUnit()) + "\n")
+                rawvals.append(rv)
 
             if self.config.get("xls200", "subdevice2") != "None":
-                rawval = self.device.getRawValue(input = 2)
-                val += (str(rawval.getDisplayedValue()) + " " +
-                    str(rawval.getFactor(type = "prefix")) +
-                    str(rawval.getUnit()) + "\n")
+                rv = self.device.getRawValue(input = 2)
+                strval += (str(rv.getDisplayedValue()) + " " +
+                    str(rv.getFactor(type = "prefix")) +
+                    str(rv.getUnit()) + "\n")
+                rawvals.append(rv)
 
             if self.config.get("xls200", "subdevice3") != "None":
-                rawval = self.device.getRawValue(input = 3)
-                val += (str(rawval.getDisplayedValue()) + " " +
-                    str(rawval.getFactor(type = "prefix")) +
-                    str(rawval.getUnit()) + "\n")
+                rv = self.device.getRawValue(input = 3)
+                strval += (str(rv.getDisplayedValue()) + " " +
+                    str(rv.getFactor(type = "prefix")) +
+                    str(rv.getUnit()) + "\n")
+                rawvals.append(rv)
         
         else:
-            rawval = self.device.getRawValue()
-            val += (str(rawval.getDisplayedValue()) + " " + str(rawval.getUnit()) + "\n")
+            rv = self.device.getRawValue()
+            strval += (str(rv.getDisplayedValue()) + " " + str(rv.getUnit()) + "\n")
+            rawvals.append(rv)
 
-        self.value = val[:-1]
+        self.strval = strval[:-1]
+        self.rawvals = tuple(rawvals)
 
 
 class MesswertWidget(Widget):
     value_standard = "Press 'Start' to begin"
     value = kivy.properties.StringProperty(value_standard)
+    rawvals = None
 
     thread_stop = None
     thread = None
 
-    def startStop(self):
+    tmpfile = None
+    starttime = None
+    lasttime = 0
+
+    def startStopMeasurement(self):
         from kivy.clock import Clock
 
-        if self.tgl_btn.state == "down":
+        if self.tgl_btn_measurement.state == "down":
             self.thread_stop = threading.Event()
             self.thread = GetValueThread(self.thread_stop)
             self.thread.start()
@@ -92,15 +104,41 @@ class MesswertWidget(Widget):
             Clock.schedule_once(self.updateValue)
             Clock.schedule_interval(self.updateValue, 0.1)
 
-        elif self.tgl_btn.state == "normal":
+        elif self.tgl_btn_measurement.state == "normal":
             Clock.unschedule(self.updateValue)
             self.thread_stop.set()
             self.thread_stop = None
             self.thread = None
             self.value = self.value_standard
 
+    def startStopLogging(self):
+        import tempfile
+        import time
+
+        if self.tgl_btn_logging.state == "down":
+            self.tmpfile = tempfile.TemporaryFile()
+            self.starttime = time.time()
+
+        elif self.tgl_btn_logging.state == "normal":
+            self.tmpfile.close()
+            self.tmpfile = None
+
     def updateValue(self, dt):
-        self.value = str(self.thread.value)
+        import time
+
+        self.value = str(self.thread.strval)
+        self.rawvals = self.thread.rawvals
+
+        if self.tmpfile and ((time.time() - self.lasttime) >
+                int(App.get_running_app().config.get("general", "logging_interval"))):
+
+            if self.rawvals != ():
+                for i in self.rawvals:
+                    self.tmpfile.write(str(i.getDisplayedValue()) + ",")
+
+            self.tmpfile.write("\n")
+
+            self.lasttime = time.time()
 
 
 class MesswertApp(App):
@@ -109,7 +147,8 @@ class MesswertApp(App):
     def build_config(self, config):
         config.setdefaults('general', {
             'port' : '/dev/ttyUSB0',
-            'device' : 'TecpelDMM8061'})
+            'device' : 'TecpelDMM8061',
+            'logging_interval': '1'})
         config.setdefaults('xls200', {
             'subdevice1' : 'None',
             'subdevice2' : 'None',
@@ -136,6 +175,13 @@ class MesswertApp(App):
                     "section": "general",
                     "options": ["TecpelDMM8061", "KernPCB", "XLS200"],
                     "key": "device"
+                },
+                {
+                    "type": "numeric",
+                    "title": "Logging Interval",
+                    "desc": "Interval between logging events",
+                    "section": "general",
+                    "key": "logging_interval"
                 }
             ]
 

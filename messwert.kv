@@ -1,6 +1,7 @@
 <MesswertWidget>:
     lbl: lbl
-    tgl_btn: tgl_btn
+    tgl_btn_measurement: tgl_btn_measurement
+    tgl_btn_logging: tgl_btn_logging
 
     FloatLayout:
         size: root.width, root.height
@@ -19,15 +20,22 @@
             pos_hint: {'x':0, 'y':0}
 
             ToggleButton:
-                id: tgl_btn
+                id: tgl_btn_measurement
 
                 text: "Start" if self.state is "normal" else "Stop"
-                on_press: root.startStop()
+                on_press: root.startStopMeasurement()
+
+            ToggleButton:
+                id: tgl_btn_logging
+
+                text: "Enable Logging" if self.state is "normal" else "Disable Logging"
+                on_press: root.startStopLogging()
+
 
             Button:
                 text: "Settings"
                 on_press:
                     from kivy.uix.popup import Popup
                     from kivy.uix.label import Label
-                    if tgl_btn.state == "down": Popup(title='Warning', content=Label(text="Stop the measurement to open the settings screen!"), size_hint=(None, None), size=(400,100),).open()
+                    if tgl_btn_measurement.state == "down" or tgl_btn_logging.state == "down": Popup(title='Warning', content=Label(text="Stop the measurement and disable logging to open the settings screen!"), size_hint=(None, None), size=(550,100),).open()
                     else: app.open_settings()
