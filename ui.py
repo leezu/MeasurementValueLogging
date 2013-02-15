@@ -26,42 +26,42 @@ class GetValueThread(threading.Thread):
             self.updateValue()
 
     def openDevice(self):
-        if self.config.get("serial", "device") == "XLS200":
-            self.device = XLS200.openRS232(self.config.get("serial", "port"))
+        if self.config.get("general", "device") == "XLS200":
+            self.device = XLS200.openRS232(self.config.get("general", "port"))
 
-            if self.config.get("serial", "subdevice1") != "None":
-                self.device.openDevice(eval(self.config.get("serial", "subdevice1")), input = 1)
+            if self.config.get("xls200", "subdevice1") != "None":
+                self.device.openDevice(eval(self.config.get("xls200", "subdevice1")), input = 1)
 
-            if self.config.get("serial", "subdevice2") != "None":
-                self.device.openDevice(eval(self.config.get("serial", "subdevice2")), input = 2)
+            if self.config.get("xls200", "subdevice2") != "None":
+                self.device.openDevice(eval(self.config.get("xls200", "subdevice2")), input = 2)
 
-            if self.config.get("serial", "subdevice3") != "None":
-                self.device.openDevice(eval(self.config.get("serial", "subdevice3")), input = 3)
+            if self.config.get("xls200", "subdevice3") != "None":
+                self.device.openDevice(eval(self.config.get("xls200", "subdevice3")), input = 3)
 
-        elif self.config.get("serial", "device") == "KernPCB":
-            self.device = KernPCB.openRS232(self.config.get("serial", "port"),
-                typeOfValue = self.config.get("serial", "kernPcbTypeOfValue"))
+        elif self.config.get("general", "device") == "KernPCB":
+            self.device = KernPCB.openRS232(self.config.get("general", "port"),
+                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
 
         else:
-            self.device = eval(self.config.get("serial", "device")).openRS232(self.config.get("serial", "port"))
+            self.device = eval(self.config.get("general", "device")).openRS232(self.config.get("general", "port"))
 
     def updateValue(self):
         val = "\n"
 
         if isinstance(self.device, XLS200):
-            if self.config.get("serial", "subdevice1") != "None":
+            if self.config.get("xls200", "subdevice1") != "None":
                 rawval = self.device.getRawValue(input = 1)
                 val += (str(rawval.getDisplayedValue()) + " " +
                     str(rawval.getFactor(type = "prefix")) +
                     str(rawval.getUnit()) + "\n")
 
-            if self.config.get("serial", "subdevice2") != "None":
+            if self.config.get("xls200", "subdevice2") != "None":
                 rawval = self.device.getRawValue(input = 2)
                 val += (str(rawval.getDisplayedValue()) + " " +
                     str(rawval.getFactor(type = "prefix")) +
                     str(rawval.getUnit()) + "\n")
 
-            if self.config.get("serial", "subdevice3") != "None":
+            if self.config.get("xls200", "subdevice3") != "None":
                 rawval = self.device.getRawValue(input = 3)
                 val += (str(rawval.getDisplayedValue()) + " " +
                     str(rawval.getFactor(type = "prefix")) +
@@ -107,42 +107,48 @@ class MesswertApp(App):
     use_kivy_settings = False
 
     def build_config(self, config):
-        config.setdefaults('serial', {
+        config.setdefaults('general', {
             'port' : '/dev/ttyUSB0',
-            'device' : 'TecpelDMM8061',
+            'device' : 'TecpelDMM8061'})
+        config.setdefaults('xls200', {
             'subdevice1' : 'None',
             'subdevice2' : 'None',
-            'subdevice3' : 'None',
+            'subdevice3' : 'None'})
+        config.setdefaults('kernpcb', {
             'kernpcbtypeofvalue' : 'unstable'
             })
 
     def build_settings(self, settings):
-        jsondata = """
+        general_settings = """
+
             [
                 {
                     "type": "string",
                     "title": "Serial Port",
                     "desc": "Set the serial port on which a device is connected",
-                    "section": "serial",
+                    "section": "general",
                     "key": "port"
                 },
                 {
                     "type": "options",
                     "title": "Device",
                     "desc": "Device",
-                    "section": "serial",
+                    "section": "general",
                     "options": ["TecpelDMM8061", "KernPCB", "XLS200"],
                     "key": "device"
-                },
-                {
-                    "type": "title",
-                    "title": "Multibox-Settings"
-                },
+                }
+            ]
+
+        """
+
+        xls200_settings = """
+
+            [
                 {
                     "type": "options",
                     "title": "Subdevice 1",
                     "desc": "Only applicable when a multibox-device like the XLS200 is used.",
-                    "section": "serial",
+                    "section": "xls200",
                     "options": ["None", "TecpelDMM8061", "KernPCB"],
                     "key": "subdevice1"
                 },
@@ -150,7 +156,7 @@ class MesswertApp(App):
                     "type": "options",
                     "title": "Subdevice 2",
                     "desc": "Only applicable when a multibox-device like the XLS200 is used.",
-                    "section": "serial",
+                    "section": "xls200",
                     "options": ["None", "TecpelDMM8061", "KernPCB"],
                     "key": "subdevice2"
                 },
@@ -158,19 +164,22 @@ class MesswertApp(App):
                     "type": "options",
                     "title": "Subdevice 3",
                     "desc": "Only applicable when a multibox-device like the XLS200 is used.",
-                    "section": "serial",
+                    "section": "xls200",
                     "options": ["None", "TecpelDMM8061", "KernPCB"],
                     "key": "subdevice3"
-                },
-                    {
-                    "type": "title",
-                    "title": "KernPCB-Settings"
-                },
-                    {
+                }
+            ]
+
+        """
+
+        kernpcb_settings = """
+
+            [
+                {
                     "type": "options",
                     "title": "Type of Value",
                     "desc": "Does not work, when behind a multibox-device. (If behind a multibox-device unstable is used)",
-                    "section": "serial",
+                    "section": "kernpcb",
                     "options": ["stable", "unstable"],
                     "key": "kernPcbTypeOfValue"
                 }
@@ -178,7 +187,9 @@ class MesswertApp(App):
 
         """
 
-        settings.add_json_panel('Serial Settings', self.config, data=jsondata)
+        settings.add_json_panel('General Settings', self.config, data=general_settings)
+        settings.add_json_panel('Multibox Settings', self.config, data=xls200_settings)
+        settings.add_json_panel('KernPCB Settings', self.config, data=kernpcb_settings)
 
 
     def build(self):
