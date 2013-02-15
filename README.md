@@ -6,7 +6,7 @@ It aims to be an open source alternative to the software provided by www.xlsmess
 
 Installation
 ============
-Make sure you have a recent version of http://pyserial.sourceforge.net/ installed.
+Make sure you have a recent version of http://pyserial.sourceforge.net/ installed. To use the GUI you need a recent version of http://kivy.org/ as well.
 
 An easy installation will follow soon. Until then you have to clone the repo and move everything to an appropriate path.
 
