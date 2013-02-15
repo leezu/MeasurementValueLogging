@@ -457,10 +457,17 @@ class XLS200(MultiboxDevice):
     _in2 = None
     _in3 = None
 
-    def __init__(self, ser, *args, **kwargs):
+    def __init__(self, ser, in1=None, in2=None, in3=None, *args, **kwargs):
         super(XLS200, self).__init__(ser)
 
-        self._changeInput(input = 1)
+        if in1:
+            self.openDevice(in1, input = 1, *args, **kwargs)
+
+        if in2:
+            self.openDevice(in2, input = 2, *args, **kwargs)
+
+        if in3:
+            self.openDevice(in3, input = 3, *args, **kwargs)
 
     def _changeInput(self, input = 1):
         # DTR True & RTS False = 1

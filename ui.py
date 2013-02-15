@@ -27,24 +27,11 @@ class GetValueThread(threading.Thread):
             self.updateValue()
 
     def openDevice(self):
-        if self.config.get("general", "device") == "XLS200":
-            self.device = XLS200.openRS232(self.config.get("general", "port"))
-
-            if self.config.get("xls200", "subdevice1") != "None":
-                self.device.openDevice(eval(self.config.get("xls200", "subdevice1")), input = 1,
-                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
-
-            if self.config.get("xls200", "subdevice2") != "None":
-                self.device.openDevice(eval(self.config.get("xls200", "subdevice2")), input = 2,
-                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
-
-            if self.config.get("xls200", "subdevice3") != "None":
-                self.device.openDevice(eval(self.config.get("xls200", "subdevice3")), input = 3,
-                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
-
-        else:
-            self.device = eval(self.config.get("general", "device")).openRS232(self.config.get("general", "port"),
-                typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"))
+        self.device = eval(self.config.get("general", "device")).openRS232(self.config.get("general", "port"),
+            typeOfValue = self.config.get("kernpcb", "kernPcbTypeOfValue"),
+            in1=eval(self.config.get("xls200", "subdevice1")),
+            in2=eval(self.config.get("xls200", "subdevice2")),
+            in3=eval(self.config.get("xls200", "subdevice3")))
 
     def updateValue(self):
         strval = "\n"
