@@ -132,19 +132,20 @@ class Value(object):
     """
 
     def getDisplayedValue(self):
-        """Returns the displayed value (as a number)"""
+        """Returns the displayed value (as a number)."""
 
         raise NotImplementedError
 
     def getUnit(self):
-        """returns the unit (e.g. "g" (gram) or "V" (volt))"""
+        """Returns the unit (e.g. "g" (gram) or "V" (volt))."""
 
         raise NotImplementedError
 
-    def getFactor(self):
-        """returns the factor of the displayed value (According to the SI-Prefixes).
+    def getFactor(self, type="value"):
+        """Returns the factor of the displayed value (According to the SI-Prefixes).
 
         For example 10^(-3) for the milli prefix.
+        If type == "prefix" it returns the SI-Prefixes.
 
         """
 
@@ -289,17 +290,17 @@ class TecpelDMM8061(Device):
         def getFactor(self, type="value"):
             if type == "value":
                 if self.nano:
-                    return (10 ^ (-9))
+                    return pow(10, -9)
                 elif self.micro:
-                    return (10 ^ (-6))
+                    return pow(10, -6)
                 elif self.milli:
-                    return (10 ^ (-3))
+                    return pow(10, -3)
                 elif self.kilo:
-                    return (10 ^ (3))
+                    return pow(10, 3)
                 elif self.mega:
-                    return (10 ^ (6))
+                    return pow(10, 6)
                 else:
-                    return (10 ^ (0))
+                    return pow(10, 0)
 
             elif type == "prefix":
                 if self.nano:
@@ -572,42 +573,37 @@ class XLS200(MultiboxDevice):
             return self._in3
 
 
-class KernPCB(Device):
-    _baudrate = 9600
-    _timeout = 1
+class Balance(Device):
     _typeOfValue = "unstable"
 
-
     def __init__(self, ser, typeOfValue="unstable", *args, **kwargs):
-        super(KernPCB, self).__init__(ser)
+        super(Balance, self).__init__(ser)
 
         if typeOfValue in ["stable", "unstable"]:
             self._typeOfValue = typeOfValue
         else:
             raise Exception("Invalid typeOfValue")
 
-    @classmethod
-    def openRS232(cls, port, *args, **kwargs):
-        import serial
+class KernPCB(Balance):
+    import re
+    _regex = re.compile(r"\s[\s-][\d\s\.]{10}\s.{3}")
 
-        ser = serial.Serial()
-        ser.port = port
-        
-        return cls(ser, *args, **kwargs)
+    _baudrate = 9600
+    _timeout = 1
 
     class __Value(Value):
         string = None
 
         def getDisplayedValue(self):
             if 'Error' in self.string:
-                return "ERROR"
+                return "ERROR" # FIXME: A Number must be returned
             else:
                 v = float(self.string[2:12])
 
                 if self.string[1] is "-":
                     v *= -1
 
-                return str(v)
+                return v
 
         def getUnit(self, type="unit"):
             if type == "name":
@@ -618,7 +614,7 @@ class KernPCB(Device):
 
         def getFactor(self, type="value"):
             if type == "value":
-                return (10 ^ (0))
+                return pow(10, 0)
 
             elif type == "prefix":
                 return ""
@@ -634,11 +630,10 @@ class KernPCB(Device):
                 s = self._ser.read(size = 18)
 
                 try:
-                    if ord(s[0]) == 32 and ord(s[16]) == 13 and ord(s[17]) == 10: # see documentation of rs232 output
-                        result.string = s
-                        return result
+                    result.string = self._regex.search(s).group()
+                    return result
 
-                except IndexError:
+                except AttributeError:
                     pass
 
         elif self._typeOfValue == "unstable":
@@ -647,11 +642,10 @@ class KernPCB(Device):
                 s = self._ser.read(size = 18)
 
                 try:
-                    if ord(s[0]) == 32 and ord(s[16]) == 13 and ord(s[17]) == 10: # see documentation of rs232 output
-                        result.string = s
-                        return result
+                    result.string = self._regex.search(s).group()
+                    return result
 
-                except IndexError:
+                except AttributeError:
                     pass
 
     def setTara(self):
@@ -670,3 +664,148 @@ class KernPCB(Device):
 
         return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue().string[:16])
         # dont print the CR and LF at the end of the string (this would result in an unwanted newline in output)
+
+
+class BS600(Balance):
+    import re
+    _stable = re.compile(r"[WCP][TC]ST[+-][\d\s\.]{7}.{4}")
+    _unstable = re.compile(r"[WCP][TC][SU][TS][+-][\d\s\.]{7}.{4}")
+
+    _baudrate = 2400
+
+    class __Value(Value):
+        string = None
+
+        def getDisplayedValue(self):
+            if 'OL' in self.string:
+                return "ERROR" # FIXME: A Number must be returned
+            else:
+                v = float(self.string[5:12])
+
+                if self.string[4] is "-":
+                    v *= -1
+
+                return v
+
+        def getUnit(self):
+            try:
+                return self.string[12:16].strip()
+            except IndexError:
+                return ""
+
+        def getFactor(self, type="value"):
+            if type == "value":
+                return pow(10, 0)
+
+            elif type == "prefix":
+                return ""
+    
+    def getRawValue(self):
+        assert self.isAvailable()
+
+        result = self.__Value()
+
+        while True:
+            val = self._ser.read(size = 35)
+            # One value has 18 bytes, to make sure to get a complete one
+            # (and not the second 1/2 of one, and the first 1/2 of another)
+            # we read 35 bytes and match for one complete value
+
+            try:
+                if self._typeOfValue == "stable":
+                    result.string = self._stable.search(val).group()
+                    return result
+
+                elif self._typeOfValue == "unstable":
+                    result.string = self._unstable.search(val).group()
+                    return result
+
+            except AttributeError:
+                pass
+
+    def getString(self, starttime):
+        import time
+
+        return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue().string)
+
+
+class VirtualDevice(Device):
+    _subdevice = None
+
+    def openDevice(self, deviceClass, *args, **kwargs):
+        assert self.isAvailable()
+
+        self._subdevice = deviceClass(self._ser, *args, **kwargs)
+        self._ser.setRTS(level=self._subdevice._rts)
+        self._ser.setDTR(level=self._subdevice._dtr)
+
+
+class FunctionDevice(VirtualDevice):
+    """Take values from a subdevice and apply a linear function on it."""
+
+    linearFunction = None
+    unit = None
+
+    def __init__(self, ser, functionDevice_subDeviceClass=None,
+            functionDevice_value1=(0,0), functionDevice_value2=(1,1),
+            functionDevice_unit=None, *args, **kwargs):
+
+        super(FunctionDevice, self).__init__(ser)
+
+        self.linearFunction = self._createFunctionTerm(functionDevice_value1,
+            functionDevice_value2)
+
+        self.unit = functionDevice_unit
+
+        if functionDevice_subDeviceClass:
+            self.openDevice(functionDevice_subDeviceClass, *args, **kwargs)
+
+    def _createFunctionTerm(self, value1, value2):
+        """ Create linear function with value1 and value2.
+
+        Values are tuples of format (x,y).
+
+        """
+
+        m = (value1[1] - value2[1]) / (value1[0] - value2[0])
+        c = value1[1] - m*value1[0]
+
+        def result(x):
+            return m*x +c
+        
+        return result
+
+    class __Value(Value):
+        displayedValue = None
+        unit = None
+
+        def getDisplayedValue(self):
+            return self.displayedValue
+
+        def getUnit(self):
+            return self.unit
+
+        def getFactor(self, type="value"):
+            if type == "value":
+                return pow(10, 0)
+            elif type == "prefix":
+                return ""
+
+    def getRawValue(self):
+        rv = self._subdevice.getRawValue()
+        result = self.__Value()
+
+        result.displayedValue = self.linearFunction(rv.getDisplayedValue() * rv.getFactor())
+
+        if self.unit: result.unit = self.unit
+        else: result.unit = rv.getUnit()
+
+        return result
+
+    def getString(self, starttime):
+        import time
+
+        rv = self.getRawValue()
+
+        return (str(round(time.time() - starttime, 3)) + ": " + str(rv.getDisplayedValue() * rv.getFactor())
+            + " " + rv.getUnit())
