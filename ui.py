@@ -162,7 +162,7 @@ class MesswertWidget(Widget):
 
             if self.rawvals != ():
                 for i in self.rawvals:
-                    self.tmpfile.write(str(i.getDisplayedValue()) + ",")
+                    self.tmpfile.write(str(i.getDisplayedValue() * i.getFactor()) + ",")
 
             self.tmpfile.write("\n")
 
