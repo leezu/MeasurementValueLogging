@@ -595,15 +595,12 @@ class KernPCB(Balance):
         string = None
 
         def getDisplayedValue(self):
-            if 'Error' in self.string:
-                return "ERROR" # FIXME: A Number must be returned
-            else:
-                v = float(self.string[2:12])
+            v = float(self.string[2:12])
 
-                if self.string[1] is "-":
-                    v *= -1
+            if self.string[1] is "-":
+                v *= -1
 
-                return v
+            return v
 
         def getUnit(self, type="unit"):
             if type == "name":
@@ -677,15 +674,12 @@ class BS600(Balance):
         string = None
 
         def getDisplayedValue(self):
-            if 'OL' in self.string:
-                return "ERROR" # FIXME: A Number must be returned
-            else:
-                v = float(self.string[5:12])
+            v = float(self.string[5:12])
 
-                if self.string[4] is "-":
-                    v *= -1
+            if self.string[4] is "-":
+                v *= -1
 
-                return v
+            return v
 
         def getUnit(self):
             try:
