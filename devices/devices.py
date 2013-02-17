@@ -659,8 +659,7 @@ class KernPCB(Balance):
     def getString(self, starttime):
         import time
 
-        return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue().string[:16])
-        # dont print the CR and LF at the end of the string (this would result in an unwanted newline in output)
+        return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue().string)
 
 
 class BS600(Balance):
