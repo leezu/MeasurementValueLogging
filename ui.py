@@ -279,29 +279,29 @@ class MesswertApp(App):
             [
                 {
                     "type": "numeric",
-                    "title": "Value 1: X",
-                    "desc": "X value of the first value",
+                    "title": "Value 1: Is",
+                    "desc": "The value displayed by the device.",
                     "section": "functiondevice",
                     "key": "value1x"
                 },
                 {
                     "type": "numeric",
-                    "title": "Value 1: Y",
-                    "desc": "Y value of the first value",
+                    "title": "Value 1: Should be",
+                    "desc": "The should be value.",
                     "section": "functiondevice",
                     "key": "value1y"
                 },
                 {
                     "type": "numeric",
-                    "title": "Value 2: X",
-                    "desc": "X value of the first value",
+                    "title": "Value 2: Is",
+                    "desc": "The value displayed by the device.",
                     "section": "functiondevice",
                     "key": "value2x"
                 },
                 {
                     "type": "numeric",
-                    "title": "Value 2: Y",
-                    "desc": "Y value of the first value",
+                    "title": "Value 2: Should be",
+                    "desc": "The should be value.",
                     "section": "functiondevice",
                     "key": "value2y"
                 },
