@@ -6,6 +6,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 from kivy.factory import Factory
 
 import threading
@@ -92,6 +93,7 @@ class MesswertWidget(Widget):
 
     tmpfile = tempfile.TemporaryFile()
     log = False
+    pathToLogFile = None
     starttime = None
     lasttime = 0
 
@@ -134,6 +136,16 @@ class MesswertWidget(Widget):
     def saveLog(self):
         self.show_save()
 
+    def openLog(self):
+        import subprocess
+
+        if self.pathToLogFile:
+            subprocess.call(["libreoffice", "--calc", self.pathToLogFile])
+            # FIXME: Windows support? Add Try, Except
+        else:
+            Popup(title='Warning', content=Label(text="There is no log to open!"),
+                size_hint=(None, None), size=(250,100)).open()
+
     def dismiss_popup(self):
         self._popup.dismiss()
 
@@ -149,6 +161,7 @@ class MesswertWidget(Widget):
         self.tmpfile.seek(0, 0)
         with open(os.path.join(path, filename), 'w') as stream:
             stream.write(self.tmpfile.read())
+        self.pathToLogFile = os.path.join(path, filename)
         self.dismiss_popup()
 
     def updateValue(self, dt):

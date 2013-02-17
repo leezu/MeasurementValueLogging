@@ -36,11 +36,15 @@
                 on_press: root.saveLog()
 
             Button:
+                text: "Open last log\nin LibreOffice"
+                on_press: root.openLog()
+
+            Button:
                 text: "Settings"
                 on_press:
                     from kivy.uix.popup import Popup
                     from kivy.uix.label import Label
-                    if tgl_btn_measurement.state == "down" or tgl_btn_logging.state == "down": Popup(title='Warning', content=Label(text="Stop the measurement and disable logging to open the settings screen!"), size_hint=(None, None), size=(550,100),).open()
+                    if tgl_btn_measurement.state == "down" or tgl_btn_logging.state == "down": Popup(title='Warning', content=Label(text="Stop the measurement and disable logging to open the settings screen!"), size_hint=(None, None), size=(550,100)).open()
                     else: app.open_settings()
 
 <SaveDialog>:
