@@ -574,12 +574,12 @@ class XLS200(MultiboxDevice):
 
 
 class Balance(Device):
-    _typeOfValue = "unstable"
+    _typeOfValue = "all"
 
-    def __init__(self, ser, typeOfValue="unstable", *args, **kwargs):
+    def __init__(self, ser, typeOfValue="all", *args, **kwargs):
         super(Balance, self).__init__(ser)
 
-        if typeOfValue in ["stable", "unstable"]:
+        if typeOfValue in ["stable", "all"]:
             self._typeOfValue = typeOfValue
         else:
             raise Exception("Invalid typeOfValue")
@@ -633,7 +633,7 @@ class KernPCB(Balance):
                 except AttributeError:
                     pass
 
-        elif self._typeOfValue == "unstable":
+        elif self._typeOfValue == "all":
             while True:
                 self._ser.write("w")
                 s = self._ser.read(size = 18)
@@ -665,7 +665,7 @@ class KernPCB(Balance):
 class BS600(Balance):
     import re
     _stable = re.compile(r"[WCP][TC]ST[+-][\d\s\.]{7}.{4}")
-    _unstable = re.compile(r"[WCP][TC][SU][TS][+-][\d\s\.]{7}.{4}")
+    _all = re.compile(r"[WCP][TC][SU][TS][+-][\d\s\.]{7}.{4}")
 
     _baudrate = 2400
 
@@ -709,8 +709,8 @@ class BS600(Balance):
                     result.string = self._stable.search(val).group()
                     return result
 
-                elif self._typeOfValue == "unstable":
-                    result.string = self._unstable.search(val).group()
+                elif self._typeOfValue == "all":
+                    result.string = self._all.search(val).group()
                     return result
 
             except AttributeError:

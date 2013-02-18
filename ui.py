@@ -201,7 +201,7 @@ class MesswertApp(App):
             'subdevice2' : 'None',
             'subdevice3' : 'None'})
         config.setdefaults('balance', {
-            'typeofvalue' : 'unstable'})
+            'typeofvalue' : 'all'})
         config.setdefaults('functiondevice', {
             'value1x' : 0,
             'value1y' : 0,
@@ -280,7 +280,7 @@ class MesswertApp(App):
                     "title": "Type of Value",
                     "desc": "See device manual",
                     "section": "balance",
-                    "options": ["stable", "unstable"],
+                    "options": ["stable", "all"],
                     "key": "typeOfValue"
                 }
             ]
