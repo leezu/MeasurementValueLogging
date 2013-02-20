@@ -84,15 +84,7 @@ class Device(object):
         """Return a Value object."""
 
         raise NotImplementedError
-    
-    def getString(self, starttime):
-        """Return a string representation of the currently displayed value
-        
-        This can be very useful for command line output
 
-        """
-
-        raise NotImplementedError
 
 class MultiboxDevice(Device):
     """This is a special MultiboxDevice, which allows to use multiple
@@ -130,6 +122,7 @@ class Value(object):
     methods defined in this base class.
 
     """
+    _time = 0
 
     def getDisplayedValue(self):
         """Returns the displayed value (as a number)."""
@@ -151,6 +144,11 @@ class Value(object):
 
         raise NotImplementedError
 
+    def getTime(self):
+        """Returns the time the measurement value was taken in seconds since the epoch."""
+
+        return self._time
+
 
 class TecpelDMM8061(Device):
     """Multimeter
@@ -158,8 +156,6 @@ class TecpelDMM8061(Device):
     TECPEL DMM 8061 or VOLTCRAFT VC 840
 
     """
-
-    import time
     
     _baudrate = 2400
     _rts = False
@@ -241,9 +237,6 @@ class TecpelDMM8061(Device):
         hertz = 0
         volt = 0
         ampere = 0
-
-        time = 0
-
 
         def getDisplayedValue(self):
             result = self.d4.getDigit() * 1000 + self.d3.getDigit() * 100 + self.d2.getDigit() * 10 + self.d1.getDigit()
@@ -331,6 +324,7 @@ class TecpelDMM8061(Device):
 
     def getRawValue(self):
         import time
+        
         assert self.isAvailable()
 
         bytesrecived = 0
@@ -428,17 +422,9 @@ class TecpelDMM8061(Device):
                 # SEG 14 does not contain any useful information on the RS232 output
                 pass
 
-        result.time = time.time()
+        result._time = time.time()
 
         return result
-
-    def getString(self, starttime):
-        assert self.isAvailable()
-
-        result = self.getRawValue()
-
-        return (str(round(result.time - starttime, 3)) + ": " + str(result.getDisplayedValue()) + " " +
-            str(result.getFactor("prefix")) + str(result.getUnit("unit")))
 
 
 class XLS200(MultiboxDevice):
@@ -541,24 +527,6 @@ class XLS200(MultiboxDevice):
             self._changeInput(input = 3)
             return self._in3.getRawValue()
 
-
-    def getString(self, starttime):
-        returnValue = ""
-
-        if self._in1:
-            self._changeInput(input = 1)
-            returnValue += ("Input 1:\n\t" + self._in1.getString(starttime) + "\n")
-
-        if self._in2:
-            self._changeInput(input = 2)
-            returnValue += ("Input 2:\n\t" + self._in2.getString(starttime) + "\n")
-
-        if self._in3:
-            self._changeInput(input = 3)
-            returnValue += ("Input 3:\n\t" + self._in3.getString(starttime) + "\n")
-
-        return returnValue
-
     def getDevice(self, input = 1):
         if input == 1:
             self._changeInput(input = 1)
@@ -617,6 +585,8 @@ class KernPCB(Balance):
                 return ""
 
     def getRawValue(self):
+        import time
+
         assert self.isAvailable()
 
         result = self.__Value()
@@ -628,6 +598,7 @@ class KernPCB(Balance):
 
                 try:
                     result.string = self._regex.search(s).group()
+                    result._time = time.time()
                     return result
 
                 except AttributeError:
@@ -640,6 +611,7 @@ class KernPCB(Balance):
 
                 try:
                     result.string = self._regex.search(s).group()
+                    result._time = time.time()
                     return result
 
                 except AttributeError:
@@ -655,11 +627,6 @@ class KernPCB(Balance):
         assert self.isAvailable()
 
         return self._ser.write("t") # Should be 1 if write succeeds
-
-    def getString(self, starttime):
-        import time
-
-        return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue().string)
 
 
 class BS600(Balance):
@@ -694,6 +661,8 @@ class BS600(Balance):
                 return ""
     
     def getRawValue(self):
+        import time
+
         assert self.isAvailable()
 
         result = self.__Value()
@@ -707,19 +676,16 @@ class BS600(Balance):
             try:
                 if self._typeOfValue == "stable":
                     result.string = self._stable.search(val).group()
+                    result._time = time.time()
                     return result
 
                 elif self._typeOfValue == "all":
                     result.string = self._all.search(val).group()
+                    result._time = time.time()
                     return result
 
             except AttributeError:
                 pass
-
-    def getString(self, starttime):
-        import time
-
-        return (str(round(time.time() - starttime, 3)) + ":" + self.getRawValue().string)
 
 
 class VirtualDevice(Device):
@@ -785,20 +751,15 @@ class FunctionDevice(VirtualDevice):
                 return ""
 
     def getRawValue(self):
+        import time
+
         rv = self._subdevice.getRawValue()
         result = self.__Value()
 
         result.displayedValue = self.linearFunction(rv.getDisplayedValue() * rv.getFactor())
+        result._time = rv.getTime()
 
         if self.unit: result.unit = self.unit
         else: result.unit = rv.getUnit()
 
         return result
-
-    def getString(self, starttime):
-        import time
-
-        rv = self.getRawValue()
-
-        return (str(round(time.time() - starttime, 3)) + ": " + str(rv.getDisplayedValue() * rv.getFactor())
-            + " " + rv.getUnit())
