@@ -80,8 +80,14 @@ class Device(object):
 
         return self._ser.isOpen()
 
-    def getRawValue(self):
-        """Return a Value object."""
+    def getRawValue(self, timeout = 10):
+        """Return a Value object.
+
+        The timeout option specifies a timeout in seconds.
+        If the timeout is reached and no value gathered,
+        None is returned
+
+        """
 
         raise NotImplementedError
 
@@ -322,16 +328,18 @@ class TecpelDMM8061(Device):
         else:
             raise Exception
 
-    def getRawValue(self):
+    def getRawValue(self, timeout = 10):
         import time
         
+        starttime = time.time()
+
         assert self.isAvailable()
 
         bytesrecived = 0
         result = self.__Value()
 
         #There are 14 bytes to be received, for every received byte the corresponding bit in bytesreceived is set
-        while(bytesrecived != int('11111111111111', base=2)):
+        while((bytesrecived != int('11111111111111', base=2)) and not (time.time() - starttime > timeout)):
             b = ord(self._ser.read())
             id = (b & int('11110000', base=2)) >> 4 #convert the higher nibble to the id
             
@@ -424,7 +432,11 @@ class TecpelDMM8061(Device):
 
         result._time = time.time()
 
-        return result
+        if bytesrecived == int('11111111111111', base=2):
+            return result
+        else:
+            print(str(bytesrecived))
+            return None
 
 
 class XLS200(MultiboxDevice):
@@ -514,18 +526,18 @@ class XLS200(MultiboxDevice):
         elif input == 3:
             self._in3 = None
 
-    def getRawValue(self, input = 1):
+    def getRawValue(self, input = 1, timeout = 10):
         if input == 1:
             self._changeInput(input = 1)
-            return self._in1.getRawValue()
+            return self._in1.getRawValue(timeout=timeout)
 
         elif input == 2:
             self._changeInput(input = 2)
-            return self._in2.getRawValue()
+            return self._in2.getRawValue(timeout=timeout)
 
         elif input == 3:
             self._changeInput(input = 3)
-            return self._in3.getRawValue()
+            return self._in3.getRawValue(timeout=timeout)
 
     def getDevice(self, input = 1):
         if input == 1:
@@ -584,15 +596,17 @@ class KernPCB(Balance):
             elif type == "prefix":
                 return ""
 
-    def getRawValue(self):
+    def getRawValue(self, timeout = 10):
         import time
+
+        starttime = time.time()
 
         assert self.isAvailable()
 
         result = self.__Value()
 
         if self._typeOfValue == "stable":
-            while True:
+            while True and not (time.time() - starttime > timeout):
                 self._ser.write("s")
                 s = self._ser.read(size = 18)
 
@@ -604,8 +618,10 @@ class KernPCB(Balance):
                 except AttributeError:
                     pass
 
+            return None # return None, if timeout is reached
+
         elif self._typeOfValue == "all":
-            while True:
+            while True and not (time.time() - starttime > timeout):
                 self._ser.write("w")
                 s = self._ser.read(size = 18)
 
@@ -616,6 +632,8 @@ class KernPCB(Balance):
 
                 except AttributeError:
                     pass
+
+            return None # return None, if timeout is reached
 
     def setTara(self):
         """Set taring.
@@ -660,14 +678,16 @@ class BS600(Balance):
             elif type == "prefix":
                 return ""
     
-    def getRawValue(self):
+    def getRawValue(self, timeout = 10):
         import time
+
+        starttime = time.time()
 
         assert self.isAvailable()
 
         result = self.__Value()
 
-        while True:
+        while True and not (time.time() - starttime > timeout):
             val = self._ser.read(size = 35)
             # One value has 18 bytes, to make sure to get a complete one
             # (and not the second 1/2 of one, and the first 1/2 of another)
@@ -686,6 +706,8 @@ class BS600(Balance):
 
             except AttributeError:
                 pass
+
+        return None # return None, if timeout is reached
 
 
 class VirtualDevice(Device):
@@ -750,10 +772,10 @@ class FunctionDevice(VirtualDevice):
             elif type == "prefix":
                 return ""
 
-    def getRawValue(self):
+    def getRawValue(self, timeout = 10):
         import time
 
-        rv = self._subdevice.getRawValue()
+        rv = self._subdevice.getRawValue(timeout=timeout)
         result = self.__Value()
 
         result.displayedValue = self.linearFunction(rv.getDisplayedValue() * rv.getFactor())
