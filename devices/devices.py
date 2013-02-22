@@ -249,11 +249,11 @@ class TecpelDMM8061(Device):
             if (self.d4.ex):
                 result *= -1
             if (self.d3.ex):
-                result /= 1000
+                result /= 1000.0
             elif (self.d2.ex):
-                result /= 100
+                result /= 100.0
             elif (self.d1.ex):
-                result /= 10
+                result /= 10.0
 
             return result
 
