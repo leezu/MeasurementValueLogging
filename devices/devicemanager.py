@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import threading
-from devices import Device, TecpelDMM8061, XLS200, KernPCB, BS600, FunctionDevice
+from devices import Device, Value, TecpelDMM8061, XLS200, KernPCB, BS600, FunctionDevice
 
 class DeviceManager(object):
     _validDevices = ("TecpelDMM8061", "XLS200", "KernPCB", "BS600", "FunctionDevice")
@@ -24,6 +26,24 @@ class DeviceManager(object):
         assert self._running
 
         self.rawValues = self._thread.rawValues
+
+    def _getLinearFunction(self, value1, value2):
+        """Return a linear function, which contains value1 and value2.
+
+        :param value1: tuple of x,y coordinates
+        :type value1: tuple x,y
+        :param value2: tuple of x,y coordinates
+        :type value2: tuple x,y
+
+        """
+
+        m = (value1[1] - value2[1]) / (value1[0] - value2[0])
+        c = value1[1] - m*value1[0]
+
+        def result(x):
+            return m*x +c
+        
+        return result
 
     def openWithConfig(self, config):
         """Open a device with a config object. Returns a deviceID."""
@@ -63,6 +83,53 @@ class DeviceManager(object):
         except KeyError:
             return None
 
+    def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
+        """Return a calibrated value from the getLastRawValue method.
+        
+        :param deviceID: device id
+        :type deviceID: float
+        :param calibration: calibration tuple
+        :type calibration: tuple
+
+        The calibration tuple must contain either two integers (m, c)
+        or two tuples containing two points on the linear function,
+        used to compute m and c. (of a function f(x) = mx+c)
+
+        """
+        try:
+            linearFunction = self._getLinearFunction(calibration[0], calibration[1])
+        except TypeError:
+            def resultFunction(x): return (calibration[0] * x + calibration[1])
+            linearFunction = resultFunction
+
+        class __Value(Value):
+            displayedValue = None
+            unit = None
+
+            def getDisplayedValue(self):
+                return self.displayedValue
+
+            def getUnit(self):
+                return self.unit
+
+            def getFactor(self, type="value"):
+                if type == "value":
+                    return pow(10, 0)
+                elif type == "prefix":
+                    return ""
+
+        rv = self.getLastRawValue(deviceID)
+        if rv == None: return None
+
+        result = __Value()
+
+        result.displayedValue = linearFunction(rv.getDisplayedValue() * rv.getFactor())
+        result._time = rv.getTime()
+
+        if unit: result.unit = unit
+        else: result.unit = rv.getUnit()
+
+        return result
 
     def start(self):
         self._stopEvent = threading.Event()
@@ -116,6 +183,7 @@ class GetValuesThread(threading.Thread):
             self.updateValue()
 
     def updateValue(self):
+        # python3 incompatibility: iteritems
         for key, val in self.configs.iteritems():
             if isinstance(val.relationship[0], str):
                 if len(val.relationship[1]) == 0: # If there are no subdevices
@@ -125,19 +193,15 @@ class GetValuesThread(threading.Thread):
                     for subID, subInput in val.relationship[1].iteritems():
                         self.rawValues[subID] = self.devices[key].getRawValue(input = subInput)
 
-        # FIXME: If Device -> Subdevice 1 -> Subdevice 2, ID of first subdev is set instead of the second
-
-
-
 if __name__ == '__main__':
     dv = DeviceManager()
 
-    a = DeviceConfig(("/dev/ttyUSB0", {}), "XLS200")
+    a = DeviceConfig(("/dev/ttyUSB0", {}), "TecpelDMM8061")
     ida = dv.openWithConfig(a)
-    b = DeviceConfig((ida, {}, 2), "TecpelDMM8061")
-    idb = dv.openWithConfig(b)
-    c = DeviceConfig((ida, {}, 3), "BS600")
-    idc = dv.openWithConfig(c)
+    # b = DeviceConfig((ida, {}, 2), "TecpelDMM8061")
+    # idb = dv.openWithConfig(b)
+    # c = DeviceConfig((ida, {}, 3), "BS600")
+    # idc = dv.openWithConfig(c)
     
     dv.start()
 
@@ -146,10 +210,10 @@ if __name__ == '__main__':
     while True:
         try:
             time.sleep(1)
-            rv = dv.getLastRawValue(idb)
-            rvc  = dv.getLastRawValue(idc)
+            rv = dv.getCalibratedLastRawValue(ida, ((pow(10,-6), 21), (4 * pow(10,-6), 30)), unit="°C")
+            # rvc  = dv.getLastRawValue(idc)
             print(str(rv.getDisplayedValue() * rv.getFactor()) + " " + rv.getUnit())
-            print(str(rvc.getDisplayedValue() * rvc.getFactor()) + " " + rvc.getUnit())
+            # print(str(rvc.getDisplayedValue() * rvc.getFactor()) + " " + rvc.getUnit())
 
         except AttributeError:
-            print "nothing yet"
+            print("nothing yet")
