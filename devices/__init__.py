@@ -1,1 +1,1 @@
-__all__ = ["TecpelDMM8061", "XLS200", "KernPCB", "BS600", "FunctionDevice"]
+__all__ = ["DeviceManager", "TecpelDMM8061", "XLS200", "KernPCB", "BS600",]

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import threading
-from devices import Device, Value, TecpelDMM8061, XLS200, KernPCB, BS600, FunctionDevice
+from devices import Device, Value, TecpelDMM8061, XLS200, KernPCB, BS600
 
 class DeviceManager(object):
-    _validDevices = ("TecpelDMM8061", "XLS200", "KernPCB", "BS600", "FunctionDevice")
+    _validDevices = ("TecpelDMM8061", "XLS200", "KernPCB", "BS600")
     _running = False
     _stopEvent = None
     _thread = None
@@ -45,6 +45,9 @@ class DeviceManager(object):
         
         return result
 
+    def isValidDevice(self, deviceName):
+        return deviceName in self._validDevices
+
     def openWithConfig(self, config):
         """Open a device with a config object. Returns a deviceID."""
 
@@ -56,13 +59,13 @@ class DeviceManager(object):
         id = time.time()
 
         if isinstance(config.relationship[0], str):
-            device = eval(config.deviceName).openRS232(config.relationship[0])
+            device = eval(config.deviceName).openRS232(config.relationship[0], *config.args, **config.kwargs)
 
         elif isinstance(config.relationship[0], float):
             assert self.devices[config.relationship[0]] # FIXME: use another error (e.g. WrongIDError)
 
             self.devices[config.relationship[0]].openDevice(eval(config.deviceName),
-                input = config.relationship[2])
+                input = config.relationship[2], *config.args, **config.kwargs)
             device = self.devices[config.relationship[0]].getDevice(input = config.relationship[2])
             self.configs[config.relationship[0]].relationship[1][id] = config.relationship[2]
 
@@ -193,27 +196,31 @@ class GetValuesThread(threading.Thread):
                     for subID, subInput in val.relationship[1].iteritems():
                         self.rawValues[subID] = self.devices[key].getRawValue(input = subInput)
 
+                    self.rawValues[key] = {} # Add a dict of subdevice rawvalues to the device
+                    for subID, subInput in val.relationship[1].iteritems():
+                        self.rawValues[key][subID] = self.rawValues[subID]
+
+
+
 if __name__ == '__main__':
     dv = DeviceManager()
 
-    a = DeviceConfig(("/dev/ttyUSB0", {}), "TecpelDMM8061")
+    a = DeviceConfig(("/dev/ttyUSB0", {}), "XLS200")
     ida = dv.openWithConfig(a)
-    # b = DeviceConfig((ida, {}, 2), "TecpelDMM8061")
-    # idb = dv.openWithConfig(b)
-    # c = DeviceConfig((ida, {}, 3), "BS600")
-    # idc = dv.openWithConfig(c)
+    b = DeviceConfig((ida, {}, 2), "TecpelDMM8061")
+    idb = dv.openWithConfig(b)
+    c = DeviceConfig((ida, {}, 3), "BS600", typeOfValue="stable")
+    idc = dv.openWithConfig(c)
     
     dv.start()
 
     import time
 
-    while True:
-        try:
-            time.sleep(1)
-            rv = dv.getCalibratedLastRawValue(ida, ((pow(10,-6), 21), (4 * pow(10,-6), 30)), unit="°C")
-            # rvc  = dv.getLastRawValue(idc)
-            print(str(rv.getDisplayedValue() * rv.getFactor()) + " " + rv.getUnit())
-            # print(str(rvc.getDisplayedValue() * rvc.getFactor()) + " " + rvc.getUnit())
+    time.sleep(3)
 
-        except AttributeError:
-            print("nothing yet")
+    while True:
+        time.sleep(0.5)
+        rv = dv.getCalibratedLastRawValue(idb, ((pow(10,-6), 21), (4 * pow(10,-6), 30)), unit="°C")
+        rvc  = dv.getLastRawValue(idc)
+        print(str(rv.getDisplayedValue() * rv.getFactor()) + " " + rv.getUnit())
+        print(str(rvc.getDisplayedValue() * rvc.getFactor()) + " " + rvc.getUnit())
