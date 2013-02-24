@@ -48,6 +48,9 @@ class DeviceManager(object):
     def isValidDevice(self, deviceName):
         return deviceName in self._validDevices
 
+    def getStatus(self):
+        return self._running
+
     def openWithConfig(self, config):
         """Open a device with a config object. Returns a deviceID."""
 
