@@ -196,7 +196,7 @@ class DeviceManager(object):
         self._stopEvent = threading.Event()
         self._running = True
 
-        self._thread = GetValuesThread(self._stopEvent, self.devices, self.configs)
+        self._thread = _GetValuesThread(self._stopEvent, self.devices, self.configs)
 
         self._thread.start()
 
@@ -212,7 +212,7 @@ class DeviceManager(object):
 
 class DeviceConfig(object):
     """DeviceConfig objects can be passed to DeviceManager openWithConfig method."""
-    
+
     relationship = () # ("parent" deviceID or rs232 port, {"subdeviceID":inputNumber}, inputNumber)
     deviceName = None
     args = ()
@@ -230,7 +230,7 @@ class DeviceConfig(object):
         self.kwargs = kwargs
 
 
-class GetValuesThread(threading.Thread):
+class _GetValuesThread(threading.Thread):
     devices = {}
     configs = {}
     rawValues = {}
