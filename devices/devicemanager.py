@@ -4,6 +4,12 @@ import threading
 from .devices import Device, Value, TecpelDMM8061, XLS200, KernPCB, BS600
 
 class DeviceManager(object):
+    """DeviceManager object manages devices.
+
+    It provides methods to add devices and get their most recent values.
+
+    """
+    
     _validDevices = ["TecpelDMM8061", "XLS200", "KernPCB", "BS600"]
     _running = False
     _stopEvent = None
@@ -46,12 +52,18 @@ class DeviceManager(object):
         return result
 
     def isValidDevice(self, deviceName):
+        """Tests whether deviceName is a valid device."""
+
         return deviceName in self._validDevices
 
     def getValidDevices(self):
+        """Returns a list of valid devicenames"""
+
         return self._validDevices
 
     def getAvailiablePorts(self):
+        """Returns a list of valid and availiable serial ports."""
+
         import serial.tools.list_ports
         portsTuple = serial.tools.list_ports.comports()
         portsList = []
@@ -63,6 +75,8 @@ class DeviceManager(object):
 
 
     def getStatus(self):
+        """Returns the status of the devicemanager."""
+
         return self._running
 
     def openWithConfig(self, config):
@@ -93,6 +107,12 @@ class DeviceManager(object):
         return id
 
     def getLastRawValue(self, deviceID):
+        """Returns the last raw value of device with ID deviceID.
+
+        If there is no last value (last value == None), it returns a NullValue.
+        
+        """
+
         class __NullValue(Value):
             def getDisplayedValue(self):
                 return 0
@@ -171,6 +191,8 @@ class DeviceManager(object):
         return result
 
     def start(self):
+        """Start the devicemanager"""
+
         self._stopEvent = threading.Event()
         self._running = True
 
@@ -179,6 +201,8 @@ class DeviceManager(object):
         self._thread.start()
 
     def stop(self):
+        """Stop the devicemanager"""
+
         if self._running == True:
             self._stopEvent.set()
             self._running = False
@@ -187,6 +211,8 @@ class DeviceManager(object):
 
 
 class DeviceConfig(object):
+    """DeviceConfig objects can be passed to DeviceManager openWithConfig method."""
+    
     relationship = () # ("parent" deviceID or rs232 port, {"subdeviceID":inputNumber}, inputNumber)
     deviceName = None
     args = ()
