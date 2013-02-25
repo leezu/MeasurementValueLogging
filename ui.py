@@ -5,13 +5,13 @@ from devices.devicemanager import DeviceManager, DeviceConfig
 class NewDeviceDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("newDeviceDialog.ui", self)
+        self.ui = uic.loadUi("ui/newDeviceDialog.ui", self)
 
 
 class Xls200Dialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("xls200Dialog.ui", self)
+        self.ui = uic.loadUi("ui/xls200Dialog.ui", self)
 
         settings = QtCore.QSettings()
 
@@ -19,7 +19,7 @@ class Xls200Dialog(QtGui.QDialog):
 class SettingsDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("settingsDialog.ui", self)
+        self.ui = uic.loadUi("ui/settingsDialog.ui", self)
 
         self.pathButton.clicked.connect(self.openFile)
         self.saveButton.clicked.connect(self.save)
@@ -42,7 +42,7 @@ class SettingsDialog(QtGui.QDialog):
 class DisplayWidget(QtGui.QWidget):
     def __init__(self, deviceName, deviceID, dm, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        self.ui = uic.loadUi("displayWidget.ui", self)
+        self.ui = uic.loadUi("ui/displayWidget.ui", self)
 
         self.deviceName = deviceName
         self.deviceID = deviceID
@@ -83,7 +83,7 @@ class DisplayWidget(QtGui.QWidget):
 class DeviceSettingsDialog(QtGui.QDialog):
     def __init__(self, deviceID, dm, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("deviceSettingsDialog.ui", self)
+        self.ui = uic.loadUi("ui/deviceSettingsDialog.ui", self)
 
         self.deviceID = deviceID
         self.dm = dm
@@ -116,7 +116,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def __init__(self, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
-        self.ui = uic.loadUi("mainWindow.ui", self)
+        self.ui = uic.loadUi("ui/mainWindow.ui", self)
 
         self.measurementButton.clicked.connect(self.startStopMeasurement)
         self.loggingButton.clicked.connect(self.startStopLogging)
