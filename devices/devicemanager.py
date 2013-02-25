@@ -138,6 +138,9 @@ class DeviceManager(object):
             return rv
 
         except KeyError:
+            import sys
+            sys.stderr.write("KeyError")
+            
             return __NullValue()
 
     def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):

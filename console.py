@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from devices.devices import TecpelDMM8061, XLS200, KernPCB
+from devices.devicemanager import DeviceManager, DeviceConfig
 
 def main():
     import argparse
     import time
+
+    dm = DeviceManager()
 
     parser = argparse.ArgumentParser(description='Messwerterfassung')
     parser.add_argument('port', help="Serial Port (e.g. /dev/ttyUSB0 or COM1)")
@@ -12,37 +14,59 @@ def main():
 
     parserTecpelDMM8061 = subparser.add_parser('TecpelDMM8061')
     parserKernPCB = subparser.add_parser('KernPCB')
+    parserBS600 = subparser.add_parser('BS600')
     parserXLS200 = subparser.add_parser('XLS200', help="At least one of the sub-arguments must be specified.")
 
-    parserXLS200.add_argument('input1', choices=["TecpelDMM8061", "KernPCB", "None"], help="device to use with input 1")
-    parserXLS200.add_argument('input2', choices=["TecpelDMM8061", "KernPCB", "None"], help="device to use with input 2")
-    parserXLS200.add_argument('input3', choices=["TecpelDMM8061", "KernPCB", "None"], help="device to use with input 3")
+    parserXLS200.add_argument('input1', choices=dm.getValidDevices() + ["None"], help="device to use with input 1")
+    parserXLS200.add_argument('input2', choices=dm.getValidDevices() + ["None"], help="device to use with input 2")
+    parserXLS200.add_argument('input3', choices=dm.getValidDevices() + ["None"], help="device to use with input 3")
 
     args = parser.parse_args()
 
     if args.device == None:
         raise Exception("You have to specify a device")
 
-    x = eval(args.device).openRS232(args.port)
+    deviceIDs = []
+
+    a = DeviceConfig((args.port, {}), args.device)
+    ida = dm.openWithConfig(a)
+
+    deviceIDs.append(ida)
 
     if args.device == "XLS200":
-    	if args.input1 != "None":
-    		x.openDevice(eval(args.input1), input=1)
+        deviceIDs = []
+        if args.input1 != "None":
+            b = DeviceConfig((ida, {}, 1), args.input1)
+            idb = dm.openWithConfig(b)
+            deviceIDs.append(idb)
 
-    	if args.input2 != "None":
-    		x.openDevice(eval(args.input2), input=2)
+        if args.input2 != "None":
+            c = DeviceConfig((ida, {}, 2), args.input2)
+            idc = dm.openWithConfig(c)
+            deviceIDs.append(idc)
 
-    	if args.input3 != "None":
-    		x.openDevice(eval(args.input3), input=3)
+        if args.input3 != "None":
+            d = DeviceConfig((ida, {}, 3), args.input3)
+            idd = dm.openWithConfig(d)
+            deviceIDs.append(idd)
 
 
     starttime = time.time()
 
+    dm.start()
+
     try:
         while True:
-            print(x.getString(starttime))
+            import time
+            time.sleep(2)
+            for i in deviceIDs:
+                rv = dm.getLastRawValue(i)
+                print(str(round(time.time() - starttime, 1)) + ": " + 
+                    str(rv.getDisplayedValue()) + " " + rv.getFactor("prefix") +
+                    rv.getUnit())
             
     except KeyboardInterrupt:
+        dm.stop()
         print("Closing")
 
 
