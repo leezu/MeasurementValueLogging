@@ -93,15 +93,32 @@ class DeviceManager(object):
         return id
 
     def getLastRawValue(self, deviceID):
+        class __NullValue(Value):
+            def getDisplayedValue(self):
+                return 0
+
+            def getUnit(self):
+                return ""
+
+            def getFactor(self, type="value"):
+                if type == "value":
+                    return pow(10, 0)
+                elif type == "prefix":
+                    return ""
+
         try:
             self._updateRawValues()
         except AssertionError:
             pass
 
         try:
-            return self.rawValues[deviceID]
+            rv = self.rawValues[deviceID]
+            if rv == None:
+                return __NullValue()
+            return rv
+
         except KeyError:
-            return None
+            return __NullValue()
 
     def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
         """Return a calibrated value from the getLastRawValue method.
