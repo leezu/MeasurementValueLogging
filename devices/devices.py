@@ -80,7 +80,7 @@ class Device(object):
 
         return self._ser.isOpen()
 
-    def getRawValue(self, timeout = 10):
+    def getRawValue(self, timeout = 1.5):
         """Return a Value object.
 
         The timeout option specifies a timeout in seconds.
@@ -328,7 +328,7 @@ class TecpelDMM8061(Device):
         else:
             raise Exception
 
-    def getRawValue(self, timeout = 10):
+    def getRawValue(self, timeout = 1.5):
         import time
         
         starttime = time.time()
@@ -435,7 +435,6 @@ class TecpelDMM8061(Device):
         if bytesrecived == int('11111111111111', base=2):
             return result
         else:
-            print(str(bytesrecived))
             return None
 
 
@@ -526,7 +525,7 @@ class XLS200(MultiboxDevice):
         elif input == 3:
             self._in3 = None
 
-    def getRawValue(self, input = 1, timeout = 10):
+    def getRawValue(self, input = 1, timeout = 1.5):
         if input == 1:
             self._changeInput(input = 1)
             return self._in1.getRawValue(timeout=timeout)
@@ -596,7 +595,7 @@ class KernPCB(Balance):
             elif type == "prefix":
                 return ""
 
-    def getRawValue(self, timeout = 10):
+    def getRawValue(self, timeout = 1.5):
         import time
 
         starttime = time.time()
@@ -678,7 +677,7 @@ class BS600(Balance):
             elif type == "prefix":
                 return ""
     
-    def getRawValue(self, timeout = 10):
+    def getRawValue(self, timeout = 1.5):
         import time
 
         starttime = time.time()

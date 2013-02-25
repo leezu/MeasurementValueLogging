@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import threading
-from devices import Device, Value, TecpelDMM8061, XLS200, KernPCB, BS600
+from .devices import Device, Value, TecpelDMM8061, XLS200, KernPCB, BS600
 
 class DeviceManager(object):
-    _validDevices = ("TecpelDMM8061", "XLS200", "KernPCB", "BS600")
+    _validDevices = ["TecpelDMM8061", "XLS200", "KernPCB", "BS600"]
     _running = False
     _stopEvent = None
     _thread = None
@@ -47,6 +47,20 @@ class DeviceManager(object):
 
     def isValidDevice(self, deviceName):
         return deviceName in self._validDevices
+
+    def getValidDevices(self):
+        return self._validDevices
+
+    def getAvailiablePorts(self):
+        import serial.tools.list_ports
+        portsTuple = serial.tools.list_ports.comports()
+        portsList = []
+
+        for i in portsTuple:
+            portsList.append(i[0])
+
+        return tuple(portsList)
+
 
     def getStatus(self):
         return self._running
@@ -111,6 +125,7 @@ class DeviceManager(object):
         class __Value(Value):
             displayedValue = None
             unit = None
+            factor = (pow(10, 0),"")
 
             def getDisplayedValue(self):
                 return self.displayedValue
@@ -120,16 +135,17 @@ class DeviceManager(object):
 
             def getFactor(self, type="value"):
                 if type == "value":
-                    return pow(10, 0)
+                    return self.factor[0]
                 elif type == "prefix":
-                    return ""
+                    return self.factor[1]
 
         rv = self.getLastRawValue(deviceID)
         if rv == None: return None
 
         result = __Value()
 
-        result.displayedValue = linearFunction(rv.getDisplayedValue() * rv.getFactor())
+        result.displayedValue = linearFunction(rv.getDisplayedValue())
+        result.factor = (rv.getFactor(type="value"), rv.getFactor(type="prefix"))
         result._time = rv.getTime()
 
         if unit: result.unit = unit
@@ -206,16 +222,16 @@ class GetValuesThread(threading.Thread):
 
 
 if __name__ == '__main__':
-    dv = DeviceManager()
+    dm = DeviceManager()
 
     a = DeviceConfig(("/dev/ttyUSB0", {}), "XLS200")
-    ida = dv.openWithConfig(a)
+    ida = dm.openWithConfig(a)
     b = DeviceConfig((ida, {}, 2), "TecpelDMM8061")
-    idb = dv.openWithConfig(b)
+    idb = dm.openWithConfig(b)
     c = DeviceConfig((ida, {}, 3), "BS600", typeOfValue="stable")
-    idc = dv.openWithConfig(c)
+    idc = dm.openWithConfig(c)
     
-    dv.start()
+    dm.start()
 
     import time
 
@@ -223,7 +239,7 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(0.5)
-        rv = dv.getCalibratedLastRawValue(idb, ((pow(10,-6), 21), (4 * pow(10,-6), 30)), unit="°C")
-        rvc  = dv.getLastRawValue(idc)
+        rv = dm.getCalibratedLastRawValue(idb, ((pow(10,-6), 21), (4 * pow(10,-6), 30)), unit="°C")
+        rvc  = dm.getLastRawValue(idc)
         print(str(rv.getDisplayedValue() * rv.getFactor()) + " " + rv.getUnit())
         print(str(rvc.getDisplayedValue() * rvc.getFactor()) + " " + rvc.getUnit())
