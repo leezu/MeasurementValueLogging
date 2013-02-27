@@ -193,6 +193,13 @@ class DeviceManager(object):
 
         return result
 
+    def getDevice(self, deviceID):
+        try:
+            return self.devices[deviceID]
+
+        except KeyError:
+            return None
+
     def start(self):
         """Start the devicemanager"""
 
