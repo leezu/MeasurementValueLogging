@@ -80,7 +80,7 @@ class Device(object):
             serial=self._ser, ownser = self._ownSer)
 
     def __str__(self):
-        return "{classname}: port={serialport!s}".format(classname=self.__class__.__name__,
+        return "{classname} (port={serialport!s})".format(classname=self.__class__.__name__,
             serialport=self._ser.port)
 
     def isAvailable(self):
@@ -505,7 +505,7 @@ class XLS200(MultiboxDevice):
         return string
 
     def __str__(self):
-        string = "{classname}: port={port!s}".format(
+        string = "{classname} (port={port!s}".format(
             classname=self.__class__.__name__, port=self._ser.port)
 
         if self.getDevice(input=1):
@@ -515,7 +515,7 @@ class XLS200(MultiboxDevice):
         if self.getDevice(input=3):
             string += ", in3={in3}".format(in3=self.getDevice(input=3).__class__.__name__)
 
-        return string
+        return string + ")"
 
     def _changeInput(self, input = 1):
         # DTR True & RTS False = 1
