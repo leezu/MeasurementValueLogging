@@ -106,6 +106,22 @@ class DeviceManager(object):
 
         return id
 
+    def closeDevice(self, deviceID):
+        assert self._running == False # FIXME: use another error
+
+        config =self.configs[deviceID]
+
+        if isinstance(config.relationship[0], str):
+            del(self.devices[deviceID])
+            del(self.configs[deviceID])
+
+        elif isinstance(config.relationship[0], float):
+            parentID = config.relationship[0]
+            self.getDevice(parentID).closeDevice(input=config[2])
+            del(self.devices[deviceID])
+            del(self.configs[deviceID])
+            del(self.configs[parentID].relationship[1][deviceID])
+
     def getLastRawValue(self, deviceID):
         """Returns the last raw value of device with ID deviceID.
 
