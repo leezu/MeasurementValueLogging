@@ -51,6 +51,7 @@ class DisplayWidget(QtGui.QWidget):
         self.deviceName.setText(str(dm.getDevice(self.deviceID)))
 
         self.settingsButton.clicked.connect(self.deviceSettings)
+        self.deleteButton.clicked.connect(self.deleteSelf)
 
     def deviceSettings(self):
         popup = DeviceSettingsDialog(self.deviceID, self.dm)
@@ -78,6 +79,12 @@ class DisplayWidget(QtGui.QWidget):
             self.calibration = (popup.slope.value(), popup.intercept.value())
 
         self.unit = str(popup.unit.text())
+
+    def deleteSelf(self):
+        self.dm.closeDevice(self.deviceID)
+        # FIXME: Remove Widget from MainWindow.displayWidgets
+        self.hide()
+        # FIXME: Delete not hide
 
 
 class DeviceSettingsDialog(QtGui.QDialog):

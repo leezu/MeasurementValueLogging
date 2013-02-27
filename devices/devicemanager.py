@@ -117,7 +117,7 @@ class DeviceManager(object):
 
         elif isinstance(config.relationship[0], float):
             parentID = config.relationship[0]
-            self.getDevice(parentID).closeDevice(input=config[2])
+            self.getDevice(parentID).closeDevice(input=config.relationship[2])
             del(self.devices[deviceID])
             del(self.configs[deviceID])
             del(self.configs[parentID].relationship[1][deviceID])
@@ -155,7 +155,7 @@ class DeviceManager(object):
 
         except KeyError:
             import sys
-            sys.stderr.write("KeyError")
+            sys.stderr.write("KeyError in getLastRawValue (no value yet?)\n")
             
             return __NullValue()
 
