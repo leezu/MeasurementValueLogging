@@ -72,7 +72,7 @@
    <item row="1" column="0" alignment="Qt::AlignRight">
     <widget class="QLabel" name="deviceName">
      <property name="text">
-      <string>TextLabel</string>
+      <string/>
      </property>
     </widget>
    </item>
