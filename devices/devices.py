@@ -286,7 +286,7 @@ class TecpelDMM8061(Device):
                 elif self.ampere:
                     return "ampere"
                 else:
-                    return ""
+                    return "celsius"
 
             elif type == "unit":
                 if self.ohm:
@@ -300,7 +300,7 @@ class TecpelDMM8061(Device):
                 elif self.ampere:
                     return "A"
                 else:
-                    return ""
+                    return "°C"
 
         def getFactor(self, type="value"):
             if type == "value":
