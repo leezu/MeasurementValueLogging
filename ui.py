@@ -40,15 +40,15 @@ class SettingsDialog(QtGui.QDialog):
 
 
 class DisplayWidget(QtGui.QWidget):
-    def __init__(self, deviceName, deviceID, dm, parent=None):
+    def __init__(self, deviceID, dm, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.ui = uic.loadUi("ui/displayWidget.ui", self)
 
-        self.deviceName = deviceName
         self.deviceID = deviceID
         self.unit = ""
         self.calibration = (1.0, 0.0)
         self.dm = dm
+        self.deviceName.setText(str(dm.getDevice(self.deviceID)))
 
         self.settingsButton.clicked.connect(self.deviceSettings)
 
@@ -177,7 +177,7 @@ class MainWindow(QtGui.QMainWindow):
                             deviceID = self.dm.openWithConfig(DeviceConfig((xls200ID, {}, 1), sub1))
                             self.deviceIDs.append(deviceID)
 
-                            sub1Widget = DisplayWidget(sub1, deviceID, self.dm)
+                            sub1Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub1Widget)
                             self.displayWidgets.append(sub1Widget)
 
@@ -185,7 +185,7 @@ class MainWindow(QtGui.QMainWindow):
                             deviceID = self.dm.openWithConfig(DeviceConfig((xls200ID, {}, 2), sub2))
                             self.deviceIDs.append(deviceID)
 
-                            sub2Widget = DisplayWidget(sub2, deviceID, self.dm)
+                            sub2Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub2Widget)
                             self.displayWidgets.append(sub2Widget)
 
@@ -193,7 +193,7 @@ class MainWindow(QtGui.QMainWindow):
                             deviceID = self.dm.openWithConfig(DeviceConfig((xls200ID, {}, 3), sub3))
                             self.deviceIDs.append(deviceID)
 
-                            sub3Widget = DisplayWidget(sub3, deviceID, self.dm)
+                            sub3Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub3Widget)
                             self.displayWidgets.append(sub3Widget)
 
@@ -201,7 +201,7 @@ class MainWindow(QtGui.QMainWindow):
                 deviceID = self.dm.openWithConfig(DeviceConfig((port, {}), device))
                 self.deviceIDs.append(deviceID)
 
-                deviceWidget = DisplayWidget(device, deviceID, self.dm)
+                deviceWidget = DisplayWidget(deviceID, self.dm)
                 self.verticalLayout.addWidget(deviceWidget)
                 self.displayWidgets.append(deviceWidget)
 
