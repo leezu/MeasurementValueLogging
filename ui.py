@@ -8,6 +8,15 @@ class NewDeviceDialog(QtGui.QDialog):
         self.ui = uic.loadUi("ui/newDeviceDialog.ui", self)
 
 
+class DoReallyDialog(QtGui.QDialog):
+    def __init__(self, title, text, parent=None):
+        QtGui.QDialog.__init__(self, parent)
+        self.ui = uic.loadUi("ui/doReallyDialog.ui", self)
+
+        self.windowTitle = title
+        self.label.setText(text)
+
+
 class Xls200Dialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
@@ -153,6 +162,13 @@ class MainWindow(QtGui.QMainWindow):
 
         if self.pathToLogFile:
             subprocess.call(self.officePath.split() + self.pathToLogFile.split())
+        else:
+            popup = DoReallyDialog("Warning",
+                "You have not saved a log yet.")
+            popup.exec_()
+
+            if popup.result() == 0:
+                return
 
     def addDevice(self):
         validDevices = self.dm.getValidDevices()
@@ -228,6 +244,15 @@ class MainWindow(QtGui.QMainWindow):
         import tempfile
 
         if self.log == False:
+            if self.tmpfile:
+                popup = DoReallyDialog("Overwrite last log",
+                    "Do you really want to overwrite the last (unsaved) log?\n"+
+                    "If not, please cancel and save it first.")
+                popup.exec_()
+
+                if popup.result() == 0:
+                    return
+
             self.tmpfile = tempfile.TemporaryFile()
             self.starttime = time.time()
             self.log = True
@@ -251,6 +276,13 @@ class MainWindow(QtGui.QMainWindow):
 	        with open(filename, 'w') as stream:
 	            stream.write(self.tmpfile.read())
 	        self.pathToLogFile = str(filename)
+        else:
+            popup = DoReallyDialog("Warning",
+                "You first have to log something, to save it.")
+            popup.exec_()
+
+            if popup.result() == 0:
+                return
 
     def updateValues(self):
         import time
@@ -265,10 +297,14 @@ class MainWindow(QtGui.QMainWindow):
             i.label.setText(str(rv.getFactor("prefix") + rv.getUnit()).decode('utf-8'))
             # python3 incompatibility: in python3 .decode() is not needed anymore
             
-            if self.log and ((time.time() - self.lasttime) > self.loggingInterval):
+        if self.log and ((time.time() - self.lasttime) > self.loggingInterval):
+            for i in self.displayWidgets:
+                unit = None
+                if i.unit != "":
+                    unit = i.unit
+                rv = self.dm.getCalibratedLastRawValue(i.deviceID, i.calibration, i.unit)
                 self.tmpfile.write(str(rv.getDisplayedValue() * rv.getFactor()) + ",")
 
-        if self.log and ((time.time() - self.lasttime) > self.loggingInterval):
             self.tmpfile.write("\n")
             self.lasttime = time.time()
         
