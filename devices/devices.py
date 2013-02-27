@@ -75,6 +75,14 @@ class Device(object):
         
         return cls(ser, *args, **kwargs)
 
+    def __repr__(self):
+        return "{classname}(serial={serial!r}) # ownSer={ownser}".format(classname=self.__class__.__name__,
+            serial=self._ser, ownser = self._ownSer)
+
+    def __str__(self):
+        return "{classname}: port={serialport!s}".format(classname=self.__class__.__name__,
+            serialport=self._ser.port)
+
     def isAvailable(self):
         """Returns the device status (available or not)"""
 
@@ -129,6 +137,14 @@ class Value(object):
 
     """
     _time = 0
+
+    def __repr__(self):
+        return "< {classname}: displaydValue={!s}), unit={!s}, factor={!s} >".format(
+            self.getDisplayedValue(), self.getUnit(), self.getFactor())
+
+    def __str__(self):
+        return "{} {}{}".format(self.getDisplayedValue(),
+            self.getUnit(type="prefix"), self.getFactor())
 
     def getDisplayedValue(self):
         """Returns the displayed value (as a number)."""
@@ -474,6 +490,32 @@ class XLS200(MultiboxDevice):
 
         if in3:
             self.openDevice(in3, input = 3, *args, **kwargs)
+
+    def __repr__(self):
+        string = "{classname}(serial={serial!r}) # ownSer={ownser}".format(
+            classname=self.__class__.__name__, serial=self._ser, ownser = self._ownSer)
+
+        if self.getDevice(input=1):
+            string += ", in1={in1}".format(in1=self.getDevice(input=1).__class__.__name__)
+        if self.getDevice(input=2):
+            string += ", in2={in2}".format(in2=self.getDevice(input=2).__class__.__name__)
+        if self.getDevice(input=3):
+            string += ", in3={in3}".format(in3=self.getDevice(input=3).__class__.__name__)
+
+        return string
+
+    def __str__(self):
+        string = "{classname}: port={port!s}".format(
+            classname=self.__class__.__name__, port=self._ser.port)
+
+        if self.getDevice(input=1):
+            string += ", in1={in1}".format(in1=self.getDevice(input=1).__class__.__name__)
+        if self.getDevice(input=2):
+            string += ", in2={in2}".format(in2=self.getDevice(input=2).__class__.__name__)
+        if self.getDevice(input=3):
+            string += ", in3={in3}".format(in3=self.getDevice(input=3).__class__.__name__)
+
+        return string
 
     def _changeInput(self, input = 1):
         # DTR True & RTS False = 1
