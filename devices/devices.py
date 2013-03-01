@@ -172,6 +172,20 @@ class Value(object):
         return self._time
 
 
+class NullValue(Value):
+    def getDisplayedValue(self):
+        return 0
+
+    def getUnit(self):
+        return ""
+
+    def getFactor(self, type="value"):
+        if type == "value":
+            return pow(10, 0)
+        elif type == "prefix":
+            return ""
+
+
 class TecpelDMM8061(Device):
     """Multimeter
 

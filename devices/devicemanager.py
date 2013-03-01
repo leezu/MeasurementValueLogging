@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import threading
-from .devices import Device, Value, TecpelDMM8061, XLS200, KernPCB, BS600
+from .devices import Device, Value, NullValue, TecpelDMM8061, XLS200, KernPCB, BS600
 
 class DeviceManager(object):
     """DeviceManager object manages devices.
@@ -29,9 +29,11 @@ class DeviceManager(object):
         assert isinstance(config.relationship[1], dict)
 
     def _updateRawValues(self):
-        assert self._running
-
-        self.rawValues = self._thread.rawValues
+        if self._running:
+            self.rawValues = self._thread.rawValues
+        else:
+            import sys
+            sys.stderr.write("GetValuesThread not running. Can't update values.\n")
 
     def _getLinearFunction(self, value1, value2):
         """Return a linear function, which contains value1 and value2.
@@ -129,35 +131,16 @@ class DeviceManager(object):
         
         """
 
-        class __NullValue(Value):
-            def getDisplayedValue(self):
-                return 0
-
-            def getUnit(self):
-                return ""
-
-            def getFactor(self, type="value"):
-                if type == "value":
-                    return pow(10, 0)
-                elif type == "prefix":
-                    return ""
+        self._updateRawValues()
 
         try:
-            self._updateRawValues()
-        except AssertionError:
-            pass
-
-        try:
-            rv = self.rawValues[deviceID]
-            if rv == None:
-                return __NullValue()
-            return rv
+            return self.rawValues[deviceID]
 
         except KeyError:
             import sys
             sys.stderr.write("KeyError in getLastRawValue (no value yet?)\n")
             
-            return __NullValue()
+            return NullValue()
 
     def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
         """Return a calibrated value from the getLastRawValue method.
@@ -220,11 +203,9 @@ class DeviceManager(object):
         """Start the devicemanager"""
 
         self._stopEvent = threading.Event()
-        self._running = True
-
         self._thread = _GetValuesThread(self._stopEvent, self.devices, self.configs)
-
         self._thread.start()
+        self._running = True
 
     def stop(self):
         """Stop the devicemanager"""
@@ -269,6 +250,9 @@ class _GetValuesThread(threading.Thread):
         self.devices = devices
         self.configs = configs
 
+        for key in self.devices.iteritems():
+            self.rawValues[key] = NullValue()
+
     def run(self):
         while not self.stop_event.is_set():
             self.updateValue()
@@ -278,16 +262,19 @@ class _GetValuesThread(threading.Thread):
         for key, val in self.configs.iteritems():
             if isinstance(val.relationship[0], str):
                 if len(val.relationship[1]) == 0: # If there are no subdevices
-                    self.rawValues[key] = self.devices[key].getRawValue()
+                    rv = self.devices[key].getRawValue()
+                    if rv:
+                        self.rawValues[key] = rv
+                    else:
+                        self.rawValues[key] = NullValue()
 
                 else:
                     for subID, subInput in val.relationship[1].iteritems():
-                        self.rawValues[subID] = self.devices[key].getRawValue(input = subInput)
-
-                    self.rawValues[key] = {} # Add a dict of subdevice rawvalues to the device
-                    for subID, subInput in val.relationship[1].iteritems():
-                        self.rawValues[key][subID] = self.rawValues[subID]
-
+                        rv = self.devices[key].getRawValue(input = subInput)
+                        if rv:
+                            self.rawValues[subID] = rv
+                        else:
+                            self.rawValues[subID] = NullValue()
 
 
 if __name__ == '__main__':
