@@ -48,6 +48,35 @@ class SettingsDialog(QtGui.QDialog):
         self.settings.setValue("logging/interval", self.loggingInterval.value())
 
 
+class DevicemanagerDialog(QtGui.QDialog):
+    ids = []
+
+    def __init__(self, dm, parent=None):
+        QtGui.QDialog.__init__(self, parent)
+        self.ui = uic.loadUi("ui/devicemanagerDialog.ui", self)
+        self.dm = dm
+
+        self.deleteButton.clicked.connect(self.deleteItem)
+
+        self.refreshList()
+
+    def refreshList(self):
+        self.ids = self.dm.getAllDeviceIDs()
+
+        self.listWidget.clear()
+
+        for id in self.ids:
+            item = QtGui.QListWidgetItem(str(self.dm.getDevice(id)))
+            self.listWidget.addItem(item)
+
+    def deleteItem(self):
+        row = self.listWidget.currentRow()
+
+        self.dm.closeDevice(self.ids[row])
+
+        self.refreshList()
+
+
 class DisplayWidget(QtGui.QWidget):
     def __init__(self, deviceID, dm, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -60,7 +89,7 @@ class DisplayWidget(QtGui.QWidget):
         self.deviceName.setText(str(dm.getDevice(self.deviceID)))
 
         self.settingsButton.clicked.connect(self.deviceSettings)
-        self.deleteButton.clicked.connect(self.deleteSelf)
+        self.deleteButton.clicked.connect(self.delete)
 
     def deviceSettings(self):
         popup = DeviceSettingsDialog(self.deviceID, self.dm)
@@ -89,10 +118,10 @@ class DisplayWidget(QtGui.QWidget):
 
         self.unit = str(popup.unit.text())
 
-    def deleteSelf(self):
+    def delete(self):
         self.dm.closeDevice(self.deviceID)
-        # FIXME: Remove Widget from MainWindow.displayWidgets
-        self.hide()
+        # self.hide()
+        self.deletelater()
         # FIXME: Delete not hide
 
 
@@ -118,8 +147,7 @@ class DeviceSettingsDialog(QtGui.QDialog):
 
 class MainWindow(QtGui.QMainWindow):
     dm = None
-    deviceIDs = []
-    displayWidgets = []
+    displayWidgets = {}
 
     log = False
     tmpfile = None
@@ -141,10 +169,11 @@ class MainWindow(QtGui.QMainWindow):
         self.openButton.clicked.connect(self.openLog)
 
         self.actionSettings.triggered.connect(self.settingsDialog)
+        self.actionDevicemanager.triggered.connect(self.devicemanagerDialog)
 
         self.dm = DeviceManager()
         self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.updateValues)
+        self.timer.timeout.connect(self.update)
 
         self.settings = QtCore.QSettings()
         self.officePath = str(self.settings.value("office/path", "").toString())
@@ -156,6 +185,11 @@ class MainWindow(QtGui.QMainWindow):
 
         self.officePath = str(self.settings.value("office/path", "").toString())
         self.loggingInterval = int(self.settings.value("logging/interval", 1).toInt()[0])
+
+    def devicemanagerDialog(self):
+        popup = DevicemanagerDialog(self.dm)
+        popup.exec_()
+
 
     def openLog(self):
         import subprocess
@@ -198,35 +232,27 @@ class MainWindow(QtGui.QMainWindow):
                     
                     if sub1 != "":
                             deviceID = self.dm.openWithConfig(DeviceConfig((xls200ID, {}, 1), sub1))
-                            self.deviceIDs.append(deviceID)
-
                             sub1Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub1Widget)
-                            self.displayWidgets.append(sub1Widget)
+                            self.displayWidgets[deviceID] = sub1Widget
 
                     if sub2 != "":
                             deviceID = self.dm.openWithConfig(DeviceConfig((xls200ID, {}, 2), sub2))
-                            self.deviceIDs.append(deviceID)
-
                             sub2Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub2Widget)
-                            self.displayWidgets.append(sub2Widget)
+                            self.displayWidgets[deviceID] = sub2Widget
 
                     if sub3 != "":
                             deviceID = self.dm.openWithConfig(DeviceConfig((xls200ID, {}, 3), sub3))
-                            self.deviceIDs.append(deviceID)
-
                             sub3Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub3Widget)
-                            self.displayWidgets.append(sub3Widget)
+                            self.displayWidgets[deviceID] = sub3Widget
 
             else:
                 deviceID = self.dm.openWithConfig(DeviceConfig((port, {}), device))
-                self.deviceIDs.append(deviceID)
-
                 deviceWidget = DisplayWidget(deviceID, self.dm)
                 self.verticalLayout.addWidget(deviceWidget)
-                self.displayWidgets.append(deviceWidget)
+                self.displayWidgets[deviceID] = deviceWidget
 
     def startStopMeasurement(self):
         if self.dm.getStatus() == False:
@@ -284,25 +310,39 @@ class MainWindow(QtGui.QMainWindow):
             if popup.result() == 0:
                 return
 
-    def updateValues(self):
+    def update(self):
         import time
+        # python3 incompatibility: .iteritems()
+        # Delete unnecessary widgets
+        for deviceID, widget in self.displayWidgets.iteritems():
+            if deviceID not in self.dm.getAllDeviceIDs():
+                deviceIDsToBeDeleted.append(deviceID)
+        for i in deviceIDsToBeDeleted:
+            try:
+                self.displayWidgets[i].delete()
+                del(self.displayWidgets[i])
+            except KeyError:
+                # Some devices don't have widgets (e.g. xls200), so there are no widgets to be deleted
+                pass
 
-        for i in self.displayWidgets:
+        # update widgets
+        for deviceID, widget in self.displayWidgets.iteritems():
             unit = None
-            if i.unit != "":
-                unit = i.unit
+            if widget.unit != "":
+                unit = widget.unit
 
-            rv = self.dm.getCalibratedLastRawValue(i.deviceID, i.calibration, i.unit)
-            i.lcdNumber.display(rv.getDisplayedValue())
-            i.label.setText(str(rv.getFactor("prefix") + rv.getUnit()).decode('utf-8'))
+            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
+            widget.lcdNumber.display(rv.getDisplayedValue())
+            widget.label.setText(str(rv.getFactor("prefix") + rv.getUnit()).decode('utf-8'))
             # python3 incompatibility: in python3 .decode() is not needed anymore
-            
+        
+        # log    
         if self.log and ((time.time() - self.lasttime) > self.loggingInterval):
-            for i in self.displayWidgets:
+            for deviceID, widget in self.displayWidgets.iteritems():
                 unit = None
-                if i.unit != "":
-                    unit = i.unit
-                rv = self.dm.getCalibratedLastRawValue(i.deviceID, i.calibration, i.unit)
+                if widget.unit != "":
+                    unit = widget.unit
+                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
                 self.tmpfile.write(str(rv.getDisplayedValue() * rv.getFactor()) + ",")
 
             self.tmpfile.write("\n")

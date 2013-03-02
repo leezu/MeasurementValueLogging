@@ -63,6 +63,15 @@ class DeviceManager(object):
 
         return self._validDevices
 
+    def getAllDeviceIDs(self):
+        """Returns a complete list of registered device ID's"""
+
+        ids = []
+        for id in self.configs:
+            ids.append(id)
+
+        return ids
+
     def getAvailiablePorts(self):
         """Returns a list of valid and availiable serial ports."""
 
@@ -91,17 +100,18 @@ class DeviceManager(object):
         self._checkConfig(config)
         id = time.time()
 
-        if isinstance(config.relationship[0], str):
+        parentID = config.relationship[0]
+
+        if isinstance(parentID, str):
             device = eval(config.deviceName).openRS232(config.relationship[0], *config.args, **config.kwargs)
 
-        elif isinstance(config.relationship[0], float):
-            assert self.devices[config.relationship[0]] # FIXME: use another error (e.g. WrongIDError)
+        elif isinstance(parentID, float):
+            assert self.devices[parentID] # FIXME: use another error (e.g. WrongIDError)
 
-            self.devices[config.relationship[0]].openDevice(eval(config.deviceName),
+            self.devices[parentID].openDevice(eval(config.deviceName),
                 input = config.relationship[2], *config.args, **config.kwargs)
-            device = self.devices[config.relationship[0]].getDevice(input = config.relationship[2])
-            self.configs[config.relationship[0]].relationship[1][id] = config.relationship[2]
-
+            device = self.devices[parentID].getDevice(input = config.relationship[2])
+            self.configs[parentID].relationship[1][id] = config.relationship[2]
 
         self.devices[id] = device
         self.configs[id] = config
@@ -111,9 +121,16 @@ class DeviceManager(object):
     def closeDevice(self, deviceID):
         assert self._running == False # FIXME: use another error
 
-        config =self.configs[deviceID]
+        config = self.configs[deviceID]
 
         if isinstance(config.relationship[0], str):
+            import copy
+            relCopy = copy.copy(config.relationship[1])
+            # prevent RuntimeError: dictionary changed size during iteration
+            
+            for subdeviceID, inputNumber in relCopy.iteritems():
+                self.closeDevice(subdeviceID)
+
             del(self.devices[deviceID])
             del(self.configs[deviceID])
 
