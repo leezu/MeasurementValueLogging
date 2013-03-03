@@ -89,7 +89,7 @@ class DisplayWidget(QtGui.QWidget):
         self.deviceName.setText(str(dm.getDevice(self.deviceID)))
 
         self.settingsButton.clicked.connect(self.deviceSettings)
-        self.deleteButton.clicked.connect(self.delete)
+        self.deleteButton.clicked.connect(self.close)
 
     def deviceSettings(self):
         popup = DeviceSettingsDialog(self.deviceID, self.dm)
@@ -119,10 +119,10 @@ class DisplayWidget(QtGui.QWidget):
         self.unit = str(popup.unit.text())
 
     def delete(self):
+        self.deleteLater()
+
+    def close(self):
         self.dm.closeDevice(self.deviceID)
-        # self.hide()
-        self.deletelater()
-        # FIXME: Delete not hide
 
 
 class DeviceSettingsDialog(QtGui.QDialog):
@@ -149,6 +149,8 @@ class MainWindow(QtGui.QMainWindow):
     dm = None
     displayWidgets = {}
 
+    running = False
+
     log = False
     tmpfile = None
     starttime = 0
@@ -174,6 +176,7 @@ class MainWindow(QtGui.QMainWindow):
         self.dm = DeviceManager()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.update)
+        self.timer.start(50)
 
         self.settings = QtCore.QSettings()
         self.officePath = str(self.settings.value("office/path", "").toString())
@@ -257,12 +260,12 @@ class MainWindow(QtGui.QMainWindow):
     def startStopMeasurement(self):
         if self.dm.getStatus() == False:
             self.dm.start()
-            self.timer.start(500)
+            self.running = True
             self.measurementButton.setText("Stop")
 
         elif self.dm.getStatus() == True:
-            self.timer.stop()
             self.dm.stop()
+            self.running = False
             self.measurementButton.setText("Start")
 
     def startStopLogging(self):
@@ -314,6 +317,7 @@ class MainWindow(QtGui.QMainWindow):
         import time
         # python3 incompatibility: .iteritems()
         # Delete unnecessary widgets
+        deviceIDsToBeDeleted = []
         for deviceID, widget in self.displayWidgets.iteritems():
             if deviceID not in self.dm.getAllDeviceIDs():
                 deviceIDsToBeDeleted.append(deviceID)
@@ -325,28 +329,29 @@ class MainWindow(QtGui.QMainWindow):
                 # Some devices don't have widgets (e.g. xls200), so there are no widgets to be deleted
                 pass
 
-        # update widgets
-        for deviceID, widget in self.displayWidgets.iteritems():
-            unit = None
-            if widget.unit != "":
-                unit = widget.unit
-
-            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
-            widget.lcdNumber.display(rv.getDisplayedValue())
-            widget.label.setText(str(rv.getFactor("prefix") + rv.getUnit()).decode('utf-8'))
-            # python3 incompatibility: in python3 .decode() is not needed anymore
-        
-        # log    
-        if self.log and ((time.time() - self.lasttime) > self.loggingInterval):
+        if self.running:
+            # update widgets
             for deviceID, widget in self.displayWidgets.iteritems():
                 unit = None
                 if widget.unit != "":
                     unit = widget.unit
-                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
-                self.tmpfile.write(str(rv.getDisplayedValue() * rv.getFactor()) + ",")
 
-            self.tmpfile.write("\n")
-            self.lasttime = time.time()
+                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
+                widget.lcdNumber.display(rv.getDisplayedValue())
+                widget.label.setText(str(rv.getFactor("prefix") + rv.getUnit()).decode('utf-8'))
+                # python3 incompatibility: in python3 .decode() is not needed anymore
+            
+            # log    
+            if self.log and ((time.time() - self.lasttime) > self.loggingInterval):
+                for deviceID, widget in self.displayWidgets.iteritems():
+                    unit = None
+                    if widget.unit != "":
+                        unit = widget.unit
+                    rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
+                    self.tmpfile.write(str(rv.getDisplayedValue() * rv.getFactor()) + ",")
+
+                self.tmpfile.write("\n")
+                self.lasttime = time.time()
         
 
 class App(QtGui.QApplication):
