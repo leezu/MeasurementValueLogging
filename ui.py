@@ -3,9 +3,13 @@ from PyQt4 import QtCore, QtGui, uic
 from devices.devicemanager import DeviceManager, DeviceConfig
 
 class NewDeviceDialog(QtGui.QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, dm, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.ui = uic.loadUi("ui/newDeviceDialog.ui", self)
+        self.dm = dm
+
+        self.deviceComboBox.addItems(self.dm.getValidDevices())
+        self.portComboBox.addItems(self.dm.getAvailiablePorts())
 
 
 class DoReallyDialog(QtGui.QDialog):
@@ -37,15 +41,17 @@ class SettingsDialog(QtGui.QDialog):
 
         self.path.setText(self.settings.value("office/path", "").toString())
         self.loggingInterval.setValue(self.settings.value("logging/interval", 1).toInt()[0])
+        self.languageComboBox.setCurrentIndex(self.settings.value("i18n", -1).toInt()[0])
 
     def openFile(self):
         import os
         popup = QtGui.QFileDialog()
-        self.path.setText(popup.getOpenFileName(self, "Search Office", os.path.expanduser("~"), ""))
+        self.path.setText(popup.getOpenFileName(self, self.tr("Search Office"), os.path.expanduser("~"), ""))
 
     def save(self):
         self.settings.setValue("office/path", self.path.text())
         self.settings.setValue("logging/interval", self.loggingInterval.value())
+        self.settings.setValue("i18n", self.languageComboBox.currentIndex())
 
 
 class DevicemanagerDialog(QtGui.QDialog):
@@ -200,19 +206,15 @@ class MainWindow(QtGui.QMainWindow):
         if self.pathToLogFile:
             subprocess.call(self.officePath.split() + self.pathToLogFile.split())
         else:
-            popup = DoReallyDialog("Warning",
-                "You have not saved a log yet.")
+            popup = DoReallyDialog(self.tr("Warning"),
+                self.tr("You have not saved a log yet."))
             popup.exec_()
 
             if popup.result() == 0:
                 return
 
     def addDevice(self):
-        validDevices = self.dm.getValidDevices()
-
-        popup = NewDeviceDialog()
-        popup.deviceComboBox.addItems(validDevices)
-        popup.portComboBox.addItems(self.dm.getAvailiablePorts())
+        popup = NewDeviceDialog(self.dm)
         popup.exec_()
 
         if popup.result():
@@ -261,12 +263,12 @@ class MainWindow(QtGui.QMainWindow):
         if self.dm.getStatus() == False:
             self.dm.start()
             self.running = True
-            self.measurementButton.setText("Stop")
+            self.measurementButton.setText(self.tr("Stop"))
 
         elif self.dm.getStatus() == True:
             self.dm.stop()
             self.running = False
-            self.measurementButton.setText("Start")
+            self.measurementButton.setText(self.tr("Start"))
 
     def startStopLogging(self):
         import time
@@ -274,9 +276,9 @@ class MainWindow(QtGui.QMainWindow):
 
         if self.log == False:
             if self.tmpfile:
-                popup = DoReallyDialog("Overwrite last log",
-                    "Do you really want to overwrite the last (unsaved) log?\n"+
-                    "If not, please cancel and save it first.")
+                popup = DoReallyDialog(self.tr("Overwrite last log"),
+                    self.tr("Do you really want to overwrite the last (unsaved) log?\n")+
+                    self.tr("If not, please cancel and save it first."))
                 popup.exec_()
 
                 if popup.result() == 0:
@@ -285,18 +287,18 @@ class MainWindow(QtGui.QMainWindow):
             self.tmpfile = tempfile.TemporaryFile()
             self.starttime = time.time()
             self.log = True
-            self.loggingButton.setText("Stop logging")
+            self.loggingButton.setText(self.tr("Stop logging"))
 
         elif self.log:
             self.log = False
-            self.loggingButton.setText("Start logging")
+            self.loggingButton.setText(self.tr("Start logging"))
 
     def saveLog(self):
         import os
 
         if self.tmpfile:
 	        popup = QtGui.QFileDialog()
-	        filename = QtGui.QFileDialog.getSaveFileName(self, "Save file", os.path.expanduser("~"), "")
+	        filename = QtGui.QFileDialog.getSaveFileName(self, self.tr("Save file"), os.path.expanduser("~"), "")
 
 	        if filename[-4:] != ".csv":
 	            filename += ".csv"
@@ -306,8 +308,8 @@ class MainWindow(QtGui.QMainWindow):
 	            stream.write(self.tmpfile.read())
 	        self.pathToLogFile = str(filename)
         else:
-            popup = DoReallyDialog("Warning",
-                "You first have to log something, to save it.")
+            popup = DoReallyDialog(self.tr("Warning"),
+                self.tr("You first have to log something, to save it."))
             popup.exec_()
 
             if popup.result() == 0:
@@ -357,12 +359,29 @@ class MainWindow(QtGui.QMainWindow):
 class App(QtGui.QApplication):
     def __init__(self, *args, **kwargs):
         QtGui.QApplication.__init__(self, *args, **kwargs)
-        self.main = MainWindow()
         self.connect(self, QtCore.SIGNAL("lastWindowClosed()"), self.byebye )
+
+    def setup(self):
+        self.main = MainWindow()
         self.main.show()
 
     def byebye(self):
         self.exit(0)
 
 if __name__ == "__main__":
-    App(sys.argv).exec_()
+    app = App(sys.argv)
+
+    translator = QtCore.QTranslator()
+    langVal = QtCore.QSettings().value("i18n", -1).toInt()[0]
+    
+    if langVal == -1:
+        locale = QtCore.QLocale.system().name()
+        if translator.load(locale, "i18n"):
+            app.installTranslator(translator)
+    if langVal == 1:
+        translator.load("de", "i18n")
+        app.installTranslator(translator)
+
+
+    app.setup()
+    app.exec_()
