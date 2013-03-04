@@ -44,8 +44,13 @@ class DeviceManager(object):
         :type value2: tuple x,y
 
         """
+        try:
+            m = (value1[1] - value2[1]) / (value1[0] - value2[0])
+        except ZeroDivisionError:
+            import sys
+            sys.stderr.write("ZeroDivisionError during slope computation.\nSetting slope to 1\n")
+            m = 1
 
-        m = (value1[1] - value2[1]) / (value1[0] - value2[0])
         c = value1[1] - m*value1[0]
 
         def result(x):
@@ -83,7 +88,6 @@ class DeviceManager(object):
             portsList.append(i[0])
 
         return tuple(portsList)
-
 
     def getStatus(self):
         """Returns the status of the devicemanager."""
