@@ -225,7 +225,7 @@ class MainWindow(QtGui.QMainWindow):
                 xls200Popup = Xls200Dialog()
                 for i in (xls200Popup.subdevice1ComboBox,
                         xls200Popup.subdevice2ComboBox, xls200Popup.subdevice3ComboBox):
-                    i.addItems([""] + validDevices)
+                    i.addItems([""] + self.dm.getValidDevices())
 
                 xls200Popup.exec_()
 
@@ -381,7 +381,6 @@ if __name__ == "__main__":
     if langVal == 1:
         translator.load("de", "i18n")
         app.installTranslator(translator)
-
 
     app.setup()
     app.exec_()
