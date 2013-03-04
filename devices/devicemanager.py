@@ -145,6 +145,12 @@ class DeviceManager(object):
             del(self.configs[deviceID])
             del(self.configs[parentID].relationship[1][deviceID])
 
+    def closeEmptyMultiboxDevices(self):
+        for i in self.getAllDeviceIDs():
+            config = self.configs[i]
+            if len(config.relationship[1]) == 0 and config.deviceName == "XLS200":
+                self.closeDevice(i)
+
     def getLastRawValue(self, deviceID):
         """Returns the last raw value of device with ID deviceID.
 
@@ -281,9 +287,9 @@ class _GetValuesThread(threading.Thread):
     def updateValue(self):
         # python3 incompatibility: iteritems
         try:
-            for key, val in self.configs.iteritems():
-                if isinstance(val.relationship[0], str):
-                    if len(val.relationship[1]) == 0 and val.deviceName != "XLS200":
+            for key, config in self.configs.iteritems():
+                if isinstance(config.relationship[0], str):
+                    if len(config.relationship[1]) == 0 and config.deviceName != "XLS200":
                             # If there are no subdevices and it's not an "empty" Multiboxdevice
                         rv = self.devices[key].getRawValue()
                         if rv:
@@ -292,7 +298,7 @@ class _GetValuesThread(threading.Thread):
                             self.rawValues[key] = NullValue()
 
                     else:
-                        for subID, subInput in val.relationship[1].iteritems():
+                        for subID, subInput in config.relationship[1].iteritems():
                             rv = self.devices[key].getRawValue(input = subInput)
                             if rv:
                                 self.rawValues[subID] = rv

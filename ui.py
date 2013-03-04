@@ -79,6 +79,7 @@ class DevicemanagerDialog(QtGui.QDialog):
         row = self.listWidget.currentRow()
 
         self.dm.closeDevice(self.ids[row])
+        self.dm.closeEmptyMultiboxDevices()
 
         self.refreshList()
 
@@ -337,6 +338,9 @@ class MainWindow(QtGui.QMainWindow):
         for deviceID, widget in self.displayWidgets.iteritems():
             if deviceID not in self.dm.getAllDeviceIDs():
                 deviceIDsToBeDeleted.append(deviceID)
+        
+        self.dm.closeEmptyMultiboxDevices()
+
         for i in deviceIDsToBeDeleted:
             try:
                 self.displayWidgets[i].delete()
