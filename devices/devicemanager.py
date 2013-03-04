@@ -295,7 +295,7 @@ class _GetValuesThread(threading.Thread):
                         if rv:
                             self.rawValues[key] = rv
                         else:
-                            self.rawValues[key] = NullValue()
+                            pass
 
                     else:
                         for subID, subInput in config.relationship[1].iteritems():
@@ -303,7 +303,7 @@ class _GetValuesThread(threading.Thread):
                             if rv:
                                 self.rawValues[subID] = rv
                             else:
-                                self.rawValues[subID] = NullValue()
+                                pass
 
         except RuntimeError:
             # A RuntimeError: dictionary changed size during iteration
