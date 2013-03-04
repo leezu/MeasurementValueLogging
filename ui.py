@@ -128,7 +128,12 @@ class DisplayWidget(QtGui.QWidget):
         self.deleteLater()
 
     def close(self):
-        self.dm.closeDevice(self.deviceID)
+        if self.dm.getStatus() == False:
+            self.dm.closeDevice(self.deviceID)
+        else:
+            popup = DoReallyDialog(self.tr("Warning"),
+                self.tr("You have to stop the measurement to delete a device."))
+            popup.exec_()
 
 
 class DeviceSettingsDialog(QtGui.QDialog):
@@ -196,9 +201,13 @@ class MainWindow(QtGui.QMainWindow):
         self.loggingInterval = int(self.settings.value("logging/interval", 1).toInt()[0])
 
     def devicemanagerDialog(self):
-        popup = DevicemanagerDialog(self.dm)
-        popup.exec_()
-
+        if self.dm.getStatus() == False:
+            popup = DevicemanagerDialog(self.dm)
+            popup.exec_()
+        else:
+            popup = DoReallyDialog(self.tr("Warning"),
+                self.tr("You have to stop the measurement to open the devicemanager."))
+            popup.exec_()
 
     def openLog(self):
         import subprocess
@@ -209,9 +218,6 @@ class MainWindow(QtGui.QMainWindow):
             popup = DoReallyDialog(self.tr("Warning"),
                 self.tr("You have not saved a log yet."))
             popup.exec_()
-
-            if popup.result() == 0:
-                return
 
     def addDevice(self):
         popup = NewDeviceDialog(self.dm)
