@@ -283,7 +283,8 @@ class _GetValuesThread(threading.Thread):
         try:
             for key, val in self.configs.iteritems():
                 if isinstance(val.relationship[0], str):
-                    if len(val.relationship[1]) == 0: # If there are no subdevices
+                    if len(val.relationship[1]) == 0 and val.deviceName != "XLS200":
+                            # If there are no subdevices and it's not an "empty" Multiboxdevice
                         rv = self.devices[key].getRawValue()
                         if rv:
                             self.rawValues[key] = rv
@@ -297,7 +298,7 @@ class _GetValuesThread(threading.Thread):
                                 self.rawValues[subID] = rv
                             else:
                                 self.rawValues[subID] = NullValue()
-                            
+
         except RuntimeError:
             # A RuntimeError: dictionary changed size during iteration
             # may occur here, if a device is deleted, but this updateValue
