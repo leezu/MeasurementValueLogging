@@ -84,13 +84,17 @@ class DevicemanagerDialog(QtGui.QDialog):
 
 
 class DisplayWidget(QtGui.QWidget):
+    calibrationType = 1 # 0: two values calibration, 1: slope and intercept calibration
+    twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
+    slopeInterceptCalibration = 1.0, 0.0
+    calibration = 1.0, 0.0 # this is either the same as slopeInterceptCalibration or twoValueCalibration
+    unit = ""
+
     def __init__(self, deviceID, dm, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.ui = uic.loadUi("ui/displayWidget.ui", self)
 
         self.deviceID = deviceID
-        self.unit = ""
-        self.calibration = (1.0, 0.0)
         self.dm = dm
         self.deviceName.setText(str(dm.getDevice(self.deviceID)))
 
@@ -100,27 +104,31 @@ class DisplayWidget(QtGui.QWidget):
     def deviceSettings(self):
         popup = DeviceSettingsDialog(self.deviceID, self.dm)
 
-        if isinstance(self.calibration[0], float):
-            popup.slope.setValue(self.calibration[0])
-            popup.intercept.setValue(self.calibration[1])
-            popup.slopeInterceptButton.setChecked(True)
+        popup.slope.setValue(self.slopeInterceptCalibration[0])
+        popup.intercept.setValue(self.slopeInterceptCalibration[1])
+        popup.is1.setValue(self.twoValueCalibration[0][0])
+        popup.should1.setValue(self.twoValueCalibration[0][1])
+        popup.is2.setValue(self.twoValueCalibration[1][0])
+        popup.should2.setValue(self.twoValueCalibration[1][1])
 
-        elif len(self.calibration[0]) == 2:
-            popup.is1.setValue(self.calibration[0][0])
-            popup.should1.setValue(self.calibration[0][1])
-            popup.is2.setValue(self.calibration[1][0])
-            popup.should2.setValue(self.calibration[1][1])
+        if self.calibrationType == 1:
+            popup.slopeInterceptButton.setChecked(True)
+        elif self.calibrationType == 0:
             popup.valuesButton.setChecked(True)
 
         popup.unit.setText(self.unit)
 
         popup.exec_()
 
-        if popup.valuesButton.isChecked():
-            self.calibration = ((popup.is1.value(), popup.should1.value()), (popup.is2.value(), popup.should2.value()))
+        self.twoValueCalibration = (popup.is1.value(), popup.should1.value()), (popup.is2.value(), popup.should2.value())
+        self.slopeInterceptCalibration = popup.slope.value(), popup.intercept.value()
 
-        elif popup.slopeInterceptButton.isChecked():
-            self.calibration = (popup.slope.value(), popup.intercept.value())
+        if popup.slopeInterceptButton.isChecked():
+            self.calibrationType = 1
+            self.calibration = self.slopeInterceptCalibration
+        elif popup.valuesButton.isChecked():
+            self.calibrationType = 0
+            self.calibration = self.twoValueCalibration
 
         self.unit = str(popup.unit.text())
 
