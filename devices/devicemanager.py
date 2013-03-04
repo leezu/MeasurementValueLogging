@@ -280,23 +280,31 @@ class _GetValuesThread(threading.Thread):
 
     def updateValue(self):
         # python3 incompatibility: iteritems
-        for key, val in self.configs.iteritems():
-            if isinstance(val.relationship[0], str):
-                if len(val.relationship[1]) == 0: # If there are no subdevices
-                    rv = self.devices[key].getRawValue()
-                    if rv:
-                        self.rawValues[key] = rv
-                    else:
-                        self.rawValues[key] = NullValue()
-
-                else:
-                    for subID, subInput in val.relationship[1].iteritems():
-                        rv = self.devices[key].getRawValue(input = subInput)
+        try:
+            for key, val in self.configs.iteritems():
+                if isinstance(val.relationship[0], str):
+                    if len(val.relationship[1]) == 0: # If there are no subdevices
+                        rv = self.devices[key].getRawValue()
                         if rv:
-                            self.rawValues[subID] = rv
+                            self.rawValues[key] = rv
                         else:
-                            self.rawValues[subID] = NullValue()
+                            self.rawValues[key] = NullValue()
 
+                    else:
+                        for subID, subInput in val.relationship[1].iteritems():
+                            rv = self.devices[key].getRawValue(input = subInput)
+                            if rv:
+                                self.rawValues[subID] = rv
+                            else:
+                                self.rawValues[subID] = NullValue()
+                            
+        except RuntimeError:
+            # A RuntimeError: dictionary changed size during iteration
+            # may occur here, if a device is deleted, but this updateValue
+            # function is still trying to get an rawValue. (-> the devicemanager
+            # is therefore not closed yet) It does no harm though,
+            # as the device is going to be closed afterwards.
+            pass
 
 if __name__ == '__main__':
     dm = DeviceManager()
