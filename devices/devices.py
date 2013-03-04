@@ -194,6 +194,7 @@ class TecpelDMM8061(Device):
     """
     
     _baudrate = 2400
+    _timeout = 1
     _rts = False
     _dtr = True
 
@@ -362,110 +363,110 @@ class TecpelDMM8061(Device):
         import time
         
         starttime = time.time()
-
         assert self.isAvailable()
 
-        bytesrecived = 0
-        result = self.__Value()
+        while not (time.time() - starttime > timeout):
+            read = self._ser.read(26)
+            idList = []
+            for i in read:
+                idList.append(ord(i) >> 4)
 
-        #There are 14 bytes to be received, for every received byte the corresponding bit in bytesreceived is set
-        while((bytesrecived != int('11111111111111', base=2)) and not (time.time() - starttime > timeout)):
-            b = ord(self._ser.read())
-            id = (b & int('11110000', base=2)) >> 4 #convert the higher nibble to the id
-            
-            if id > 0: #Sometimes id seems to be 0 if DMM8061 is (re)started while running the program
-                bytesrecived |= 1 << (id-1)
-            else:
-                continue
+            try:
+                startIndex = idList.index(1)
 
-            if id == 1:
-                result.rs232  = self._testBit(b, 0)
-                result.auto  = self._testBit(b, 1)
-                result.dc  = self._testBit(b, 2)
-                result.ac = self._testBit(b, 3)
+                # Test whether the read value is correct
+                if idList[startIndex + 1] == 2 and idList[startIndex + 4] == 5 and idList[startIndex + 7] == 8 and\
+                        idList[startIndex + 10] == 11 and idList[startIndex + 12] == 13:
+                    
+                    valueString = read[startIndex:(startIndex+13)]
 
-            elif id == 2:
-                result.d4.a  = self._testBit(b, 0)
-                result.d4.f  = self._testBit(b, 1)
-                result.d4.e  = self._testBit(b, 2)
-                result.d4.ex = self._testBit(b, 3)
+                    result = self.__Value()
 
-            elif id == 3:
-                result.d4.b = self._testBit(b, 0)
-                result.d4.g = self._testBit(b, 1)
-                result.d4.c = self._testBit(b, 2)
-                result.d4.d = self._testBit(b, 3)
+                    b = ord(valueString[0])
+                    result.rs232  = self._testBit(b, 0)
+                    result.auto  = self._testBit(b, 1)
+                    result.dc  = self._testBit(b, 2)
+                    result.ac = self._testBit(b, 3)
 
-            elif id == 4:
-                result.d3.a  = self._testBit(b, 0)
-                result.d3.f  = self._testBit(b, 1)
-                result.d3.e  = self._testBit(b, 2)
-                result.d3.ex = self._testBit(b, 3)
+                    b = ord(valueString[1])
+                    result.d4.a  = self._testBit(b, 0)
+                    result.d4.f  = self._testBit(b, 1)
+                    result.d4.e  = self._testBit(b, 2)
+                    result.d4.ex = self._testBit(b, 3)
 
-            elif id == 5:
-                result.d3.b = self._testBit(b, 0)
-                result.d3.g = self._testBit(b, 1)
-                result.d3.c = self._testBit(b, 2)
-                result.d3.d = self._testBit(b, 3)
+                    b = ord(valueString[2])
+                    result.d4.b = self._testBit(b, 0)
+                    result.d4.g = self._testBit(b, 1)
+                    result.d4.c = self._testBit(b, 2)
+                    result.d4.d = self._testBit(b, 3)
 
-            elif id == 6:
-                result.d2.a  = self._testBit(b, 0)
-                result.d2.f  = self._testBit(b, 1)
-                result.d2.e  = self._testBit(b, 2)
-                result.d2.ex = self._testBit(b, 3)
+                    b = ord(valueString[3])
+                    result.d3.a  = self._testBit(b, 0)
+                    result.d3.f  = self._testBit(b, 1)
+                    result.d3.e  = self._testBit(b, 2)
+                    result.d3.ex = self._testBit(b, 3)
 
-            elif id == 7:
-                result.d2.b = self._testBit(b, 0)
-                result.d2.g = self._testBit(b, 1)
-                result.d2.c = self._testBit(b, 2)
-                result.d2.d = self._testBit(b, 3)
+                    b = ord(valueString[4])
+                    result.d3.b = self._testBit(b, 0)
+                    result.d3.g = self._testBit(b, 1)
+                    result.d3.c = self._testBit(b, 2)
+                    result.d3.d = self._testBit(b, 3)
 
-            elif id == 8:
-                result.d1.a  = self._testBit(b, 0)
-                result.d1.f  = self._testBit(b, 1)
-                result.d1.e  = self._testBit(b, 2)
-                result.d1.ex = self._testBit(b, 3)
+                    b = ord(valueString[5])
+                    result.d2.a  = self._testBit(b, 0)
+                    result.d2.f  = self._testBit(b, 1)
+                    result.d2.e  = self._testBit(b, 2)
+                    result.d2.ex = self._testBit(b, 3)
 
-            elif id == 9:
-                result.d1.b = self._testBit(b, 0)
-                result.d1.g = self._testBit(b, 1)
-                result.d1.c = self._testBit(b, 2)
-                result.d1.d = self._testBit(b, 3)
+                    b = ord(valueString[6])
+                    result.d2.b = self._testBit(b, 0)
+                    result.d2.g = self._testBit(b, 1)
+                    result.d2.c = self._testBit(b, 2)
+                    result.d2.d = self._testBit(b, 3)
 
-            elif id == 10:
-                result.diode_test = self._testBit(b, 0)
-                result.kilo = self._testBit(b, 1)
-                result.nano = self._testBit(b, 2)
-                result.micro = self._testBit(b, 3)
+                    b = ord(valueString[7])
+                    result.d1.a  = self._testBit(b, 0)
+                    result.d1.f  = self._testBit(b, 1)
+                    result.d1.e  = self._testBit(b, 2)
+                    result.d1.ex = self._testBit(b, 3)
 
-            elif id == 11:
-                result.continuity_buzzer = self._testBit(b, 0)
-                result.mega = self._testBit(b, 1)
-                result.duty_cycle = self._testBit(b, 2)
-                result.milli = self._testBit(b, 3)
+                    b = ord(valueString[8])
+                    result.d1.b = self._testBit(b, 0)
+                    result.d1.g = self._testBit(b, 1)
+                    result.d1.c = self._testBit(b, 2)
+                    result.d1.d = self._testBit(b, 3)
 
-            elif id == 12:
-                result.hold = self._testBit(b, 0)
-                result.delta = self._testBit(b, 1)
-                result.ohm = self._testBit(b, 2)
-                result.farad = self._testBit(b, 3)
+                    b = ord(valueString[9])
+                    result.diode_test = self._testBit(b, 0)
+                    result.kilo = self._testBit(b, 1)
+                    result.nano = self._testBit(b, 2)
+                    result.micro = self._testBit(b, 3)
 
-            elif id == 13:
-                result.battery_low = self._testBit(b, 0)
-                result.hertz = self._testBit(b, 1)
-                result.volt = self._testBit(b, 2)
-                result.ampere = self._testBit(b, 3)
+                    b = ord(valueString[10])
+                    result.continuity_buzzer = self._testBit(b, 0)
+                    result.mega = self._testBit(b, 1)
+                    result.duty_cycle = self._testBit(b, 2)
+                    result.milli = self._testBit(b, 3)
 
-            elif id == 14:
-                # SEG 14 does not contain any useful information on the RS232 output
+                    b = ord(valueString[11])
+                    result.hold = self._testBit(b, 0)
+                    result.delta = self._testBit(b, 1)
+                    result.ohm = self._testBit(b, 2)
+                    result.farad = self._testBit(b, 3)
+
+                    b = ord(valueString[12])
+                    result.battery_low = self._testBit(b, 0)
+                    result.hertz = self._testBit(b, 1)
+                    result.volt = self._testBit(b, 2)
+                    result.ampere = self._testBit(b, 3)
+
+                    result._time = time.time()
+
+                    return result
+            except (ValueError, IndexError):
                 pass
 
-        result._time = time.time()
-
-        if bytesrecived == int('11111111111111', base=2):
-            return result
-        else:
-            return None
+        return None # If timeout is reached
 
 
 class XLS200(MultiboxDevice):
