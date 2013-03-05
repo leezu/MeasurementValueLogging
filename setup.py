@@ -3,6 +3,7 @@ from distutils.core import setup
 setup(name="MeasurementValueLogging",
 	version="0.1",
 	description="Display measurement values from various serial devices.",
+	long_description=open('README.md').read(),
 	author="Leonard Lausen",
 	author_email="leonard@lausen.nl",
 	url="https://github.com/leezu/measurement-value-logging",
