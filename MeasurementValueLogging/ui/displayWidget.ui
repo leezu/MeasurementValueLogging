@@ -72,7 +72,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>close.svg</normaloff>close.svg</iconset>
+           <normaloff>close.png</normaloff>close.png</iconset>
          </property>
         </widget>
        </item>
@@ -89,7 +89,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>settings.svg</normaloff>settings.svg</iconset>
+           <normaloff>settings.png</normaloff>settings.png</iconset>
          </property>
         </widget>
        </item>

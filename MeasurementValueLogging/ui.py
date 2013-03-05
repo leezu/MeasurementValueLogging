@@ -407,6 +407,10 @@ class App(QtGui.QApplication):
 if __name__ == "__main__":
     app = App(sys.argv)
 
+    QtCore.QCoreApplication.setOrganizationName("Lausen")
+    QtCore.QCoreApplication.setOrganizationDomain("lausen.nl")
+    QtCore.QCoreApplication.setApplicationName("MeasurementValueLogging")
+
     translator = QtCore.QTranslator()
     langVal = QtCore.QSettings().value("i18n", -1).toInt()[0]
     
