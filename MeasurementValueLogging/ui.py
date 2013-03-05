@@ -19,7 +19,7 @@
 import sys
 import pkgutil
 import StringIO
-import ui_qr
+import qr
 from PyQt4 import QtCore, QtGui, uic
 from devices.devicemanager import DeviceManager, DeviceConfig
 
@@ -438,10 +438,10 @@ if __name__ == "__main__":
     
     if langVal == -1:
         locale = QtCore.QLocale.system().name()
-        if translator.load(locale, "i18n"):
+        if translator.load(":/i18n/" + locale + "qm"):
             app.installTranslator(translator)
     if langVal == 1:
-        translator.load("de", "i18n")
+        translator.load(":/i18n/de.qm")
         app.installTranslator(translator)
 
     app.setup()
