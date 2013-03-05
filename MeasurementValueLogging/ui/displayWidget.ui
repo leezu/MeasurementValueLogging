@@ -70,10 +70,6 @@
          <property name="text">
           <string/>
          </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>close.png</normaloff>close.png</iconset>
-         </property>
         </widget>
        </item>
        <item>
@@ -86,10 +82,6 @@
          </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>settings.png</normaloff>settings.png</iconset>
          </property>
         </widget>
        </item>

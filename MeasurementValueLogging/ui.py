@@ -17,13 +17,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import pkgutil
+import StringIO
+import ui_qr
 from PyQt4 import QtCore, QtGui, uic
 from devices.devicemanager import DeviceManager, DeviceConfig
 
 class NewDeviceDialog(QtGui.QDialog):
     def __init__(self, dm, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("ui/newDeviceDialog.ui", self)
+        qfile = QtCore.QFile(":/ui/newDeviceDialog.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
         self.dm = dm
 
         self.deviceComboBox.addItems(self.dm.getValidDevices())
@@ -33,7 +38,9 @@ class NewDeviceDialog(QtGui.QDialog):
 class DoReallyDialog(QtGui.QDialog):
     def __init__(self, title, text, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("ui/doReallyDialog.ui", self)
+        qfile = QtCore.QFile(":/ui/doReallyDialog.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
 
         self.windowTitle = title
         self.label.setText(text)
@@ -42,7 +49,9 @@ class DoReallyDialog(QtGui.QDialog):
 class Xls200Dialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("ui/xls200Dialog.ui", self)
+        qfile = QtCore.QFile(":/ui/xls200Dialog.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
 
         settings = QtCore.QSettings()
 
@@ -50,7 +59,9 @@ class Xls200Dialog(QtGui.QDialog):
 class SettingsDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("ui/settingsDialog.ui", self)
+        qfile = QtCore.QFile(":/ui/settingsDialog.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
 
         self.pathButton.clicked.connect(self.openFile)
         self.saveButton.clicked.connect(self.save)
@@ -77,7 +88,9 @@ class DevicemanagerDialog(QtGui.QDialog):
 
     def __init__(self, dm, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("ui/devicemanagerDialog.ui", self)
+        qfile = QtCore.QFile(":/ui/devicemanagerDialog.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
         self.dm = dm
 
         self.deleteButton.clicked.connect(self.deleteItem)
@@ -111,7 +124,9 @@ class DisplayWidget(QtGui.QWidget):
 
     def __init__(self, deviceID, dm, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        self.ui = uic.loadUi("ui/displayWidget.ui", self)
+        qfile = QtCore.QFile(":/ui/displayWidget.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
 
         self.deviceID = deviceID
         self.dm = dm
@@ -119,6 +134,9 @@ class DisplayWidget(QtGui.QWidget):
 
         self.settingsButton.clicked.connect(self.deviceSettings)
         self.deleteButton.clicked.connect(self.close)
+
+        self.settingsButton.setIcon(QtGui.QIcon(":/images/settings.png"))
+        self.deleteButton.setIcon(QtGui.QIcon(":/images/close.png"))
 
     def deviceSettings(self):
         popup = DeviceSettingsDialog(self.deviceID, self.dm)
@@ -166,7 +184,9 @@ class DisplayWidget(QtGui.QWidget):
 class DeviceSettingsDialog(QtGui.QDialog):
     def __init__(self, deviceID, dm, parent=None):
         QtGui.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("ui/deviceSettingsDialog.ui", self)
+        qfile = QtCore.QFile(":/ui/deviceSettingsDialog.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
 
         self.deviceID = deviceID
         self.dm = dm
@@ -200,7 +220,9 @@ class MainWindow(QtGui.QMainWindow):
 
     def __init__(self, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
-        self.ui = uic.loadUi("ui/mainWindow.ui", self)
+        qfile = QtCore.QFile(":/ui/mainWindow.ui")
+        qfile.open(QtCore.QIODevice.ReadOnly)
+        self.ui = uic.loadUi(qfile, self)
 
         self.measurementButton.clicked.connect(self.startStopMeasurement)
         self.loggingButton.clicked.connect(self.startStopLogging)

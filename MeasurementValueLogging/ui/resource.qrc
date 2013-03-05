@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>close.png</file>
+        <file>settings.png</file>
+    </qresource>
+    <qresource prefix="/ui">
+        <file>devicemanagerDialog.ui</file>
+        <file>deviceSettingsDialog.ui</file>
+        <file>displayWidget.ui</file>
+        <file>doReallyDialog.ui</file>
+        <file>mainWindow.ui</file>
+        <file>newDeviceDialog.ui</file>
+        <file>settingsDialog.ui</file>
+        <file>xls200Dialog.ui</file>
+    </qresource>
+</RCC>
