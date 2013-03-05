@@ -94,6 +94,7 @@ class DevicemanagerDialog(QtGui.QDialog):
         self.dm = dm
 
         self.deleteButton.clicked.connect(self.deleteItem)
+        self.deleteButton.setIcon(QtGui.QIcon(":/images/close.png"))
 
         self.refreshList()
 

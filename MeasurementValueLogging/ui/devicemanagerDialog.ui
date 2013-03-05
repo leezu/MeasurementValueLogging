@@ -32,10 +32,6 @@
          <property name="text">
           <string/>
          </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>close.svg</normaloff>close.svg</iconset>
-         </property>
         </widget>
        </item>
       </layout>
