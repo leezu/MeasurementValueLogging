@@ -19,4 +19,5 @@ setup(name="MeasurementValueLogging",
           'Operating System :: Microsoft :: Windows',
           'Operating System :: POSIX',
           'Programming Language :: Python'
+          ]
 	)
