@@ -261,9 +261,12 @@ class MainWindow(QtGui.QMainWindow):
 
     def openLog(self):
         import subprocess
+        import os
 
         if self.pathToLogFile:
-            subprocess.call(self.officePath.split() + self.pathToLogFile.split())
+            subprocess.call('"' + self.officePath + '"' + ' ' + 
+                '"' + self.pathToLogFile + '"', shell=True)
+                    # FIXME: security flaw: shell=True 
         else:
             popup = DoReallyDialog(self.tr("Warning"),
                 self.tr("You have not saved a log yet."))
