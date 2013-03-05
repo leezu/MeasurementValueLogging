@@ -10,7 +10,7 @@ setup(name="MeasurementValueLogging",
 	packages = ['MeasurementValueLogging', 'MeasurementValueLogging.devices'],
 	requires = ["pyserial", "PyQt"],
 	license = "GPLv3+",
-	provides = ["MeasurementValueLogging"]
+	provides = ["MeasurementValueLogging"],
 	classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',
