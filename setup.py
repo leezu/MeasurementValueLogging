@@ -9,6 +9,8 @@ setup(name="MeasurementValueLogging",
 	url="https://github.com/leezu/measurement-value-logging",
 	packages = ['MeasurementValueLogging', 'MeasurementValueLogging.devices'],
 	requires = ["pyserial", "PyQt"],
+	license = "GPLv3+",
+	provides = ["MeasurementValueLogging"]
 	classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',
