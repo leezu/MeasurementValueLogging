@@ -34,7 +34,7 @@ class Device(object):
     _dtr = False # data terminal ready rs232 flag (used for setting up the rs232 connection)
     _ownSer = False # does the device own the serial connection or is it just a user
     # (e.g. one of three devices, which are behind a multibox)
-    _timeout = None # timeout value for reading from serial device
+    _timeout = 0.1 # timeout value for reading from serial device
 
     def __init__(self, ser, *args, **kwargs):
         """Setup a device as new or subdevice.
@@ -212,7 +212,6 @@ class TecpelDMM8061(Device):
     """
     
     _baudrate = 2400
-    _timeout = 1
     _rts = False
     _dtr = True
 
@@ -640,10 +639,9 @@ class Balance(Device):
 
 class KernPCB(Balance):
     import re
-    _regex = re.compile(r"\s[\s-][\d\s\.]{10}\s.{3}")
+    _regex = re.compile(r"\s[\s-][\d\s\.]{10}\s.{3}\r\n")
 
     _baudrate = 9600
-    _timeout = 1
 
     class __Value(Value):
         string = None
@@ -682,7 +680,10 @@ class KernPCB(Balance):
         if self._typeOfValue == "stable":
             while True and not (time.time() - starttime > timeout):
                 self._ser.write("s")
-                s = self._ser.read(size = 18)
+                s = self._ser.read(size = 35)
+                # One value has 18 bytes, to make sure to get a complete one
+                # (and not the second 1/2 of one, and the first 1/2 of another)
+                # we read 35 bytes and match for one complete value
 
                 try:
                     result.string = self._regex.search(s).group()
@@ -697,7 +698,10 @@ class KernPCB(Balance):
         elif self._typeOfValue == "all":
             while True and not (time.time() - starttime > timeout):
                 self._ser.write("w")
-                s = self._ser.read(size = 18)
+                s = self._ser.read(size = 35)
+                # One value has 18 bytes, to make sure to get a complete one
+                # (and not the second 1/2 of one, and the first 1/2 of another)
+                # we read 35 bytes and match for one complete value
 
                 try:
                     result.string = self._regex.search(s).group()
