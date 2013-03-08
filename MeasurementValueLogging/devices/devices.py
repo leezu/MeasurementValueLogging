@@ -106,14 +106,8 @@ class Device(object):
 
         return self._ser.isOpen()
 
-    def getRawValue(self, timeout = 1.5):
-        """Return a Value object.
-
-        The timeout option specifies a timeout in seconds.
-        If the timeout is reached and no value gathered,
-        None is returned
-
-        """
+    def getRawValue(self):
+        """Return a Value object."""
 
         raise NotImplementedError
 
@@ -376,114 +370,114 @@ class TecpelDMM8061(Device):
         else:
             raise Exception
 
-    def getRawValue(self, timeout = 1.5):
+    def getRawValue(self):
         import time
         
         starttime = time.time()
         assert self.isAvailable()
 
-        while not (time.time() - starttime > timeout):
-            read = self._ser.read(26)
-            idList = []
-            for i in read:
-                idList.append(ord(i) >> 4)
+        read = self._ser.read(26)
+        idList = []
+        for i in read:
+            idList.append(ord(i) >> 4)
 
-            try:
-                startIndex = idList.index(1)
+        try:
+            startIndex = idList.index(1)
 
-                # Test whether the read value is correct
-                if idList[startIndex + 1] == 2 and idList[startIndex + 4] == 5 and idList[startIndex + 7] == 8 and\
-                        idList[startIndex + 10] == 11 and idList[startIndex + 12] == 13:
-                    
-                    valueString = read[startIndex:(startIndex+13)]
+            # Test whether the read value is correct
+            if idList[startIndex + 1] == 2 and idList[startIndex + 4] == 5 and idList[startIndex + 7] == 8 and\
+                    idList[startIndex + 10] == 11 and idList[startIndex + 12] == 13:
+                
+                valueString = read[startIndex:(startIndex+13)]
 
-                    result = self.__Value()
+                result = self.__Value()
 
-                    b = ord(valueString[0])
-                    result.rs232  = self._testBit(b, 0)
-                    result.auto  = self._testBit(b, 1)
-                    result.dc  = self._testBit(b, 2)
-                    result.ac = self._testBit(b, 3)
+                b = ord(valueString[0])
+                result.rs232  = self._testBit(b, 0)
+                result.auto  = self._testBit(b, 1)
+                result.dc  = self._testBit(b, 2)
+                result.ac = self._testBit(b, 3)
 
-                    b = ord(valueString[1])
-                    result.d4.a  = self._testBit(b, 0)
-                    result.d4.f  = self._testBit(b, 1)
-                    result.d4.e  = self._testBit(b, 2)
-                    result.d4.ex = self._testBit(b, 3)
+                b = ord(valueString[1])
+                result.d4.a  = self._testBit(b, 0)
+                result.d4.f  = self._testBit(b, 1)
+                result.d4.e  = self._testBit(b, 2)
+                result.d4.ex = self._testBit(b, 3)
 
-                    b = ord(valueString[2])
-                    result.d4.b = self._testBit(b, 0)
-                    result.d4.g = self._testBit(b, 1)
-                    result.d4.c = self._testBit(b, 2)
-                    result.d4.d = self._testBit(b, 3)
+                b = ord(valueString[2])
+                result.d4.b = self._testBit(b, 0)
+                result.d4.g = self._testBit(b, 1)
+                result.d4.c = self._testBit(b, 2)
+                result.d4.d = self._testBit(b, 3)
 
-                    b = ord(valueString[3])
-                    result.d3.a  = self._testBit(b, 0)
-                    result.d3.f  = self._testBit(b, 1)
-                    result.d3.e  = self._testBit(b, 2)
-                    result.d3.ex = self._testBit(b, 3)
+                b = ord(valueString[3])
+                result.d3.a  = self._testBit(b, 0)
+                result.d3.f  = self._testBit(b, 1)
+                result.d3.e  = self._testBit(b, 2)
+                result.d3.ex = self._testBit(b, 3)
 
-                    b = ord(valueString[4])
-                    result.d3.b = self._testBit(b, 0)
-                    result.d3.g = self._testBit(b, 1)
-                    result.d3.c = self._testBit(b, 2)
-                    result.d3.d = self._testBit(b, 3)
+                b = ord(valueString[4])
+                result.d3.b = self._testBit(b, 0)
+                result.d3.g = self._testBit(b, 1)
+                result.d3.c = self._testBit(b, 2)
+                result.d3.d = self._testBit(b, 3)
 
-                    b = ord(valueString[5])
-                    result.d2.a  = self._testBit(b, 0)
-                    result.d2.f  = self._testBit(b, 1)
-                    result.d2.e  = self._testBit(b, 2)
-                    result.d2.ex = self._testBit(b, 3)
+                b = ord(valueString[5])
+                result.d2.a  = self._testBit(b, 0)
+                result.d2.f  = self._testBit(b, 1)
+                result.d2.e  = self._testBit(b, 2)
+                result.d2.ex = self._testBit(b, 3)
 
-                    b = ord(valueString[6])
-                    result.d2.b = self._testBit(b, 0)
-                    result.d2.g = self._testBit(b, 1)
-                    result.d2.c = self._testBit(b, 2)
-                    result.d2.d = self._testBit(b, 3)
+                b = ord(valueString[6])
+                result.d2.b = self._testBit(b, 0)
+                result.d2.g = self._testBit(b, 1)
+                result.d2.c = self._testBit(b, 2)
+                result.d2.d = self._testBit(b, 3)
 
-                    b = ord(valueString[7])
-                    result.d1.a  = self._testBit(b, 0)
-                    result.d1.f  = self._testBit(b, 1)
-                    result.d1.e  = self._testBit(b, 2)
-                    result.d1.ex = self._testBit(b, 3)
+                b = ord(valueString[7])
+                result.d1.a  = self._testBit(b, 0)
+                result.d1.f  = self._testBit(b, 1)
+                result.d1.e  = self._testBit(b, 2)
+                result.d1.ex = self._testBit(b, 3)
 
-                    b = ord(valueString[8])
-                    result.d1.b = self._testBit(b, 0)
-                    result.d1.g = self._testBit(b, 1)
-                    result.d1.c = self._testBit(b, 2)
-                    result.d1.d = self._testBit(b, 3)
+                b = ord(valueString[8])
+                result.d1.b = self._testBit(b, 0)
+                result.d1.g = self._testBit(b, 1)
+                result.d1.c = self._testBit(b, 2)
+                result.d1.d = self._testBit(b, 3)
 
-                    b = ord(valueString[9])
-                    result.diode_test = self._testBit(b, 0)
-                    result.kilo = self._testBit(b, 1)
-                    result.nano = self._testBit(b, 2)
-                    result.micro = self._testBit(b, 3)
+                b = ord(valueString[9])
+                result.diode_test = self._testBit(b, 0)
+                result.kilo = self._testBit(b, 1)
+                result.nano = self._testBit(b, 2)
+                result.micro = self._testBit(b, 3)
 
-                    b = ord(valueString[10])
-                    result.continuity_buzzer = self._testBit(b, 0)
-                    result.mega = self._testBit(b, 1)
-                    result.duty_cycle = self._testBit(b, 2)
-                    result.milli = self._testBit(b, 3)
+                b = ord(valueString[10])
+                result.continuity_buzzer = self._testBit(b, 0)
+                result.mega = self._testBit(b, 1)
+                result.duty_cycle = self._testBit(b, 2)
+                result.milli = self._testBit(b, 3)
 
-                    b = ord(valueString[11])
-                    result.hold = self._testBit(b, 0)
-                    result.delta = self._testBit(b, 1)
-                    result.ohm = self._testBit(b, 2)
-                    result.farad = self._testBit(b, 3)
+                b = ord(valueString[11])
+                result.hold = self._testBit(b, 0)
+                result.delta = self._testBit(b, 1)
+                result.ohm = self._testBit(b, 2)
+                result.farad = self._testBit(b, 3)
 
-                    b = ord(valueString[12])
-                    result.battery_low = self._testBit(b, 0)
-                    result.hertz = self._testBit(b, 1)
-                    result.volt = self._testBit(b, 2)
-                    result.ampere = self._testBit(b, 3)
+                b = ord(valueString[12])
+                result.battery_low = self._testBit(b, 0)
+                result.hertz = self._testBit(b, 1)
+                result.volt = self._testBit(b, 2)
+                result.ampere = self._testBit(b, 3)
 
-                    result._time = time.time()
+                result._time = time.time()
 
-                    return result
-            except (ValueError, IndexError):
-                pass
+                return result
 
-        return None # If timeout is reached
+        except (ValueError, IndexError):
+            pass
+
+        return None
 
 
 class XLS200(MultiboxDevice):
@@ -599,18 +593,18 @@ class XLS200(MultiboxDevice):
         elif input == 3:
             self._in3 = None
 
-    def getRawValue(self, input = 1, timeout = 1.5):
+    def getRawValue(self, input = 1):
         if input == 1:
             self._changeInput(input = 1)
-            return self._in1.getRawValue(timeout=timeout)
+            return self._in1.getRawValue()
 
         elif input == 2:
             self._changeInput(input = 2)
-            return self._in2.getRawValue(timeout=timeout)
+            return self._in2.getRawValue()
 
         elif input == 3:
             self._changeInput(input = 3)
-            return self._in3.getRawValue(timeout=timeout)
+            return self._in3.getRawValue()
 
     def getDevice(self, input = 1):
         if input == 1:
@@ -636,6 +630,7 @@ class Balance(Device):
             self._typeOfValue = typeOfValue
         else:
             raise Exception("Invalid typeOfValue")
+
 
 class KernPCB(Balance):
     import re
@@ -668,7 +663,7 @@ class KernPCB(Balance):
             elif type == "prefix":
                 return ""
 
-    def getRawValue(self, timeout = 1.5):
+    def getRawValue(self):
         import time
 
         starttime = time.time()
@@ -678,40 +673,38 @@ class KernPCB(Balance):
         result = self.__Value()
 
         if self._typeOfValue == "stable":
-            while True and not (time.time() - starttime > timeout):
-                self._ser.write("s")
-                s = self._ser.read(size = 35)
-                # One value has 18 bytes, to make sure to get a complete one
-                # (and not the second 1/2 of one, and the first 1/2 of another)
-                # we read 35 bytes and match for one complete value
+            self._ser.write("s")
+            s = self._ser.read(size = 35)
+            # One value has 18 bytes, to make sure to get a complete one
+            # (and not the second 1/2 of one, and the first 1/2 of another)
+            # we read 35 bytes and match for one complete value
 
-                try:
-                    result.string = self._regex.search(s).group()
-                    result._time = time.time()
-                    return result
+            try:
+                result.string = self._regex.search(s).group()
+                result._time = time.time()
+                return result
 
-                except AttributeError:
-                    pass
+            except AttributeError:
+                pass
 
-            return None # return None, if timeout is reached
+            return None
 
         elif self._typeOfValue == "all":
-            while True and not (time.time() - starttime > timeout):
-                self._ser.write("w")
-                s = self._ser.read(size = 35)
-                # One value has 18 bytes, to make sure to get a complete one
-                # (and not the second 1/2 of one, and the first 1/2 of another)
-                # we read 35 bytes and match for one complete value
+            self._ser.write("w")
+            s = self._ser.read(size = 35)
+            # One value has 18 bytes, to make sure to get a complete one
+            # (and not the second 1/2 of one, and the first 1/2 of another)
+            # we read 35 bytes and match for one complete value
 
-                try:
-                    result.string = self._regex.search(s).group()
-                    result._time = time.time()
-                    return result
+            try:
+                result.string = self._regex.search(s).group()
+                result._time = time.time()
+                return result
 
-                except AttributeError:
-                    pass
+            except AttributeError:
+                pass
 
-            return None # return None, if timeout is reached
+            return None
 
     def setTara(self):
         """Set taring.
@@ -756,7 +749,7 @@ class BS600(Balance):
             elif type == "prefix":
                 return ""
     
-    def getRawValue(self, timeout = 1.5):
+    def getRawValue(self):
         import time
 
         starttime = time.time()
@@ -765,24 +758,23 @@ class BS600(Balance):
 
         result = self.__Value()
 
-        while True and not (time.time() - starttime > timeout):
-            val = self._ser.read(size = 35)
-            # One value has 18 bytes, to make sure to get a complete one
-            # (and not the second 1/2 of one, and the first 1/2 of another)
-            # we read 35 bytes and match for one complete value
+        val = self._ser.read(size = 35)
+        # One value has 18 bytes, to make sure to get a complete one
+        # (and not the second 1/2 of one, and the first 1/2 of another)
+        # we read 35 bytes and match for one complete value
 
-            try:
-                if self._typeOfValue == "stable":
-                    result.string = self._stable.search(val).group()
-                    result._time = time.time()
-                    return result
+        try:
+            if self._typeOfValue == "stable":
+                result.string = self._stable.search(val).group()
+                result._time = time.time()
+                return result
 
-                elif self._typeOfValue == "all":
-                    result.string = self._all.search(val).group()
-                    result._time = time.time()
-                    return result
+            elif self._typeOfValue == "all":
+                result.string = self._all.search(val).group()
+                result._time = time.time()
+                return result
 
-            except AttributeError:
-                pass
+        except AttributeError:
+            pass
 
-        return None # return None, if timeout is reached
+        return None
