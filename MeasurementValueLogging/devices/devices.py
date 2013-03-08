@@ -130,7 +130,7 @@ class MultiboxDevice(Device):
     def openDevice(self, deviceClass, input = 1, *args, **kwargs):
         """Open a device of deviceClass on input X
 
-        *args and **kwargs are passed on to the devices __init__ methods.
+        \*args and \*\*kwargs are passed on to the devices __init__ methods.
 
         """
 
