@@ -1,7 +1,7 @@
 # Makefile for Sphinx documentation
 #
 
-GH_PAGES_SOURCES = . ../MeasurementValueLogging
+GH_PAGES_SOURCES = ../MeasurementValueLogging
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
@@ -160,6 +160,6 @@ gh-pages:
 	git reset HEAD
 	make html
 	mv -fv _build/html/* ./
-	rm -rf $(GH_PAGES_SOURCES) build
+	rm -rf $(GH_PAGES_SOURCES) _build
 	git add -A
 	git ci -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
