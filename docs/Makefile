@@ -154,9 +154,9 @@ doctest:
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
 gh-pages:
+	cd ..
 	git checkout gh-pages
 	rm -rf _build _sources _static
-	cd ..
 	git checkout master $(GH_PAGES_SOURCES)
 	git reset HEAD
 	cd docs
