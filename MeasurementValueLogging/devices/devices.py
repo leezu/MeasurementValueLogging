@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Device(object):
-    """This class is the base device class.
+    """The base device class.
 
     Subclasses must define at least the methods defined in this base class
     or, when applicable inherit them unmodified.
@@ -36,8 +36,8 @@ class Device(object):
     # (e.g. one of three devices, which are behind a multibox)
     _timeout = 0.1 # timeout value for reading from serial device
 
-    def __init__(self, ser, *args, **kwargs):
-        """Setup a device as new or subdevice.
+    def __init__(self, ser):
+        """Setup a device as new device or as subdevice.
 
         Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
         set the in the class defined attributes and open the serial connection.
@@ -46,8 +46,8 @@ class Device(object):
         To setup the device as a subdevice simply pass the serial connection to the class constructor.
         To setup the device as a new device one has to use the openRS232 classmethod.
 
-        Subclasses may use more positional or keyword arguments.
-        It is safe to pass arbitrary *args and **kwargs.
+        :param ser: Serial connection (pyserial module)
+        :type ser: Serial
 
         """
 
@@ -67,22 +67,23 @@ class Device(object):
             self._ser.setDTR(level=self._dtr)
 
     def __del__(self):
-        """Closes the serial connection if the device ownes the serial connection (if its not a subdevice)"""
+        """Closes the serial connection if the device ownes the serial connection (if its not a subdevice)."""
 
         if self._ownSer is True:
             self._ser.close()
 
     @classmethod
     def openRS232(cls, port, *args, **kwargs):
-        """Create a new serial connection and create a new object with it.
+        """Open a new serial connection and create a Device object with it.
 
-        One has to pass the port argument, which must be a valid argument following to
-        the pyserial documentation ( http://pyserial.sourceforge.net/ ):
+        :param port: Serial port (see pyserial documentation)
+        :type port: String
+        :returns: Device object
+        :rtype: Device
 
-        - /dev/ttyUSB0 (Linux)
-        - COM1 (Windows)
-
-        For more examples see the pyserial documentation.
+        Valid port parameters are for example:
+            - /dev/ttyUSB0 (Linux)
+            - COM1 (Windows)
 
         """
 
@@ -102,41 +103,68 @@ class Device(object):
             serialport=self._ser.port)
 
     def isAvailable(self):
-        """Returns the device status (available or not)"""
+        """Returns the device status (available or not)
+        
+        returns: Device status
+        rtype: Boolean
+
+        """
 
         return self._ser.isOpen()
 
     def getRawValue(self):
-        """Return a Value object."""
+        """Return a Value object or None.
+
+        returns: Value or None
+        rtype: Value or None
+
+        """
 
         raise NotImplementedError
 
 
 class MultiboxDevice(Device):
     """This is a special MultiboxDevice, which allows to use multiple
-    other devices on just one serial connection.
+    subdevices on just one serial connection.
 
     Every subclass must implement at least the in this class defined methods
     and the methods of the base device class.
 
     """
 
-    def openDevice(self, deviceClass, input = 1, *args, **kwargs):
-        """Open a device of deviceClass on input X
+    def openDevice(self, deviceClass, input, *args, **kwargs):
+        """Open a device of deviceClass on input.
 
         \*args and \*\*kwargs are passed on to the devices __init__ methods.
+
+        :param deviceClass: Classname of the subdevice
+        :type deviceClass: Device
+        :param input: Input number of subdevice
+        :type input: Input
 
         """
 
         raise NotImplementedError
 
-    def closeDevice(self, input = 1):
-        """Close the device on input X"""
+    def closeDevice(self, input):
+        """Close the device on input.
+        
+        :param input: Input number of subdevice
+        :type input: Input
+
+        """
 
         raise NotImplementedError
 
-    def getDevice(self, input = 1):
-        """This returns the device object on input X"""
+    def getDevice(self, input):
+        """This returns the device object on input.
+
+        :param input: Input number of subdevice
+        :type input: Input
+        :returns: Device on input
+        :rtype: Device
+
+        """
 
         raise NotImplementedError
 
@@ -148,6 +176,7 @@ class Value(object):
     methods defined in this base class.
 
     """
+
     _time = 0
 
     def __repr__(self):
@@ -159,12 +188,22 @@ class Value(object):
             self.getUnit(type="prefix"), self.getFactor())
 
     def getDisplayedValue(self):
-        """Returns the displayed value (as a number)."""
+        """Returns the displayed value (as a number).
+
+        :returns: Displayed value
+        :rtype: Float
+
+        """
 
         raise NotImplementedError
 
     def getUnit(self):
-        """Returns the unit (e.g. "g" (gram) or "V" (volt))."""
+        """Returns the unit (e.g. "g" (gram) or "V" (volt)).
+
+        :returns: Unit
+        :rtype: String
+
+        """
 
         raise NotImplementedError
 
@@ -174,17 +213,27 @@ class Value(object):
         For example 10^(-3) for the milli prefix.
         If type == "prefix" it returns the SI-Prefixes.
 
+        :returns: Factor of the displayed value as a number or a SI-Prefix
+        :rtype: Int or String
+
         """
 
         raise NotImplementedError
 
     def getTime(self):
-        """Returns the time the measurement value was taken in seconds since the epoch."""
+        """Returns the time the measurement value was taken in seconds since the epoch.
+    
+        :returns: Time the measurement value was taken
+        :rtype: Float
+
+        """
 
         return self._time
 
 
 class NullValue(Value):
+    """This class represents an "empty" measurement value."""
+
     def getDisplayedValue(self):
         return 0
 
@@ -199,11 +248,7 @@ class NullValue(Value):
 
 
 class TecpelDMM8061(Device):
-    """Multimeter
-
-    TECPEL DMM 8061 or VOLTCRAFT VC 840
-
-    """
+    """This class represents a TECPEL DMM 8061 or VOLTCRAFT VC 840 Multimeter."""
     
     _baudrate = 2400
     _rts = False
@@ -481,16 +526,16 @@ class TecpelDMM8061(Device):
 
 
 class XLS200(MultiboxDevice):
-    """XLS200
+    """This class represents the XLS200 MultiboxDevice.
 
     http://www.xlsmess.de/html/xls_200.html
 
     This device passes one of the three input serial connections, depending
     in which combination DTR and RTS rs232 attributes are set.
 
-    DTR True & RTS False -> 1
-    DTR False & RTS True -> 2
-    DTR False & RTS False -> 3
+    DTR True & RTS False: Input 1
+    DTR False & RTS True: Input 2
+    DTR False & RTS False: Input 3
 
     """
 
@@ -498,24 +543,8 @@ class XLS200(MultiboxDevice):
     _in2 = None
     _in3 = None
 
-    def __init__(self, ser, in1=None, in2=None, in3=None, *args, **kwargs):
-        """Via in{1,2,3} subdevices can be specified.
-
-        This is completely optional and the same result can be achieved
-        by calling openDevice() later.
-
-        """
-
+    def __init__(self, ser):
         super(XLS200, self).__init__(ser)
-
-        if in1:
-            self.openDevice(in1, input = 1, *args, **kwargs)
-
-        if in2:
-            self.openDevice(in2, input = 2, *args, **kwargs)
-
-        if in3:
-            self.openDevice(in3, input = 3, *args, **kwargs)
 
     def __repr__(self):
         string = "{classname}(serial={serial!r}) # ownSer={ownser}".format(
@@ -543,7 +572,7 @@ class XLS200(MultiboxDevice):
 
         return string + ")"
 
-    def _changeInput(self, input = 1):
+    def _changeInput(self, input):
         # DTR True & RTS False = 1
         # DTR False & RTS True = 2
         # DTR False & RTS False = 3
@@ -568,7 +597,7 @@ class XLS200(MultiboxDevice):
             self._ser.baudrate = self._in3._baudrate
             self._ser.timeout = self._in3._timeout
 
-    def openDevice(self, deviceClass, input=1, *args, **kwargs):
+    def openDevice(self, deviceClass, input, *args, **kwargs):
         assert self.isAvailable()
 
         if input == 1:
@@ -583,7 +612,7 @@ class XLS200(MultiboxDevice):
         else:
             raise Exception("Input has to be in rage of 1 to 3")
 
-    def closeDevice(self, input = 1):
+    def closeDevice(self, input):
         if input == 1:
             self._in1 = None
 
@@ -593,38 +622,47 @@ class XLS200(MultiboxDevice):
         elif input == 3:
             self._in3 = None
 
-    def getRawValue(self, input = 1):
+    def getRawValue(self, input):
         if input == 1:
-            self._changeInput(input = 1)
+            self._changeInput(1)
             return self._in1.getRawValue()
 
         elif input == 2:
-            self._changeInput(input = 2)
+            self._changeInput(2)
             return self._in2.getRawValue()
 
         elif input == 3:
-            self._changeInput(input = 3)
+            self._changeInput(3)
             return self._in3.getRawValue()
 
-    def getDevice(self, input = 1):
+    def getDevice(self, input):
         if input == 1:
-            self._changeInput(input = 1)
+            self._changeInput(1)
             return self._in1
 
         elif input == 2:
-            self._changeInput(input = 2)
+            self._changeInput(2)
             return self._in2
 
         elif input == 3:
-            self._changeInput(input = 3)
+            self._changeInput(3)
             return self._in3
 
 
 class Balance(Device):
+    """This class represents Balance Devices."""
     _typeOfValue = "all"
 
-    def __init__(self, ser, typeOfValue="all", *args, **kwargs):
-        super(Balance, self).__init__(ser)
+    def setTypeOfValue(self, typeOfValue):
+        """Balance Devices have two different kind of values: Stable and Unstable Values.
+
+        This method sets, which kind of values should be returned by the getRawValue method.
+        For more information please see the Device's manual.
+
+        :param typeOfValue: Type of values, which should be returned by the getRawValue method - stable or all
+        :type typeOfValue: String
+
+        """
 
         if typeOfValue in ["stable", "all"]:
             self._typeOfValue = typeOfValue
@@ -632,7 +670,10 @@ class Balance(Device):
             raise Exception("Invalid typeOfValue")
 
 
+
 class KernPCB(Balance):
+    """This class represents the KernPCB Balance."""
+
     import re
     _regex = re.compile(r"\s[\s-][\d\s\.]{10}\s.{3}\r\n")
 
@@ -719,6 +760,8 @@ class KernPCB(Balance):
 
 
 class BS600(Balance):
+    """This class represents the BS600 Balance."""
+
     import re
     _stable = re.compile(r"[WCP][TC]ST[+-][\d\s\.]{7}.{4}")
     _all = re.compile(r"[WCP][TC][SU][TS][+-][\d\s\.]{7}.{4}")

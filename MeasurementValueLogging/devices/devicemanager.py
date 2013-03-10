@@ -22,9 +22,10 @@ import threading
 from .devices import Device, Value, NullValue, TecpelDMM8061, XLS200, KernPCB, BS600
 
 class DeviceManager(object):
-    """DeviceManager object manages devices.
+    """The DeviceManager manages devices.
 
-    It provides methods to add devices and get their most recent values.
+    It provides methods to add or delete devices,
+    get their most recent measurement values and various other things.
 
     """
     
@@ -56,10 +57,10 @@ class DeviceManager(object):
     def _getLinearFunction(self, value1, value2):
         """Return a linear function, which contains value1 and value2.
 
-        :param value1: tuple of x,y coordinates
-        :type value1: tuple x,y
-        :param value2: tuple of x,y coordinates
-        :type value2: tuple x,y
+        :param value1: Tuple of x,y coordinates
+        :type value1: Tuple x,y
+        :param value2: Tuple of x,y coordinates
+        :type value2: Tuple x,y
 
         """
         try:
@@ -77,17 +78,34 @@ class DeviceManager(object):
         return result
 
     def isValidDevice(self, deviceName):
-        """Tests whether deviceName is a valid device."""
+        """Tests whether deviceName is a valid device.
+
+        :param deviceName: DeviceName (e.g. XLS200, TecpelDMM8061 etc.)
+        :type deviceName: String
+        :returns: Whether deviceName is a valid deviceName
+        :rtype: Boolean
+
+        """
 
         return deviceName in self._validDevices
 
     def getValidDevices(self):
-        """Returns a list of valid devicenames"""
+        """Returns a list of valid deviceNames.
+        
+        :returns: List of valid deviceNames
+        :rtype: List of strings
+
+        """
 
         return self._validDevices
 
     def getAllDeviceIDs(self):
-        """Returns a complete list of registered device ID's"""
+        """Returns a complete list of registered deviceIDs.
+
+        :returns: Complete list of registered deviceIDs
+        :rtype: List of deviceIDs
+
+        """
 
         ids = []
         for id in self.configs:
@@ -96,7 +114,12 @@ class DeviceManager(object):
         return ids
 
     def getAvailiablePorts(self):
-        """Returns a list of valid and availiable serial ports."""
+        """Returns a list of valid and availiable serial ports.
+
+        :returns: List of valid and availiable serial ports
+        :rtype: List of strings
+
+        """
 
         import serial.tools.list_ports
         portsTuple = serial.tools.list_ports.comports()
@@ -108,12 +131,26 @@ class DeviceManager(object):
         return tuple(portsList)
 
     def getStatus(self):
-        """Returns the status of the devicemanager."""
+        """Returns the status of the deviceManager.
+        
+        True if deviceManager is running, otherwise False.
+
+        :returns: Status of deviceManager
+        :rtype: Boolean
+
+        """
 
         return self._running
 
     def openWithConfig(self, config):
-        """Open a device with a config object. Returns a deviceID."""
+        """Open a device with a config object. Returns a deviceID.
+
+        :param config: DeviceConfig object
+        :type config: DeviceConfig
+        :returns: DeviceID of opened device
+        :rtype: DeviceID
+
+        """
 
         import time
 
@@ -141,6 +178,13 @@ class DeviceManager(object):
         return id
 
     def closeDevice(self, deviceID):
+        """Close device with deviceID.
+        
+        :param deviceID: DeviceID of device to close
+        :type deviceID: DeviceID
+
+        """
+
         assert self._running == False # FIXME: use another error
 
         config = self.configs[deviceID]
@@ -164,6 +208,8 @@ class DeviceManager(object):
             del(self.configs[parentID].relationship[1][deviceID])
 
     def closeEmptyMultiboxDevices(self):
+        """Close all MultiboxDevices without subDevices."""
+
         for i in self.getAllDeviceIDs():
             config = self.configs[i]
             if len(config.relationship[1]) == 0 and config.deviceName == "XLS200":
@@ -173,6 +219,11 @@ class DeviceManager(object):
         """Returns the last raw value of device with ID deviceID.
 
         If there is no last value (last value == None), it returns a NullValue.
+
+        :param deviceID: deviceID (e.g. XLS200, TecpelDMM8061 etc.)
+        :type deviceID: DeviceID
+        :returns: Last Value object of device with deviceID
+        :rtype: Value
         
         """
 
@@ -190,14 +241,17 @@ class DeviceManager(object):
     def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
         """Return a calibrated value from the getLastRawValue method.
         
-        :param deviceID: device id
-        :type deviceID: float
-        :param calibration: calibration tuple
-        :type calibration: tuple
+        :param deviceID: DeviceID
+        :type deviceID: DeviceID
+        :param calibration: Calibration tuple
+        :type calibration: Tuple
+        :param unit: Unit or None
+        :type unit: String or None
 
-        The calibration tuple must contain either two integers (m, c)
-        or two tuples containing two points on the linear function,
-        used to compute m and c. (of a function f(x) = mx+c)
+        The calibration tuple must contain either two integers m, c
+        to create a function of style f(x) = m x + c
+        or two tuples containing two points on such a linear function,
+        used to compute m and c.
 
         """
         try:
@@ -238,6 +292,15 @@ class DeviceManager(object):
         return result
 
     def getDevice(self, deviceID):
+        """Return device with deviceID.
+        
+        :param deviceID: DeviceID
+        :type deviceID: DeviceID
+        :returns: Device with deviceID
+        :rtype: Device
+
+        """
+
         try:
             return self.devices[deviceID]
 
@@ -245,7 +308,7 @@ class DeviceManager(object):
             return None
 
     def start(self):
-        """Start the devicemanager"""
+        """Start the DeviceManager."""
 
         self._stopEvent = threading.Event()
         self._thread = _GetValuesThread(self._stopEvent, self.devices, self.configs)
@@ -253,7 +316,7 @@ class DeviceManager(object):
         self._running = True
 
     def stop(self):
-        """Stop the devicemanager"""
+        """Stop the DeviceManager."""
 
         if self._running == True:
             self._stopEvent.set()
@@ -271,6 +334,17 @@ class DeviceConfig(object):
     kwargs = {}
 
     def __init__(self, relationship, deviceName, *args, **kwargs):
+        """Create a DeviceConfig object of a relationship tuple and deviceName.
+        
+        :param relationship: (parent deviceID or rs232 port, {"subdeviceID":inputNumber}, inputNumber)
+        :type relationship: Tuple
+        :param deviceName: DeviceName
+        :type deviceName: String
+        :returns: deviceID of opened device.
+        :rtype: deviceID
+
+        """
+
         assert deviceName in DeviceManager._validDevices
         assert isinstance(relationship, tuple) and (len(relationship) == 2 or len(relationship) == 3)
         assert isinstance(relationship[0], str) or isinstance(relationship[0], float)

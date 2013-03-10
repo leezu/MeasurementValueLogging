@@ -24,7 +24,16 @@ from PyQt4 import QtCore, QtGui, uic
 from devices.devicemanager import DeviceManager, DeviceConfig
 
 class NewDeviceDialog(QtGui.QDialog):
+    """Dialog to add new devices."""
+
     def __init__(self, dm, parent=None):
+        """
+
+        :param dm: DeviceManager
+        :type dm: DeviceManager
+
+        """
+
         QtGui.QDialog.__init__(self, parent)
         qfile = QtCore.QFile(":/ui/newDeviceDialog.ui")
         qfile.open(QtCore.QIODevice.ReadOnly)
@@ -36,7 +45,18 @@ class NewDeviceDialog(QtGui.QDialog):
 
 
 class DoReallyDialog(QtGui.QDialog):
+    """Dialog to ask whether a user wants really to do something."""
+
     def __init__(self, title, text, parent=None):
+        """
+
+        :param title: Dialog title
+        :type title: String
+        :param text: Dialog text
+        :type text: String
+
+        """
+
         QtGui.QDialog.__init__(self, parent)
         qfile = QtCore.QFile(":/ui/doReallyDialog.ui")
         qfile.open(QtCore.QIODevice.ReadOnly)
@@ -47,6 +67,8 @@ class DoReallyDialog(QtGui.QDialog):
 
 
 class Xls200Dialog(QtGui.QDialog):
+    """Dialog to chose XLS200 subdevices."""
+
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
         qfile = QtCore.QFile(":/ui/xls200Dialog.ui")
@@ -57,6 +79,8 @@ class Xls200Dialog(QtGui.QDialog):
 
 
 class SettingsDialog(QtGui.QDialog):
+    """The general settings dialog."""
+
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
         qfile = QtCore.QFile(":/ui/settingsDialog.ui")
@@ -73,20 +97,33 @@ class SettingsDialog(QtGui.QDialog):
         self.languageComboBox.setCurrentIndex(self.settings.value("i18n", -1).toInt()[0])
 
     def openFile(self):
+        """Open a QFileDialog and save the path."""
+
         import os
         popup = QtGui.QFileDialog()
         self.path.setText(popup.getOpenFileName(self, self.tr("Search Office"), os.path.expanduser("~"), ""))
 
     def save(self):
+        """Save the settings to QSettings."""
+
         self.settings.setValue("office/path", self.path.text())
         self.settings.setValue("logging/interval", self.loggingInterval.value())
         self.settings.setValue("i18n", self.languageComboBox.currentIndex())
 
 
 class DevicemanagerDialog(QtGui.QDialog):
+    """A DeviceManager Dialog where one could delete or add new devices."""
+
     ids = []
 
     def __init__(self, dm, parent=None):
+        """
+
+        :param dm: DeviceManager
+        :type dm: DeviceManager
+
+        """
+
         QtGui.QDialog.__init__(self, parent)
         qfile = QtCore.QFile(":/ui/devicemanagerDialog.ui")
         qfile.open(QtCore.QIODevice.ReadOnly)
@@ -99,6 +136,8 @@ class DevicemanagerDialog(QtGui.QDialog):
         self.refreshList()
 
     def refreshList(self):
+        """Refresh the list of devices."""
+
         self.ids = self.dm.getAllDeviceIDs()
 
         self.listWidget.clear()
@@ -108,6 +147,8 @@ class DevicemanagerDialog(QtGui.QDialog):
             self.listWidget.addItem(item)
 
     def deleteItem(self):
+        """Close the device and refresh list."""
+
         row = self.listWidget.currentRow()
 
         self.dm.closeDevice(self.ids[row])
@@ -117,6 +158,7 @@ class DevicemanagerDialog(QtGui.QDialog):
 
 
 class DisplayWidget(QtGui.QWidget):
+    """Widget containing a lcd display and buttons to modify or delete a device."""
     calibrationType = 1 # 0: two values calibration, 1: slope and intercept calibration
     twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
     slopeInterceptCalibration = 1.0, 0.0
@@ -124,6 +166,15 @@ class DisplayWidget(QtGui.QWidget):
     unit = ""
 
     def __init__(self, deviceID, dm, parent=None):
+        """
+
+        :param deviceID: DeviceID
+        :type deviceID: DeviceID
+        :param dm: DeviceManager
+        :type dm: DeviceManager
+
+        """
+
         QtGui.QWidget.__init__(self, parent)
         qfile = QtCore.QFile(":/ui/displayWidget.ui")
         qfile.open(QtCore.QIODevice.ReadOnly)
@@ -140,6 +191,8 @@ class DisplayWidget(QtGui.QWidget):
         self.deleteButton.setIcon(QtGui.QIcon(":/images/close.png"))
 
     def deviceSettings(self):
+        """Open a DeviceSettingsDialog."""
+
         popup = DeviceSettingsDialog(self.deviceID, self.dm)
 
         popup.slope.setValue(self.slopeInterceptCalibration[0])
@@ -171,9 +224,13 @@ class DisplayWidget(QtGui.QWidget):
         self.unit = str(popup.unit.text())
 
     def delete(self):
+        """Delete Widget."""
+
         self.deleteLater()
 
     def close(self):
+        """Close the device."""
+
         if self.dm.getStatus() == False:
             self.dm.closeDevice(self.deviceID)
         else:
@@ -183,7 +240,17 @@ class DisplayWidget(QtGui.QWidget):
 
 
 class DeviceSettingsDialog(QtGui.QDialog):
+    """Settings dialog for device specific settings."""
+
     def __init__(self, deviceID, dm, parent=None):
+        """
+
+        :param deviceID: DeviceID
+        :type deviceID: DeviceID
+        :param dm: DeviceManager
+        :type dm: DeviceManager
+
+        """
         QtGui.QDialog.__init__(self, parent)
         qfile = QtCore.QFile(":/ui/deviceSettingsDialog.ui")
         qfile.open(QtCore.QIODevice.ReadOnly)
@@ -196,15 +263,21 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.get2.clicked.connect(self.setCurrentValue2)
 
     def setCurrentValue1(self):
+        """Get current displayedValue from Device."""
+
         rv = self.dm.getLastRawValue(self.deviceID)
         self.is1.setValue(rv.getDisplayedValue())
 
     def setCurrentValue2(self):
+        """Get current displayedValue from Device."""
+
         rv = self.dm.getLastRawValue(self.deviceID)
         self.is2.setValue(rv.getDisplayedValue())
 
 
 class MainWindow(QtGui.QMainWindow):
+    """Main window."""
+
     dm = None
     displayWidgets = {}
 
@@ -244,6 +317,8 @@ class MainWindow(QtGui.QMainWindow):
         self.loggingInterval = int(self.settings.value("logging/interval", 1).toInt()[0])
 
     def settingsDialog(self):
+        """Open a SettingsDialog."""
+
         popup = SettingsDialog()
         popup.exec_()
 
@@ -251,6 +326,8 @@ class MainWindow(QtGui.QMainWindow):
         self.loggingInterval = int(self.settings.value("logging/interval", 1).toInt()[0])
 
     def devicemanagerDialog(self):
+        """Open a DevicemanagerDialog."""
+        
         if self.dm.getStatus() == False:
             popup = DevicemanagerDialog(self.dm)
             popup.exec_()
@@ -260,6 +337,8 @@ class MainWindow(QtGui.QMainWindow):
             popup.exec_()
 
     def openLog(self):
+        """Open last log with office."""
+        
         import subprocess
         import os
 
@@ -273,6 +352,8 @@ class MainWindow(QtGui.QMainWindow):
             popup.exec_()
 
     def addDevice(self):
+        """Open a NewDeviceDialog."""
+        
         popup = NewDeviceDialog(self.dm)
         popup.exec_()
 
@@ -319,6 +400,8 @@ class MainWindow(QtGui.QMainWindow):
                 self.displayWidgets[deviceID] = deviceWidget
 
     def startStopMeasurement(self):
+        """Start/Stop measurement."""
+        
         if self.dm.getStatus() == False:
             self.dm.start()
             self.running = True
@@ -330,6 +413,8 @@ class MainWindow(QtGui.QMainWindow):
             self.measurementButton.setText(self.tr("Start"))
 
     def startStopLogging(self):
+        """Start/Stop logging."""
+
         import time
         import tempfile
 
@@ -353,6 +438,8 @@ class MainWindow(QtGui.QMainWindow):
             self.loggingButton.setText(self.tr("Start logging"))
 
     def saveLog(self):
+        """Save last log to file."""
+
         import os
 
         if self.tmpfile:
@@ -375,6 +462,8 @@ class MainWindow(QtGui.QMainWindow):
                 return
 
     def update(self):
+        """Update the displayWidgets and, when logging enabled log."""
+        
         import time
         # python3 incompatibility: .iteritems()
         # Delete unnecessary widgets
