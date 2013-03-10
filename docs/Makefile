@@ -1,7 +1,7 @@
 # Makefile for Sphinx documentation
 #
 
-GH_PAGES_SOURCES = ../MeasurementValueLogging
+GH_PAGES_SOURCES = MeasurementValueLogging
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
