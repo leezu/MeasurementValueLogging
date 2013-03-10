@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction &mdash; MeasurementValueLogging 0.1 documentation</title>
+    <title>Installation &mdash; MeasurementValueLogging 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="MeasurementValueLogging 0.1 documentation" href="index.html" />
-    <link rel="next" title="Modules" href="documentation.html" />
+    <link rel="next" title="Developer information" href="developer.html" />
     <link rel="prev" title="MeasurementValueLogging" href="index.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -46,7 +46,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="documentation.html" title="Modules"
+          <a href="developer.html" title="Developer information"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="MeasurementValueLogging"
@@ -60,36 +60,31 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>This application logs/displays measurement values from various serial devices.
-It aims to be an open source alternative to the software provided by <a class="reference external" href="http://www.xlsmess.de/">XLSmess</a></p>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="stand-alone-executables">
-<h3>Stand-alone Executables<a class="headerlink" href="#stand-alone-executables" title="Permalink to this headline">¶</a></h3>
+<h2>Stand-alone Executables<a class="headerlink" href="#stand-alone-executables" title="Permalink to this headline">¶</a></h2>
 <p>There are stand-alone executables, compiled with <a class="reference external" href="http://www.pyinstaller.org/">PyInstaller</a> on <a class="reference external" href="http://sourceforge.net/projects/measurement-log/files/">SourceForge</a> . They do not require you to install anything on your computer. Simply execute the file.</p>
 </div>
 <div class="section" id="python-package">
-<h3>Python Package<a class="headerlink" href="#python-package" title="Permalink to this headline">¶</a></h3>
+<h2>Python Package<a class="headerlink" href="#python-package" title="Permalink to this headline">¶</a></h2>
 <p>To use the program as a Python package, make sure you have a recent version of <a class="reference external" href="http://pyserial.sourceforge.net/">PySerial</a> installed. To use the GUI you need a recent version of <a class="reference external" href="http://www.riverbankcomputing.co.uk/software/pyqt/">PyQT</a> as well.</p>
 <p>Then download and install the package from <a class="reference external" href="https://pypi.python.org/pypi/MeasurementValueLogging">PyPi</a>.</p>
 </div>
 </div>
 <div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="console-interface">
-<h3>Console Interface<a class="headerlink" href="#console-interface" title="Permalink to this headline">¶</a></h3>
+<h2>Console Interface<a class="headerlink" href="#console-interface" title="Permalink to this headline">¶</a></h2>
 <p>To use the console interface simply run:</p>
 <div class="highlight-python"><pre>python2 -m MeasurementValueLogging.console [-h] port device [-h] [device options...]</pre>
 </div>
 <p>For further information use the -h or &#8211;help option.</p>
 </div>
 <div class="section" id="gui">
-<h3>GUI<a class="headerlink" href="#gui" title="Permalink to this headline">¶</a></h3>
+<h2>GUI<a class="headerlink" href="#gui" title="Permalink to this headline">¶</a></h2>
 <p>To use the GUI simply run:</p>
 <div class="highlight-python"><pre>python2 -m MeasurementValueLogging.ui</pre>
-</div>
 </div>
 </div>
 </div>
@@ -102,8 +97,7 @@ It aims to be an open source alternative to the software provided by <a class="r
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#stand-alone-executables">Stand-alone Executables</a></li>
 <li><a class="reference internal" href="#python-package">Python Package</a></li>
 </ul>
@@ -114,15 +108,13 @@ It aims to be an open source alternative to the software provided by <a class="r
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">MeasurementValueLogging</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="documentation.html"
-                        title="next chapter">Modules</a></p>
+  <p class="topless"><a href="developer.html"
+                        title="next chapter">Developer information</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -150,7 +142,7 @@ It aims to be an open source alternative to the software provided by <a class="r
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="documentation.html" title="Modules"
+          <a href="developer.html" title="Developer information"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="MeasurementValueLogging"

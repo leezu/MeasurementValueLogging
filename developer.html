@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Modules &mdash; MeasurementValueLogging 0.1 documentation</title>
+    <title>Developer information &mdash; MeasurementValueLogging 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -56,11 +56,73 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="modules">
-<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-devices.devices">
-<span id="devices"></span><h2>Devices<a class="headerlink" href="#module-devices.devices" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+  <div class="section" id="developer-information">
+<h1>Developer information<a class="headerlink" href="#developer-information" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>MeasurementValueLogging is grouped into three python modules: <a class="reference internal" href="#devices-module"><em>Devices module</em></a>, <a class="reference internal" href="#ui-module"><em>UI module</em></a> and <a class="reference internal" href="#console-module"><em>Console module</em></a>. Furthermore MeasurementValueLogging uses some third-party-tools to achieve various goals, like creating documentation, or providing stand-alone executables etc.:</p>
+<div class="section" id="third-party-tools">
+<h3>Third-party tools<a class="headerlink" href="#third-party-tools" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="sphinx">
+<h4>Sphinx<a class="headerlink" href="#sphinx" title="Permalink to this headline">¶</a></h4>
+<p>MeasurementValueLogging uses <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> and its <a class="reference external" href="http://sphinx-doc.org/ext/autodoc.html#module-sphinx.ext.autodoc">autodoc extension</a> to create its documentation. The Sphinx related files can be found in the docs/ directory.
+Wikipedia describes Sphinx as follows:</p>
+<blockquote>
+<div><p>Sphinx is a documentation generator which converts reStructuredText files into HTML websites and other formats including PDF, EPub and man. It exploits the extensible nature of reStructuredText through a number of extensions (e.g. for autogenerating documentation from source code, writing mathematical notation or highlighting source code). The first public release, version 0.1.61611, was announced on March 21, 2008. It was developed for, and used extensively by, the Python project for documentation.</p>
+<p>Since its introduction in 2008, Sphinx was adopted by many other important Python projects, such as Bazaar, SQLAlchemy, MayaVi, Sage, SciPy, Django and Pylons; it is also used for the Blender Python API documentation. In an effort to make maintenance of software documentation easier, the Read the Docs project was created. It automates the process of building and uploading Sphinx documentation after every commit. It is sponsored by the Python Software Foundation.</p>
+</div></blockquote>
+<p>A gh-pages option has been added to the Makefile in docs/ . This allows to automatically update the <a class="reference external" href="https://github.com/leezu/MeasurementValueLogging">Github MeasurementValueLogging</a> page with the most recent Sphinx documentation as described by <a class="reference external" href="http://blog.nikhilism.com/2012/08/automatic-github-pages-generation-from.html">Nikhil on his blog</a>.</p>
+</div>
+<div class="section" id="qt">
+<h4>QT<a class="headerlink" href="#qt" title="Permalink to this headline">¶</a></h4>
+<p>MeasurementValueLogging uses <a class="reference external" href="https://qt-project.org/">QT</a> (<a class="reference external" href="www.riverbankcomputing.co.uk/software/pyqt/">PyQt</a>) for it&#8217;s graphical user interface. The gui is made with help of the <cite>QT Designer &lt;http://qt-project.org/doc/qt-4.8/designer-manual.html&gt;</cite> (see the .ui files in ui/). Furthermore <cite>QResources &lt;http://qt-project.org/doc/qt-4.8/qresource.html&gt;</cite>, <a class="reference external" href="http://qt-project.org/doc/qt-4.8/qsettings.html">QSettings</a> and the <a class="reference external" href="http://qt-project.org/doc/qt-4.8/internationalization.html">QT Internationalization capabilities</a> are used. QResources allow to pack arbitrary data in a python module, so that it&#8217;s more easily accessible and, more important allows to easily package MeasurementValueLogging in a single executable. QSettings provice persistent platform-independent application settings. The internationalization files can be found in the i18n/ directory.</p>
+</div>
+<div class="section" id="python-distribution-utilities">
+<h4>Python Distribution Utilities<a class="headerlink" href="#python-distribution-utilities" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://docs.python.org/3/distutils/">Python Distutils</a> are used to create Python packages distributed on <a class="reference external" href="https://pypi.python.org/pypi/MeasurementValueLogging">PyPi</a>.</p>
+</div>
+<div class="section" id="pyinstaller">
+<h4>PyInstaller<a class="headerlink" href="#pyinstaller" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="www.pyinstaller.org">PyInstaller</a> is used to package MeasurementValueLogging into stand-alone executables. This is done by calling the following command:</p>
+<div class="highlight-python"><pre>pyinstaller --onefile --name=MeasurementValueLogging --windowed path/to/ui.py</pre>
+</div>
+<p>Please see the <a class="reference external" href="www.pyinstaller.org/export/v2.0/project/doc/Manual.html">PyInstaller documentation</a> for more information. The stand-alone executables can be found on <a class="reference external" href="http://sphinx.pocoo.org">SourceForge</a>.</p>
+</div>
+<div class="section" id="pyserial">
+<h4>PySerial<a class="headerlink" href="#pyserial" title="Permalink to this headline">¶</a></h4>
+<p>Last but not least MeasurementValueLogging uses the <a class="reference external" href="http://pyserial.sourceforge.net/">PySerial module</a> by Chris Liechti for its serial communication with the devices.</p>
+</div>
+</div>
+<div class="section" id="measurementvaluelogging-modules">
+<h3>MeasurementValueLogging Modules<a class="headerlink" href="#measurementvaluelogging-modules" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="devices-module">
+<span id="id4"></span><h4>Devices module<a class="headerlink" href="#devices-module" title="Permalink to this headline">¶</a></h4>
+<p>The devices module contains code representing physical devices as well as the code necessary to manage them. It is furthermore divided into</p>
+<div class="section" id="devices-devices">
+<h5>devices.devices<a class="headerlink" href="#devices-devices" title="Permalink to this headline">¶</a></h5>
+<p>The devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object). For a general overview see the base device class documentation <a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a>. In particular there are so called MutliboxDevices like the XLS200, which allow to use multiple devices on just one serial connection. For more information see the MultiboxDevice documentation <a class="reference internal" href="#devices.devices.MultiboxDevice" title="devices.devices.MultiboxDevice"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.MultiboxDevice</span></tt></a></p>
+</div>
+<div class="section" id="devices-devicemanager">
+<h5>devices.devicemanager<a class="headerlink" href="#devices-devicemanager" title="Permalink to this headline">¶</a></h5>
+<p>The devicemanager module contains a DeviceManager class to manage devices and a DeviceConfig class, with which the devicemanager can be told to open a specific device with a given configuration. Please see <a class="reference internal" href="#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a> and <a class="reference internal" href="#devices.devicemanager.DeviceConfig" title="devices.devicemanager.DeviceConfig"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceConfig</span></tt></a>.</p>
+<p>The DeviceManager can run it&#8217;s own thread, constantly updating measurement values. It has methods which give instant access to the last acquired value from a device (identified by a deviceID).</p>
+</div>
+</div>
+<div class="section" id="ui-module">
+<span id="id5"></span><h4>UI module<a class="headerlink" href="#ui-module" title="Permalink to this headline">¶</a></h4>
+<p>This module contains a graphical user interface to the DeviceManager.
+For more information see <a class="reference internal" href="#module-ui" title="ui"><tt class="xref py py-class docutils literal"><span class="pre">ui</span></tt></a>.</p>
+</div>
+<div class="section" id="console-module">
+<span id="id6"></span><h4>Console module<a class="headerlink" href="#console-module" title="Permalink to this headline">¶</a></h4>
+<p>This module contains a console user interface to the DeviceManager.
+For more information see <a class="reference internal" href="#module-console" title="console"><tt class="xref py py-class docutils literal"><span class="pre">console</span></tt></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="module-documentation">
+<h2>Module documentation<a class="headerlink" href="#module-documentation" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-devices.devices"></span><dl class="class">
 <dt id="devices.devices.BS600">
 <em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">BS600</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.BS600" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents the BS600 Balance.</p>
@@ -405,10 +467,7 @@ in which combination DTR and RTS rs232 attributes are set.</p>
 </ul>
 </dd></dl>
 
-</div>
-<div class="section" id="module-devices.devicemanager">
-<span id="devicemanager"></span><h2>Devicemanager<a class="headerlink" href="#module-devices.devicemanager" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<span class="target" id="module-devices.devicemanager"></span><dl class="class">
 <dt id="devices.devicemanager.DeviceConfig">
 <em class="property">class </em><tt class="descclassname">devices.devicemanager.</tt><tt class="descname">DeviceConfig</tt><big>(</big><em>relationship</em>, <em>deviceName</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>DeviceConfig objects can be passed to DeviceManager openWithConfig method.</p>
@@ -634,10 +693,7 @@ used to compute m and c.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-ui">
-<span id="ui"></span><h2>UI<a class="headerlink" href="#module-ui" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<span class="target" id="module-ui"></span><dl class="class">
 <dt id="ui.DeviceSettingsDialog">
 <em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">DeviceSettingsDialog</tt><big>(</big><em>deviceID</em>, <em>dm</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#ui.DeviceSettingsDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Settings dialog for device specific settings.</p>
@@ -839,10 +895,7 @@ used to compute m and c.</p>
 <dd><p>Dialog to chose XLS200 subdevices.</p>
 </dd></dl>
 
-</div>
-<div class="section" id="module-console">
-<span id="console"></span><h2>Console<a class="headerlink" href="#module-console" title="Permalink to this headline">¶</a></h2>
-<p>This module contains a console interface.</p>
+<span class="target" id="module-console"></span><p>This module contains a console interface.</p>
 </div>
 </div>
 
@@ -854,11 +907,29 @@ used to compute m and c.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Modules</a><ul>
-<li><a class="reference internal" href="#module-devices.devices">Devices</a></li>
-<li><a class="reference internal" href="#module-devices.devicemanager">Devicemanager</a></li>
-<li><a class="reference internal" href="#module-ui">UI</a></li>
-<li><a class="reference internal" href="#module-console">Console</a></li>
+<li><a class="reference internal" href="#">Developer information</a><ul>
+<li><a class="reference internal" href="#structure">Structure</a><ul>
+<li><a class="reference internal" href="#third-party-tools">Third-party tools</a><ul>
+<li><a class="reference internal" href="#sphinx">Sphinx</a></li>
+<li><a class="reference internal" href="#qt">QT</a></li>
+<li><a class="reference internal" href="#python-distribution-utilities">Python Distribution Utilities</a></li>
+<li><a class="reference internal" href="#pyinstaller">PyInstaller</a></li>
+<li><a class="reference internal" href="#pyserial">PySerial</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#measurementvaluelogging-modules">MeasurementValueLogging Modules</a><ul>
+<li><a class="reference internal" href="#devices-module">Devices module</a><ul>
+<li><a class="reference internal" href="#devices-devices">devices.devices</a></li>
+<li><a class="reference internal" href="#devices-devicemanager">devices.devicemanager</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ui-module">UI module</a></li>
+<li><a class="reference internal" href="#console-module">Console module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-documentation">Module documentation</a></li>
 </ul>
 </li>
 </ul>
