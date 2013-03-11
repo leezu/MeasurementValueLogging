@@ -4,10 +4,10 @@ Developer information
 
 Structure
 =========
-MeasurementValueLogging is grouped into three python modules: :ref:`devices-module`, :ref:`ui-module` and :ref:`console-module`. Furthermore MeasurementValueLogging uses some third-party-tools to achieve various goals, like creating documentation, or providing stand-alone executables etc.:
+MeasurementValueLogging is grouped into three python modules: :ref:`devices-module`, :ref:`ui-module` and :ref:`console-module`. Furthermore MeasurementValueLogging uses some third-party tools to achieve various goals, like creating documentation, providing stand-alone executables or gaining (simple & multi-platform) access to serial ports.
 
-Third-party tools
-------------------
+Third-party tools and modules
+------------------------------
 
 Sphinx
 ^^^^^^^
@@ -52,8 +52,27 @@ The devices module contains code representing physical devices as well as the co
 
 devices.devices
 """""""""""""""""
-The devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object). For a general overview see the base device class documentation :class:`devices.devices.Device`. In particular there are so called MutliboxDevices like the XLS200, which allow to use multiple devices on just one serial connection. For more information see the MultiboxDevice documentation :class:`devices.devices.MultiboxDevice`
+The devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object). 
 
+.. automethod:: devices.devices.Device.getRawValue
+
+The (hopefully) returned Value object then has functions to access its data:
+
+.. automethod:: devices.devices.Value.getDisplayedValue
+.. automethod:: devices.devices.Value.getUnit
+.. automethod:: devices.devices.Value.getFactor
+
+In particular there are so called MutliboxDevices like the XLS200, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or "get" one of their subdevices.
+
+.. automethod:: devices.devices.MultiboxDevice.openDevice
+.. automethod:: devices.devices.MultiboxDevice.closeDevice
+.. automethod:: devices.devices.MultiboxDevice.getDevice
+
+Some devices, like balances provide - in additon to the base device methods - more methods.
+
+.. automethod:: devices.devices.Balance.setTypeOfValue
+
+For a complete overview please see the :class:`devices.devices` documentation.
 
 devices.devicemanager
 """""""""""""""""""""
@@ -75,25 +94,30 @@ Console module
 This module contains a console user interface to the DeviceManager.
 For more information see :class:`console`.
 
+
 Module documentation
 =====================
+
 Devices
-^^^^^^^^
+--------
 
 .. automodule:: devices.devices
 	:members:
 
 Devicemanager
-^^^^^^^^^^^^^^
+--------------
+
 .. automodule:: devices.devicemanager
 	:members:
 
 UI
-^^^
+---
+
 .. automodule:: ui
 	:members:
 
 Console
-^^^^^^^^
+--------
+
 .. automodule:: console
 	:members:

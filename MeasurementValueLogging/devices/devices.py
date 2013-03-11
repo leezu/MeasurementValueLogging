@@ -105,8 +105,8 @@ class Device(object):
     def isAvailable(self):
         """Returns the device status (available or not)
         
-        returns: Device status
-        rtype: Boolean
+        :returns: Device status
+        :rtype: Boolean
 
         """
 
@@ -115,8 +115,8 @@ class Device(object):
     def getRawValue(self):
         """Return a Value object or None.
 
-        returns: Value or None
-        rtype: Value or None
+        :returns: :class:`devices.devices.Value` or :class:`None`
+        :rtype: :class:`devices.devices.Value` or :class:`None`
 
         """
 
@@ -137,8 +137,8 @@ class MultiboxDevice(Device):
 
         \*args and \*\*kwargs are passed on to the devices __init__ methods.
 
-        :param deviceClass: Classname of the subdevice
-        :type deviceClass: Device
+        :param deviceClass: Class of the subdevice
+        :type deviceClass: :class:`devices.devices.Device`
         :param input: Input number of subdevice
         :type input: Input
 
@@ -161,8 +161,8 @@ class MultiboxDevice(Device):
 
         :param input: Input number of subdevice
         :type input: Input
-        :returns: Device on input
-        :rtype: Device
+        :returns: :class:`devices.devices.Device` on input
+        :rtype: :class:`devices.devices.Device`
 
         """
 
@@ -654,12 +654,12 @@ class Balance(Device):
     _typeOfValue = "all"
 
     def setTypeOfValue(self, typeOfValue):
-        """Balance Devices have two different kind of values: Stable and Unstable Values.
+        """Balance Devices have two different kind of values: Stable and unstable Values.
 
         This method sets, which kind of values should be returned by the getRawValue method.
         For more information please see the Device's manual.
 
-        :param typeOfValue: Type of values, which should be returned by the getRawValue method - stable or all
+        :param typeOfValue: Type of values, which should be returned by the getRawValue method - "stable" or "all"
         :type typeOfValue: String
 
         """

@@ -296,8 +296,8 @@ class DeviceManager(object):
         
         :param deviceID: DeviceID
         :type deviceID: DeviceID
-        :returns: Device with deviceID
-        :rtype: Device
+        :returns: :class:`devices.devices.Device` with deviceID
+        :rtype: :class:`devices.devices.Device`
 
         """
 
