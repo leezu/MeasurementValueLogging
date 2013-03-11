@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>343</width>
+    <width>348</width>
     <height>400</height>
    </rect>
   </property>
@@ -161,6 +161,9 @@
           <property name="text">
            <string>Unit</string>
           </property>
+          <property name="buddy">
+           <cstring>unit</cstring>
+          </property>
          </widget>
         </item>
         <item>
@@ -192,8 +195,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>390</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -208,12 +211,140 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>390</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slope</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>slopeInterceptButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>50</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intercept</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>slopeInterceptButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>305</x>
+     <y>268</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>should2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>280</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>73</x>
+     <y>125</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>258</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>94</x>
+     <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>should1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>115</x>
+     <y>113</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is1</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>118</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>get1</sender>
+   <signal>clicked()</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>196</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>50</x>
+     <y>114</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>get2</sender>
+   <signal>clicked()</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>167</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>64</x>
+     <y>124</y>
     </hint>
    </hints>
   </connection>
