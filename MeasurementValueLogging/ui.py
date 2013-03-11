@@ -18,7 +18,6 @@
 
 import sys
 import pkgutil
-import StringIO
 import qr
 from PyQt4 import QtCore, QtGui, uic
 from devices.devicemanager import DeviceManager, DeviceConfig
