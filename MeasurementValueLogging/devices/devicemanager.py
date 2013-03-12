@@ -160,7 +160,7 @@ class DeviceManager(object):
                                     "kwargs":kwargs})
 
     def openSubdevice(self, deviceName, parentDeviceID, inputNumber, *args, **kwargs):
-        """Open a device.
+        """Open a device as subdevice of the device with parentDeviceID.
         
         :param deviceName: Classname of the device to openDevice
         :type deviceName: String
