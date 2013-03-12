@@ -43,9 +43,8 @@ class DeviceManager(object):
 
     def _checkConfig(self, config):
         assert config.deviceName in self._validDevices
-        assert isinstance(config.relationship, tuple) and (len(config.relationship) == 2 or len(config.relationship) == 3)
-        assert isinstance(config.relationship[0], str) or isinstance(config.relationship[0], float)
-        assert isinstance(config.relationship[1], dict)
+        assert isinstance(config.parent, str) or isinstance(config.parent, float)
+        assert isinstance(config.subDevices, dict)
 
     def _updateRawValues(self):
         if self._running:
@@ -159,18 +158,18 @@ class DeviceManager(object):
         self._checkConfig(config)
         id = time.time()
 
-        parentID = config.relationship[0]
+        parentID = config.parent
 
         if isinstance(parentID, str):
-            device = eval(config.deviceName).openRS232(config.relationship[0], *config.args, **config.kwargs)
+            device = eval(config.deviceName).openRS232(config.parent, *config.args, **config.kwargs)
 
         elif isinstance(parentID, float):
             assert self.devices[parentID] # FIXME: use another error (e.g. WrongIDError)
 
             self.devices[parentID].openDevice(eval(config.deviceName),
-                input = config.relationship[2], *config.args, **config.kwargs)
-            device = self.devices[parentID].getDevice(input = config.relationship[2])
-            self.configs[parentID].relationship[1][id] = config.relationship[2]
+                input = config.inputNumber, *config.args, **config.kwargs)
+            device = self.devices[parentID].getDevice(input = config.inputNumber)
+            self.configs[parentID].subDevices[id] = config.inputNumber
 
         self.devices[id] = device
         self.configs[id] = config
@@ -189,9 +188,9 @@ class DeviceManager(object):
 
         config = self.configs[deviceID]
 
-        if isinstance(config.relationship[0], str):
+        if isinstance(config.parent, str):
             import copy
-            relCopy = copy.copy(config.relationship[1])
+            relCopy = copy.copy(config.subDevices)
             # prevent RuntimeError: dictionary changed size during iteration
             
             for subdeviceID, inputNumber in relCopy.iteritems():
@@ -200,19 +199,19 @@ class DeviceManager(object):
             del(self.devices[deviceID])
             del(self.configs[deviceID])
 
-        elif isinstance(config.relationship[0], float):
-            parentID = config.relationship[0]
-            self.getDevice(parentID).closeDevice(input=config.relationship[2])
+        elif isinstance(config.parent, float):
+            parentID = config.parent
+            self.getDevice(parentID).closeDevice(input=config.inputNumber)
             del(self.devices[deviceID])
             del(self.configs[deviceID])
-            del(self.configs[parentID].relationship[1][deviceID])
+            del(self.configs[parentID].subDevices[deviceID])
 
     def closeEmptyMultiboxDevices(self):
         """Close all MultiboxDevices without subDevices."""
 
         for i in self.getAllDeviceIDs():
             config = self.configs[i]
-            if len(config.relationship[1]) == 0 and config.deviceName == "XLS200":
+            if len(config.subDevices) == 0 and config.deviceName == "XLS200":
                 self.closeDevice(i)
 
     def getLastRawValue(self, deviceID):
@@ -328,29 +327,31 @@ class DeviceManager(object):
 class DeviceConfig(object):
     """DeviceConfig objects can be passed to DeviceManager openWithConfig method."""
 
-    relationship = () # ("parent" deviceID or rs232 port, {"subdeviceID":inputNumber}, inputNumber)
+    parent = None # either deviceID or serial port
+    subDevices = {} # {"subdeviceID":inputNumber} only applicable for multiboxdevices
+    inputNumber = None # only applicable for subdevices
     deviceName = None
     args = ()
     kwargs = {}
 
-    def __init__(self, relationship, deviceName, *args, **kwargs):
-        """Create a DeviceConfig object of a relationship tuple and deviceName.
+    def __init__(self, deviceName, parent, inputNumber=None, *args, **kwargs):
+        """Create a DeviceConfig object.
         
-        :param relationship: (parent deviceID or rs232 port, {"subdeviceID":inputNumber}, inputNumber)
-        :type relationship: Tuple
         :param deviceName: DeviceName
         :type deviceName: String
+        :param parent: Parent deviceID or serial port
+        :type parent: DeviceID or String
+        :param inputNumber: InputNumber of the device (if the device is a subDevice)
+        :type inputNumber: :class:`int` or :class:`None`
         :returns: deviceID of opened device.
         :rtype: deviceID
 
         """
 
         assert deviceName in DeviceManager._validDevices
-        assert isinstance(relationship, tuple) and (len(relationship) == 2 or len(relationship) == 3)
-        assert isinstance(relationship[0], str) or isinstance(relationship[0], float)
-        assert isinstance(relationship[1], dict)
 
-        self.relationship = relationship
+        self.parent = parent
+        self.inputNumber = inputNumber
         self.deviceName = deviceName
         self.args = args
         self.kwargs = kwargs
@@ -380,8 +381,8 @@ class _GetValuesThread(threading.Thread):
         # python3 incompatibility: iteritems
         try:
             for key, config in self.configs.iteritems():
-                if isinstance(config.relationship[0], str):
-                    if len(config.relationship[1]) == 0 and config.deviceName != "XLS200":
+                if isinstance(config.parent, str):
+                    if len(config.subDevices) == 0 and config.deviceName != "XLS200":
                             # If there are no subdevices and it's not an "empty" Multiboxdevice
                         rv = self.devices[key].getRawValue()
                         if rv:
@@ -390,7 +391,7 @@ class _GetValuesThread(threading.Thread):
                             pass
 
                     else:
-                        for subID, subInput in config.relationship[1].iteritems():
+                        for subID, subInput in config.subDevices.iteritems():
                             rv = self.devices[key].getRawValue(input = subInput)
                             if rv:
                                 self.rawValues[subID] = rv
