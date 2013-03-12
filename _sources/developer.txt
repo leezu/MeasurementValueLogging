@@ -76,7 +76,7 @@ For a complete overview please see the :class:`devices.devices` documentation.
 
 devices.devicemanager
 """""""""""""""""""""
-The devicemanager module contains a DeviceManager class to manage devices and a DeviceConfig class, with which the devicemanager can be told to open a specific device with a given configuration. Please see :class:`devices.devicemanager.DeviceManager` and :class:`devices.devicemanager.DeviceConfig`.
+The devicemanager module contains a DeviceManager class to manage devices. Please see :class:`devices.devicemanager.DeviceManager`.
 
 The DeviceManager can run it's own thread, constantly updating measurement values. It has methods which give instant access to the last acquired value from a device (identified by a deviceID).
 

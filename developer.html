@@ -241,7 +241,7 @@ For more information please see the Device&#8217;s manual.</p>
 </div>
 <div class="section" id="devices-devicemanager">
 <h5>devices.devicemanager<a class="headerlink" href="#devices-devicemanager" title="Permalink to this headline">¶</a></h5>
-<p>The devicemanager module contains a DeviceManager class to manage devices and a DeviceConfig class, with which the devicemanager can be told to open a specific device with a given configuration. Please see <a class="reference internal" href="#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a> and <a class="reference internal" href="#devices.devicemanager.DeviceConfig" title="devices.devicemanager.DeviceConfig"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceConfig</span></tt></a>.</p>
+<p>The devicemanager module contains a DeviceManager class to manage devices. Please see <a class="reference internal" href="#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a>.</p>
 <p>The DeviceManager can run it&#8217;s own thread, constantly updating measurement values. It has methods which give instant access to the last acquired value from a device (identified by a deviceID).</p>
 </div>
 </div>
@@ -626,31 +626,6 @@ in which combination DTR and RTS rs232 attributes are set.</p>
 <div class="section" id="module-devices.devicemanager">
 <span id="devicemanager"></span><h3>Devicemanager<a class="headerlink" href="#module-devices.devicemanager" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="devices.devicemanager.DeviceConfig">
-<em class="property">class </em><tt class="descclassname">devices.devicemanager.</tt><tt class="descname">DeviceConfig</tt><big>(</big><em>relationship</em>, <em>deviceName</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceConfig" title="Permalink to this definition">¶</a></dt>
-<dd><p>DeviceConfig objects can be passed to DeviceManager openWithConfig method.</p>
-<p>Create a DeviceConfig object of a relationship tuple and deviceName.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>relationship</strong> (<em>Tuple</em>) &#8211; (parent deviceID or rs232 port, {&#8220;subdeviceID&#8221;:inputNumber}, inputNumber)</li>
-<li><strong>deviceName</strong> (<em>String</em>) &#8211; DeviceName</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">deviceID of opened device.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">deviceID</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
 <dt id="devices.devicemanager.DeviceManager">
 <em class="property">class </em><tt class="descclassname">devices.devicemanager.</tt><tt class="descname">DeviceManager</tt><a class="headerlink" href="#devices.devicemanager.DeviceManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>The DeviceManager manages devices.</p>
@@ -820,18 +795,53 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="devices.devicemanager.DeviceManager.openWithConfig">
-<tt class="descname">openWithConfig</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.openWithConfig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a device with a config object. Returns a deviceID.</p>
+<dt id="devices.devicemanager.DeviceManager.openDevice">
+<tt class="descname">openDevice</tt><big>(</big><em>deviceName</em>, <em>serialPort</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.openDevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a device.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>DeviceConfig</em>) &#8211; DeviceConfig object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>deviceName</strong> (<em>String</em>) &#8211; Classname of the device to openDevice</li>
+<li><strong>serialPort</strong> (<em>String</em>) &#8211; Serial port on which the device sits</li>
+<li><strong>args</strong> &#8211; args to pass to the devices init method</li>
+<li><strong>kwargs</strong> &#8211; kwargs to pass to the devices init method</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DeviceID of opened device</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DeviceID of opened device</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">DeviceID</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">DeviceID</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devices.devicemanager.DeviceManager.openSubdevice">
+<tt class="descname">openSubdevice</tt><big>(</big><em>deviceName</em>, <em>parentDeviceID</em>, <em>inputNumber</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.openSubdevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a device.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>deviceName</strong> (<em>String</em>) &#8211; Classname of the device to openDevice</li>
+<li><strong>parentDeviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID of the parent device (the multiboxdevice)</li>
+<li><strong>inputNumber</strong> (<em>Int</em>) &#8211; Input the device sits on</li>
+<li><strong>args</strong> &#8211; args to pass to the devices init method</li>
+<li><strong>kwargs</strong> &#8211; kwargs to pass to the devices init method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DeviceID of opened device</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">DeviceID</span></tt></p>
+</td>
 </tr>
 </tbody>
 </table>
