@@ -20,7 +20,7 @@
 
 """This module contains a console interface."""
 
-from devices.devicemanager import DeviceManager, DeviceConfig
+from devices.devicemanager import DeviceManager
 
 def main():
     import argparse
