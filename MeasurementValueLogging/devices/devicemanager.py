@@ -405,26 +405,3 @@ class _GetValuesThread(threading.Thread):
             # is therefore not closed yet) It does no harm though,
             # as the device is going to be closed afterwards.
             pass
-
-if __name__ == '__main__':
-    dm = DeviceManager()
-
-    a = DeviceConfig(("/dev/ttyUSB0", {}), "XLS200")
-    ida = dm.openWithConfig(a)
-    b = DeviceConfig((ida, {}, 2), "TecpelDMM8061")
-    idb = dm.openWithConfig(b)
-    c = DeviceConfig((ida, {}, 3), "BS600", typeOfValue="stable")
-    idc = dm.openWithConfig(c)
-    
-    dm.start()
-
-    import time
-
-    time.sleep(3)
-
-    while True:
-        time.sleep(0.5)
-        rv = dm.getCalibratedLastRawValue(idb, ((pow(10,-6), 21), (4 * pow(10,-6), 30)), unit="°C")
-        rvc  = dm.getLastRawValue(idc)
-        print(str(rv.getDisplayedValue() * rv.getFactor()) + " " + rv.getUnit())
-        print(str(rvc.getDisplayedValue() * rvc.getFactor()) + " " + rvc.getUnit())
