@@ -55,15 +55,15 @@ def main():
     if args.device == "XLS200":
         deviceIDs = []
         if args.input1 != "None":
-            idb = dm.openWithConfig(args.input1, ida, 1)
+            idb = dm.openSubdevice(args.input1, ida, 1)
             deviceIDs.append(idb)
 
         if args.input2 != "None":
-            idc = dm.openWithConfig(args.input2, ida, 2)
+            idc = dm.openSubdevice(args.input2, ida, 2)
             deviceIDs.append(idc)
 
         if args.input3 != "None":
-            idd = dm.openWithConfig(args.input3, ida, 3)
+            idd = dm.openSubdevice(args.input3, ida, 3)
             deviceIDs.append(idd)
 
 
