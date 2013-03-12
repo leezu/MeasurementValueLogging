@@ -48,26 +48,22 @@ def main():
 
     deviceIDs = []
 
-    a = DeviceConfig(args.device, args.port)
-    ida = dm.openWithConfig(a)
+    ida = dm.openDevice(args.device, args.port)
 
     deviceIDs.append(ida)
 
     if args.device == "XLS200":
         deviceIDs = []
         if args.input1 != "None":
-            b = DeviceConfig(args.input1, ida, 1)
-            idb = dm.openWithConfig(b)
+            idb = dm.openWithConfig(args.input1, ida, 1)
             deviceIDs.append(idb)
 
         if args.input2 != "None":
-            c = DeviceConfig(args.input2, ida, 2)
-            idc = dm.openWithConfig(c)
+            idc = dm.openWithConfig(args.input2, ida, 2)
             deviceIDs.append(idc)
 
         if args.input3 != "None":
-            d = DeviceConfig(args.input3, ida, 3)
-            idd = dm.openWithConfig(d)
+            idd = dm.openWithConfig(args.input3, ida, 3)
             deviceIDs.append(idd)
 
 

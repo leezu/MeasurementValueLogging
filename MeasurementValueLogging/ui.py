@@ -369,31 +369,31 @@ class MainWindow(QtGui.QMainWindow):
                 xls200Popup.exec_()
 
                 if xls200Popup.result():
-                    xls200ID = self.dm.openWithConfig(DeviceConfig(device, port))
+                    xls200ID = self.dm.openDevice(device, port)
                     sub1 = str(xls200Popup.subdevice1ComboBox.currentText())
                     sub2 = str(xls200Popup.subdevice2ComboBox.currentText())
                     sub3 = str(xls200Popup.subdevice3ComboBox.currentText())
                     
                     if sub1 != "":
-                            deviceID = self.dm.openWithConfig(DeviceConfig(sub1, xls200ID, 1))
+                            deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
                             sub1Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub1Widget)
                             self.displayWidgets[deviceID] = sub1Widget
 
                     if sub2 != "":
-                            deviceID = self.dm.openWithConfig(DeviceConfig(sub2, xls200ID, 2))
+                            deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
                             sub2Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub2Widget)
                             self.displayWidgets[deviceID] = sub2Widget
 
                     if sub3 != "":
-                            deviceID = self.dm.openWithConfig(DeviceConfig(sub3, xls200ID, 3))
+                            deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
                             sub3Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub3Widget)
                             self.displayWidgets[deviceID] = sub3Widget
 
             else:
-                deviceID = self.dm.openWithConfig(DeviceConfig(device, port))
+                deviceID = self.dm.openDevice(device, port)
                 deviceWidget = DisplayWidget(deviceID, self.dm)
                 self.verticalLayout.addWidget(deviceWidget)
                 self.displayWidgets[deviceID] = deviceWidget

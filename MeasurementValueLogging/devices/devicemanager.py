@@ -43,7 +43,7 @@ class DeviceManager(object):
 
     def _checkConfig(self, config):
         assert config.deviceName in self._validDevices
-        assert isinstance(config.parent, str) or isinstance(config.parent, float)
+        assert isinstance(config.parent, str) or isinstance(config.parent, float)  # FIXME: Check for deviceID object when implemented
         assert isinstance(config.subDevices, dict)
 
     def _updateRawValues(self):
@@ -141,13 +141,47 @@ class DeviceManager(object):
 
         return self._running
 
+    def openDevice(self, deviceName, serialPort, *args, **kwargs):
+        """Open a device.
+        
+        :param deviceName: Classname of the device to openDevice
+        :type deviceName: String
+        :param serialPort: Serial port on which the device sits
+        :type serialPort: String
+        :param args: args to pass to the devices init method
+        :param kwargs: kwargs to pass to the devices init method
+        :returns: DeviceID of opened device
+        :rtype: :class:`DeviceID`
+
+        """
+
+        return self.openWithConfig(DeviceConfig(deviceName, serialPort, *args, **kwargs))
+
+    def openSubdevice(self, deviceName, parentDeviceID, inputNumber, *args, **kwargs):
+        """Open a device.
+        
+        :param deviceName: Classname of the device to openDevice
+        :type deviceName: String
+        :param parentDeviceID: DeviceID of the parent device (the multiboxdevice)
+        :type parentDeviceID: DeviceID
+        :param inputNumber: Input the device sits on
+        :type inputNumber: Int
+        :param args: args to pass to the devices init method
+        :param kwargs: kwargs to pass to the devices init method
+        :returns: DeviceID of opened device
+        :rtype: :class:`DeviceID`
+
+        """
+
+        return self.openWithConfig(DeviceConfig(deviceName, parentDeviceID, inputNumber, *args, **kwargs))
+
     def openWithConfig(self, config):
         """Open a device with a config object. Returns a deviceID.
 
         :param config: DeviceConfig object
-        :type config: DeviceConfig
+        :type config: :class:`DeviceConfig`
         :returns: DeviceID of opened device
-        :rtype: DeviceID
+        :rtype: :class:`DeviceID`
 
         """
 
@@ -163,7 +197,7 @@ class DeviceManager(object):
         if isinstance(parentID, str):
             device = eval(config.deviceName).openRS232(config.parent, *config.args, **config.kwargs)
 
-        elif isinstance(parentID, float):
+        elif isinstance(parentID, float): # FIXME: Check for deviceID object when implemented
             assert self.devices[parentID] # FIXME: use another error (e.g. WrongIDError)
 
             self.devices[parentID].openDevice(eval(config.deviceName),
@@ -199,7 +233,7 @@ class DeviceManager(object):
             del(self.devices[deviceID])
             del(self.configs[deviceID])
 
-        elif isinstance(config.parent, float):
+        elif isinstance(config.parent, float): # FIXME: Check for deviceID object when implemented
             parentID = config.parent
             self.getDevice(parentID).closeDevice(input=config.inputNumber)
             del(self.devices[deviceID])
