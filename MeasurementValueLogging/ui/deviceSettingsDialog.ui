@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>348</width>
-    <height>400</height>
+    <width>467</width>
+    <height>423</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,9 +31,6 @@
         </item>
         <item>
          <layout class="QFormLayout" name="formLayout_4">
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="is1"/>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
@@ -43,12 +40,6 @@
              <cstring>should1</cstring>
             </property>
            </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="should1"/>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="is2"/>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_4">
@@ -60,22 +51,133 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
-           <widget class="QDoubleSpinBox" name="should2"/>
-          </item>
           <item row="0" column="0">
            <widget class="QPushButton" name="get1">
             <property name="text">
-             <string>Is</string>
+             <string>Get</string>
             </property>
            </widget>
           </item>
           <item row="3" column="0">
            <widget class="QPushButton" name="get2">
             <property name="text">
-             <string>Is 2</string>
+             <string>Get 2</string>
             </property>
            </widget>
+          </item>
+          <item row="3" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QDoubleSpinBox" name="is2">
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="minimum">
+               <double>-100.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="is2Prefix">
+              <property name="currentIndex">
+               <number>-1</number>
+              </property>
+              <property name="maxVisibleItems">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="5" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QDoubleSpinBox" name="should2">
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="minimum">
+               <double>-100.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="should2Prefix">
+              <property name="currentIndex">
+               <number>-1</number>
+              </property>
+              <property name="maxVisibleItems">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QDoubleSpinBox" name="should1">
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="minimum">
+               <double>-100.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="should1Prefix">
+              <property name="currentIndex">
+               <number>-1</number>
+              </property>
+              <property name="maxVisibleItems">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QDoubleSpinBox" name="is1">
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="minimum">
+               <double>-100.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="is1Prefix">
+              <property name="currentIndex">
+               <number>-1</number>
+              </property>
+              <property name="maxVisibleItems">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -122,7 +224,20 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="slope"/>
+           <widget class="QDoubleSpinBox" name="slope">
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="minimum">
+             <double>-100.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>100.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_6">
@@ -135,7 +250,17 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="intercept"/>
+           <widget class="QDoubleSpinBox" name="intercept">
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="minimum">
+             <double>-100.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>100.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -196,7 +321,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>257</x>
-     <y>390</y>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -212,7 +337,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>325</x>
-     <y>390</y>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -227,12 +352,12 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>275</x>
-     <y>229</y>
+     <x>421</x>
+     <y>262</y>
     </hint>
     <hint type="destinationlabel">
-     <x>50</x>
-     <y>244</y>
+     <x>77</x>
+     <y>286</y>
     </hint>
    </hints>
   </connection>
@@ -243,28 +368,12 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>305</x>
-     <y>268</y>
+     <x>413</x>
+     <y>301</y>
     </hint>
     <hint type="destinationlabel">
      <x>166</x>
-     <y>252</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>should2</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>valuesButton</receiver>
-   <slot>toggle()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>280</x>
-     <y>182</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>73</x>
-     <y>125</y>
+     <y>285</y>
     </hint>
    </hints>
   </connection>
@@ -345,6 +454,86 @@
     <hint type="destinationlabel">
      <x>64</x>
      <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>should2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>280</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>73</x>
+     <y>125</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is1Prefix</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>511</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>36</x>
+     <y>125</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>should1Prefix</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>489</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>61</x>
+     <y>118</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is2Prefix</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>541</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>83</x>
+     <y>126</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>should2Prefix</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>valuesButton</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>468</x>
+     <y>194</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>117</y>
     </hint>
    </hints>
   </connection>

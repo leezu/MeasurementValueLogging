@@ -20,6 +20,7 @@
 
 import threading
 from .devices import Device, Value, NullValue, TecpelDMM8061, XLS200, KernPCB, BS600
+import si
 
 class DeviceManager(object):
     """The DeviceManager manages devices.
@@ -304,29 +305,30 @@ class DeviceManager(object):
             linearFunction = resultFunction
 
         class __Value(Value):
-            displayedValue = None
+            value = None
             unit = None
-            factor = (pow(10, 0),"")
 
             def getDisplayedValue(self):
-                return self.displayedValue
+                x = si.getNumberPrefix(self.value)
+                return x[0]
 
             def getUnit(self):
                 return self.unit
 
             def getFactor(self, type="value"):
+                x = si.getNumberPrefix(self.value)
+                
                 if type == "value":
-                    return self.factor[0]
+                    return si.getFactor(x[1])
                 elif type == "prefix":
-                    return self.factor[1]
+                    return x[1]
 
         rv = self.getLastRawValue(deviceID)
         if rv == None: return None
 
         result = __Value()
 
-        result.displayedValue = linearFunction(rv.getDisplayedValue())
-        result.factor = (rv.getFactor(type="value"), rv.getFactor(type="prefix"))
+        result.value = linearFunction(rv.getDisplayedValue() * rv.getFactor())
         result._time = rv.getTime()
 
         if unit: result.unit = unit

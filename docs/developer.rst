@@ -110,6 +110,12 @@ Devicemanager
 .. automodule:: devices.devicemanager
 	:members:
 
+SI
+--
+
+.. automodule:: devices.si
+	:members:
+
 UI
 ---
 

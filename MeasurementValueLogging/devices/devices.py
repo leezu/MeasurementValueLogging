@@ -18,6 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+import si
+
 class Device(object):
     """The base device class.
 
@@ -99,8 +102,10 @@ class Device(object):
             serial=self._ser, ownser = self._ownSer)
 
     def __str__(self):
-        return "{classname} (port={serialport!s})".format(classname=self.__class__.__name__,
-            serialport=self._ser.port)
+        return "{classname} (port={serialport!s}, baudrate={serialbaudr!s})".format(
+            classname=self.__class__.__name__,
+            serialport=self._ser.port,
+            serialbaudr=self._baudrate)
 
     def isAvailable(self):
         """Returns the device status (available or not)
@@ -361,7 +366,7 @@ class TecpelDMM8061(Device):
 
             elif type == "unit":
                 if self.ohm:
-                    return "Ω"
+                    return u"Ω"
                 elif self.farad:
                     return "F"
                 elif self.hertz:
@@ -371,28 +376,17 @@ class TecpelDMM8061(Device):
                 elif self.ampere:
                     return "A"
                 else:
-                    return "°C"
+                    return u"°C"
 
         def getFactor(self, type="value"):
             if type == "value":
-                if self.nano:
-                    return pow(10, -9)
-                elif self.micro:
-                    return pow(10, -6)
-                elif self.milli:
-                    return pow(10, -3)
-                elif self.kilo:
-                    return pow(10, 3)
-                elif self.mega:
-                    return pow(10, 6)
-                else:
-                    return pow(10, 0)
+                return si.getFactor(self.getFactor("prefix"))
 
             elif type == "prefix":
                 if self.nano:
                     return "n"
                 elif self.micro:
-                    return "µ"
+                    return u"µ"
                 elif self.milli:
                     return "m"
                 elif self.kilo:

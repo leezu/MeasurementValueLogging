@@ -4,7 +4,6 @@
         <file alias="settings.png" >ui/settings.png</file>
     </qresource>
     <qresource prefix="/ui">
-        <file alias="devicemanagerDialog.ui" >ui/devicemanagerDialog.ui</file>
         <file alias="deviceSettingsDialog.ui" >ui/deviceSettingsDialog.ui</file>
         <file alias="displayWidget.ui" >ui/displayWidget.ui</file>
         <file alias="doReallyDialog.ui" >ui/doReallyDialog.ui</file>

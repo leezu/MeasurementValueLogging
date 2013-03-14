@@ -21,6 +21,7 @@ import pkgutil
 import qr
 from PyQt4 import QtCore, QtGui, uic
 from devices.devicemanager import DeviceManager
+import devices.si as si
 
 class NewDeviceDialog(QtGui.QDialog):
     """Dialog to add new devices."""
@@ -92,7 +93,6 @@ class SettingsDialog(QtGui.QDialog):
         self.settings = QtCore.QSettings()
 
         self.path.setText(self.settings.value("office/path", "").toString())
-        self.loggingInterval.setValue(self.settings.value("logging/interval", 1).toInt()[0])
         self.languageComboBox.setCurrentIndex(self.settings.value("i18n", -1).toInt()[0])
 
     def openFile(self):
@@ -106,54 +106,7 @@ class SettingsDialog(QtGui.QDialog):
         """Save the settings to QSettings."""
 
         self.settings.setValue("office/path", self.path.text())
-        self.settings.setValue("logging/interval", self.loggingInterval.value())
         self.settings.setValue("i18n", self.languageComboBox.currentIndex())
-
-
-class DevicemanagerDialog(QtGui.QDialog):
-    """A DeviceManager Dialog where one could delete or add new devices."""
-
-    ids = []
-
-    def __init__(self, dm, parent=None):
-        """
-
-        :param dm: DeviceManager
-        :type dm: DeviceManager
-
-        """
-
-        QtGui.QDialog.__init__(self, parent)
-        qfile = QtCore.QFile(":/ui/devicemanagerDialog.ui")
-        qfile.open(QtCore.QIODevice.ReadOnly)
-        self.ui = uic.loadUi(qfile, self)
-        self.dm = dm
-
-        self.deleteButton.clicked.connect(self.deleteItem)
-        self.deleteButton.setIcon(QtGui.QIcon(":/images/close.png"))
-
-        self.refreshList()
-
-    def refreshList(self):
-        """Refresh the list of devices."""
-
-        self.ids = self.dm.getAllDeviceIDs()
-
-        self.listWidget.clear()
-
-        for id in self.ids:
-            item = QtGui.QListWidgetItem(str(self.dm.getDevice(id)))
-            self.listWidget.addItem(item)
-
-    def deleteItem(self):
-        """Close the device and refresh list."""
-
-        row = self.listWidget.currentRow()
-
-        self.dm.closeDevice(self.ids[row])
-        self.dm.closeEmptyMultiboxDevices()
-
-        self.refreshList()
 
 
 class DisplayWidget(QtGui.QWidget):
@@ -161,8 +114,19 @@ class DisplayWidget(QtGui.QWidget):
     calibrationType = 1 # 0: two values calibration, 1: slope and intercept calibration
     twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
     slopeInterceptCalibration = 1.0, 0.0
-    calibration = 1.0, 0.0 # this is either the same as slopeInterceptCalibration or twoValueCalibration
-    unit = ""
+
+    is1PrefixIndex = 2 # QComboBox Index
+    should1PrefixIndex = 2 # QComboBox Index
+    is2PrefixIndex = 2 # QComboBox Index
+    should2PrefixIndex = 2 # QComboBox Index
+
+    is1 = 0
+    should1 = 0
+    is2 = 1
+    should2 = 1
+
+    calibration = slopeInterceptCalibration # either slopeInterceptCalibration or twoValueCalibration
+    unit = QtCore.QString()
 
     def __init__(self, deviceID, dm, parent=None):
         """
@@ -196,10 +160,20 @@ class DisplayWidget(QtGui.QWidget):
 
         popup.slope.setValue(self.slopeInterceptCalibration[0])
         popup.intercept.setValue(self.slopeInterceptCalibration[1])
-        popup.is1.setValue(self.twoValueCalibration[0][0])
-        popup.should1.setValue(self.twoValueCalibration[0][1])
-        popup.is2.setValue(self.twoValueCalibration[1][0])
-        popup.should2.setValue(self.twoValueCalibration[1][1])
+        popup.is1.setValue(self.is1)
+        popup.should1.setValue(self.should1)
+        popup.is2.setValue(self.is2)
+        popup.should2.setValue(self.should2)
+
+        # Add prefixes to combobox
+        for i in [popup.is1Prefix, popup.should1Prefix, popup.is2Prefix, popup.should2Prefix]:
+            i.clear()
+            i.addItems(si.getSiNames())
+
+        popup.is1Prefix.setCurrentIndex(self.is1PrefixIndex)
+        popup.should1Prefix.setCurrentIndex(self.should1PrefixIndex)
+        popup.is2Prefix.setCurrentIndex(self.is2PrefixIndex)
+        popup.should2Prefix.setCurrentIndex(self.should2PrefixIndex)
 
         if self.calibrationType == 1:
             popup.slopeInterceptButton.setChecked(True)
@@ -210,8 +184,22 @@ class DisplayWidget(QtGui.QWidget):
 
         popup.exec_()
 
-        self.twoValueCalibration = (popup.is1.value(), popup.should1.value()), (popup.is2.value(), popup.should2.value())
+        self.twoValueCalibration = ((popup.is1.value() * si.getFactor(str(popup.is1Prefix.currentText())),
+                popup.should1.value()  * si.getFactor(str(popup.should1Prefix.currentText()))),
+            (popup.is2.value() * si.getFactor(str(popup.is2Prefix.currentText())), 
+                popup.should2.value() * si.getFactor(str(popup.should2Prefix.currentText()))))
+
         self.slopeInterceptCalibration = popup.slope.value(), popup.intercept.value()
+
+        self.is1 = popup.is1.value()
+        self.should1 = popup.should1.value()
+        self.is2 = popup.is2.value()
+        self.should2 = popup.should2.value()
+
+        self.is1PrefixIndex = popup.is1Prefix.currentIndex()
+        self.should1PrefixIndex = popup.should1Prefix.currentIndex()
+        self.is2PrefixIndex = popup.is2Prefix.currentIndex()
+        self.should2PrefixIndex = popup.should2Prefix.currentIndex()
 
         if popup.slopeInterceptButton.isChecked():
             self.calibrationType = 1
@@ -220,7 +208,7 @@ class DisplayWidget(QtGui.QWidget):
             self.calibrationType = 0
             self.calibration = self.twoValueCalibration
 
-        self.unit = str(popup.unit.text())
+        self.unit = popup.unit.text()
 
     def delete(self):
         """Delete Widget."""
@@ -267,11 +255,21 @@ class DeviceSettingsDialog(QtGui.QDialog):
         rv = self.dm.getLastRawValue(self.deviceID)
         self.is1.setValue(rv.getDisplayedValue())
 
+        name = si.getName(rv.getFactor())
+        index = self.is1Prefix.findText(name)
+        self.is1Prefix.setCurrentIndex(index)
+        self.should1Prefix.setCurrentIndex(index)
+
     def setCurrentValue2(self):
         """Get current displayedValue from Device."""
 
         rv = self.dm.getLastRawValue(self.deviceID)
         self.is2.setValue(rv.getDisplayedValue())
+
+        name = si.getName(rv.getFactor())
+        index = self.is1Prefix.findText(name)
+        self.is2Prefix.setCurrentIndex(index)
+        self.should2Prefix.setCurrentIndex(index)
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -286,7 +284,6 @@ class MainWindow(QtGui.QMainWindow):
     tmpfile = None
     starttime = 0
     lasttime = 0
-    loggingInterval = 3
     pathToLogFile = None
 
     officePath = None
@@ -296,6 +293,8 @@ class MainWindow(QtGui.QMainWindow):
         qfile = QtCore.QFile(":/ui/mainWindow.ui")
         qfile.open(QtCore.QIODevice.ReadOnly)
         self.ui = uic.loadUi(qfile, self)
+
+        self.settings = QtCore.QSettings()
 
         self.measurementButton.clicked.connect(self.startStopMeasurement)
         self.loggingButton.clicked.connect(self.startStopLogging)
@@ -313,7 +312,12 @@ class MainWindow(QtGui.QMainWindow):
 
         self.settings = QtCore.QSettings()
         self.officePath = str(self.settings.value("office/path", "").toString())
-        self.loggingInterval = int(self.settings.value("logging/interval", 1).toInt()[0])
+
+        self.loggingInterval.setValue(self.settings.value("logging/interval", 1).toInt()[0])
+        self.loggingInterval.valueChanged.connect(self.saveLoggingInterval)
+
+    def saveLoggingInterval(self):
+        self.settings.setValue("logging/interval", self.loggingInterval.value())
 
     def settingsDialog(self):
         """Open a SettingsDialog."""
@@ -322,7 +326,6 @@ class MainWindow(QtGui.QMainWindow):
         popup.exec_()
 
         self.officePath = str(self.settings.value("office/path", "").toString())
-        self.loggingInterval = int(self.settings.value("logging/interval", 1).toInt()[0])
 
     def devicemanagerDialog(self):
         """Open a DevicemanagerDialog."""
@@ -490,11 +493,10 @@ class MainWindow(QtGui.QMainWindow):
 
                 rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
                 widget.lcdNumber.display(rv.getDisplayedValue())
-                widget.label.setText(str(rv.getFactor("prefix") + rv.getUnit()).decode('utf-8'))
-                # python3 incompatibility: in python3 .decode() is not needed anymore
+                widget.label.setText(rv.getFactor("prefix") + rv.getUnit())
             
             # log    
-            if self.log and ((time.time() - self.lasttime) > self.loggingInterval):
+            if self.log and ((time.time() - self.lasttime) > self.loggingInterval.value()):
                 for deviceID, widget in self.displayWidgets.iteritems():
                     unit = None
                     if widget.unit != "":
