@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name="MeasurementValueLogging",
-	version="0.1.2",
+	version="0.2.0",
 	description="Display measurement values from various serial devices.",
 	long_description=open('README.md').read(),
 	author="Leonard Lausen",
