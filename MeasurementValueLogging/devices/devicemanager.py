@@ -238,6 +238,8 @@ class DeviceManager(object):
             for subdeviceID, inputNumber in relCopy.iteritems():
                 self.closeDevice(subdeviceID)
 
+            self.devices[deviceID].close()
+
             del(self.devices[deviceID])
             del(self.configs[deviceID])
 

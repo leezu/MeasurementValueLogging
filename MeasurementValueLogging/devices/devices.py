@@ -66,7 +66,7 @@ class Device(object):
             self._ser.setRTS(level=self._rts)
             self._ser.setDTR(level=self._dtr)
 
-    def __del__(self):
+    def close(self):
         """Closes the serial connection if the device ownes the serial connection (if its not a subdevice)."""
 
         if self._ownSer is True:
@@ -614,12 +614,15 @@ class XLS200(MultiboxDevice):
 
     def closeDevice(self, input):
         if input == 1:
+            self._in1.close()
             self._in1 = None
 
         elif input == 2:
+            self._in2.close()
             self._in2 = None
 
         elif input == 3:
+            self._in3.close()
             self._in3 = None
 
     def getRawValue(self, input):
