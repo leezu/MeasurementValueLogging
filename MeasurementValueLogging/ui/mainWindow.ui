@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>339</height>
+    <width>597</width>
+    <height>302</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,7 +125,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Open log</string>
+         <string>Open log with office</string>
         </property>
        </widget>
       </item>
@@ -157,7 +157,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>527</width>
+     <width>597</width>
      <height>27</height>
     </rect>
    </property>

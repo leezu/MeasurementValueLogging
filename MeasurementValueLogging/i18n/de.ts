@@ -145,7 +145,7 @@
         <location filename="ui.py" line="413"/>
         <source>Do you really want to overwrite the last (unsaved) log?
 </source>
-        <translation>Wenn Sie fortfahren werden alle ungespeicherten Aufnahmen verworfen.
+        <translation>Möchten Sie wirklich die letzte Aufnahme verworfe?
 </translation>
     </message>
     <message>
@@ -184,11 +184,6 @@
         <translation>Aufnahme speichern</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="128"/>
-        <source>Open log</source>
-        <translation>Aufnahme im Office öffnen</translation>
-    </message>
-    <message>
         <location filename="mainWindow.ui" line="147"/>
         <source>Add devices</source>
         <translation>Geräte hinzufügen</translation>
@@ -216,7 +211,12 @@
     <message>
         <location filename="mainWindow.ui" line="30"/>
         <source> seconds</source>
-        <translation>Sekunden</translation>
+        <translation> Sekunden</translation>
+    </message>
+    <message>
+        <location filename="mainWindow.ui" line="128"/>
+        <source>Open log with office</source>
+        <translation>Aufnahme im Office öffnen</translation>
     </message>
 </context>
 <context>
