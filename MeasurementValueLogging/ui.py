@@ -303,7 +303,6 @@ class MainWindow(QtGui.QMainWindow):
         self.openButton.clicked.connect(self.openLog)
 
         self.actionSettings.triggered.connect(self.settingsDialog)
-        self.actionDevicemanager.triggered.connect(self.devicemanagerDialog)
 
         self.dm = DeviceManager()
         self.timer = QtCore.QTimer()
@@ -326,17 +325,6 @@ class MainWindow(QtGui.QMainWindow):
         popup.exec_()
 
         self.officePath = str(self.settings.value("office/path", "").toString())
-
-    def devicemanagerDialog(self):
-        """Open a DevicemanagerDialog."""
-        
-        if self.dm.getStatus() == False:
-            popup = DevicemanagerDialog(self.dm)
-            popup.exec_()
-        else:
-            popup = DoReallyDialog(self.tr("Warning"),
-                self.tr("You have to stop the measurement to open the devicemanager."))
-            popup.exec_()
 
     def openLog(self):
         """Open last log with office."""
