@@ -62,7 +62,7 @@ The (hopefully) returned Value object then has functions to access its data:
 .. automethod:: devices.devices.Value.getUnit
 .. automethod:: devices.devices.Value.getFactor
 
-In particular there are so called MutliboxDevices like the XLS200, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or "get" one of their subdevices.
+In particular there are so called MutliboxDevices like the `XLS200 <http://www.xlsmess.de/html/xls_200.html>`_, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or "get" one of their subdevices.
 
 .. automethod:: devices.devices.MultiboxDevice.openDevice
 .. automethod:: devices.devices.MultiboxDevice.closeDevice
