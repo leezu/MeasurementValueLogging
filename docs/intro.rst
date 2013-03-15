@@ -10,6 +10,9 @@ To use the program as a Python package, make sure you have a recent version of `
 
 Then download and install the package from `PyPi <https://pypi.python.org/pypi/MeasurementValueLogging>`_.
 
+Source Code
+-----------
+The complete source code is available on `Github <https://github.com/leezu/MeasurementValueLogging>`_.
 
 Usage
 ======
