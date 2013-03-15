@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; MeasurementValueLogging 0.1 documentation</title>
+    <title>Index &mdash; MeasurementValueLogging 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="MeasurementValueLogging 0.1 documentation" href="index.html" />
+    <link rel="top" title="MeasurementValueLogging 0.2 documentation" href="index.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -106,9 +106,15 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="developer.html#ui.DisplayWidget.close">close() (ui.DisplayWidget method)</a>
+  <dt><a href="developer.html#devices.devices.Device.close">close() (devices.devices.Device method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="developer.html#ui.DisplayWidget.close">(ui.DisplayWidget method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="developer.html#devices.devicemanager.DeviceManager.closeDevice">closeDevice() (devices.devicemanager.DeviceManager method)</a>
   </dt>
@@ -140,10 +146,6 @@
   </dt>
 
       
-  <dt><a href="developer.html#ui.DevicemanagerDialog.deleteItem">deleteItem() (ui.DevicemanagerDialog method)</a>
-  </dt>
-
-      
   <dt><a href="developer.html#devices.devices.Device">Device (class in devices.devices)</a>
   </dt>
 
@@ -152,21 +154,17 @@
   </dt>
 
       
-  <dt><a href="developer.html#ui.DevicemanagerDialog">DevicemanagerDialog (class in ui)</a>
-  </dt>
-
-      
-  <dt><a href="developer.html#ui.MainWindow.devicemanagerDialog">devicemanagerDialog() (ui.MainWindow method)</a>
-  </dt>
-
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
-      
   <dt><a href="developer.html#module-devices.devicemanager">devices.devicemanager (module)</a>
   </dt>
 
       
   <dt><a href="developer.html#module-devices.devices">devices.devices (module)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="developer.html#module-devices.si">devices.si (module)</a>
   </dt>
 
       
@@ -221,14 +219,36 @@
   <dt><a href="developer.html#devices.devices.Value.getFactor">getFactor() (devices.devices.Value method)</a>, <a href="developer.html#devices.devices.Value.getFactor">[1]</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
+      <dd><dl>
+        
+  <dt><a href="developer.html#devices.si.getFactor">(in module devices.si)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="developer.html#devices.devicemanager.DeviceManager.getLastRawValue">getLastRawValue() (devices.devicemanager.DeviceManager method)</a>
   </dt>
 
       
+  <dt><a href="developer.html#devices.si.getName">getName() (in module devices.si)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="developer.html#devices.si.getNumberPrefix">getNumberPrefix() (in module devices.si)</a>
+  </dt>
+
+      
+  <dt><a href="developer.html#devices.si.getPrefix">getPrefix() (in module devices.si)</a>
+  </dt>
+
+      
   <dt><a href="developer.html#devices.devices.Device.getRawValue">getRawValue() (devices.devices.Device method)</a>, <a href="developer.html#devices.devices.Device.getRawValue">[1]</a>
+  </dt>
+
+      
+  <dt><a href="developer.html#devices.si.getSiNames">getSiNames() (in module devices.si)</a>
   </dt>
 
       
@@ -356,12 +376,6 @@
 
       </dl></dd>
   </dl></td>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="developer.html#ui.DevicemanagerDialog.refreshList">refreshList() (ui.DevicemanagerDialog method)</a>
-  </dt>
-
-  </dl></td>
 </tr></table>
 
 <h2 id="S">S</h2>
@@ -391,14 +405,18 @@
   <dt><a href="developer.html#ui.SettingsDialog">SettingsDialog (class in ui)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="developer.html#ui.MainWindow.settingsDialog">settingsDialog() (ui.MainWindow method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="developer.html#devices.devices.Balance.setTypeOfValue">setTypeOfValue() (devices.devices.Balance method)</a>, <a href="developer.html#devices.devices.Balance.setTypeOfValue">[1]</a>
+  </dt>
+
+      
+  <dt><a href="developer.html#devices.si.splitNumber">splitNumber() (in module devices.si)</a>
   </dt>
 
       
@@ -508,7 +526,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
 
