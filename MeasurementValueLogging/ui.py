@@ -433,16 +433,16 @@ class MainWindow(QtGui.QMainWindow):
         import os
 
         if self.tmpfile:
-	        popup = QtGui.QFileDialog()
-	        filename = QtGui.QFileDialog.getSaveFileName(self, self.tr("Save file"), os.path.expanduser("~"), "")
+            popup = QtGui.QFileDialog()
+            filename = QtGui.QFileDialog.getSaveFileName(self, self.tr("Save file"),
+                os.path.expanduser("~/" + self.tr("log") + ".csv"),
+                "CSV (*.csv)")
 
-	        if filename[-4:] != ".csv":
-	            filename += ".csv"
-
-	        self.tmpfile.seek(0, 0)
-	        with open(filename, 'w') as stream:
-	            stream.write(self.tmpfile.read())
-	        self.pathToLogFile = str(filename)
+            if filename != "":
+                self.tmpfile.seek(0, 0)
+                with open(filename, 'w') as stream:
+                    stream.write(self.tmpfile.read())
+                self.pathToLogFile = str(filename)
         else:
             popup = DoReallyDialog(self.tr("Warning"),
                 self.tr("You first have to log something, to save it."))
