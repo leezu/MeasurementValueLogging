@@ -115,10 +115,10 @@ class DisplayWidget(QtGui.QWidget):
     twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
     slopeInterceptCalibration = 1.0, 0.0
 
-    is1PrefixIndex = 2 # QComboBox Index
-    should1PrefixIndex = 2 # QComboBox Index
-    is2PrefixIndex = 2 # QComboBox Index
-    should2PrefixIndex = 2 # QComboBox Index
+    is1PrefixIndex = 0 # QComboBox Index
+    should1PrefixIndex = 0 # QComboBox Index
+    is2PrefixIndex = 0 # QComboBox Index
+    should2PrefixIndex = 0 # QComboBox Index
 
     is1 = 0
     should1 = 0
