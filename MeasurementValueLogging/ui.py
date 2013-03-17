@@ -353,9 +353,13 @@ class MainWindow(QtGui.QMainWindow):
 
             if device == "XLS200":
                 xls200Popup = Xls200Dialog()
+                
+                validDevices = self.dm.getValidDevices()
+                validDevices.remove("XLS200") # Chaining XLS200 devices is not supported
+
                 for i in (xls200Popup.subdevice1ComboBox,
                         xls200Popup.subdevice2ComboBox, xls200Popup.subdevice3ComboBox):
-                    i.addItems([""] + self.dm.getValidDevices())
+                    i.addItems([self.tr("No device")] + validDevices)
 
                 xls200Popup.exec_()
 
@@ -365,19 +369,19 @@ class MainWindow(QtGui.QMainWindow):
                     sub2 = str(xls200Popup.subdevice2ComboBox.currentText())
                     sub3 = str(xls200Popup.subdevice3ComboBox.currentText())
                     
-                    if sub1 != "":
+                    if xls200Popup.subdevice1ComboBox.currentIndex() != 0:
                             deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
                             sub1Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub1Widget)
                             self.displayWidgets[deviceID] = sub1Widget
 
-                    if sub2 != "":
+                    if xls200Popup.subdevice2ComboBox.currentIndex() != 0:
                             deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
                             sub2Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub2Widget)
                             self.displayWidgets[deviceID] = sub2Widget
 
-                    if sub3 != "":
+                    if xls200Popup.subdevice3ComboBox.currentIndex() != 0:
                             deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
                             sub3Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub3Widget)

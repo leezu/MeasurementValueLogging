@@ -21,6 +21,8 @@
 
 import si
 
+deviceClassNames = ["TecpelDMM8061", "VoltcraftVC820", "XLS200", "KernPCB", "BS600"]
+
 class Device(object):
     """The base device class.
 
@@ -253,7 +255,7 @@ class NullValue(Value):
 
 
 class TecpelDMM8061(Device):
-    """This class represents a TECPEL DMM 8061 or VOLTCRAFT VC 840 Multimeter."""
+    """This class represents a TECPEL DMM 8061 multimeter."""
     
     _baudrate = 2400
     _rts = False
@@ -517,6 +519,14 @@ class TecpelDMM8061(Device):
             pass
 
         return None
+
+
+class VoltcraftVC820(TecpelDMM8061):
+    """This class represents a VOLTCRAFT VC 840 multimeter
+
+    The VC 40 is identical to the TecpelDMM8061.
+
+    """
 
 
 class XLS200(MultiboxDevice):

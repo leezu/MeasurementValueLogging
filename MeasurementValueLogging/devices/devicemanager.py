@@ -19,7 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import threading
-from .devices import Device, Value, NullValue, TecpelDMM8061, XLS200, KernPCB, BS600
+# from .devices import Device, Value, NullValue, TecpelDMM8061, XLS200, KernPCB, BS600
+import devices as devicesModule
 import si
 
 class DeviceManager(object):
@@ -29,8 +30,7 @@ class DeviceManager(object):
     get their most recent measurement values and various other things.
 
     """
-    
-    _validDevices = ["TecpelDMM8061", "XLS200", "KernPCB", "BS600"]
+
     _running = False
     _stopEvent = None
     _thread = None
@@ -43,7 +43,7 @@ class DeviceManager(object):
         pass
 
     def _checkConfig(self, config):
-        assert config["deviceName"] in self._validDevices
+        assert config["deviceName"] in devicesModule.deviceClassNames
         assert isinstance(config["parent"], str) or isinstance(config["parent"], float)  # FIXME: Check for deviceID object when implemented
 
     def _updateRawValues(self):
@@ -86,7 +86,7 @@ class DeviceManager(object):
 
         """
 
-        return deviceName in self._validDevices
+        return deviceName in devicesModule.deviceClassNames
 
     def getValidDevices(self):
         """Returns a list of valid deviceNames.
@@ -95,8 +95,9 @@ class DeviceManager(object):
         :rtype: List of strings
 
         """
-
-        return self._validDevices
+        names = devicesModule.deviceClassNames
+        names.sort()
+        return names
 
     def getAllDeviceIDs(self):
         """Returns a complete list of registered deviceIDs.
@@ -204,12 +205,13 @@ class DeviceManager(object):
         config["subDevices"] = {}
 
         if isinstance(parentID, str):
-            device = eval(config["deviceName"]).openRS232(config["parent"], *config["args"], **config["kwargs"])
+            device = eval("devicesModule." + config["deviceName"]).openRS232(config["parent"],
+                *config["args"], **config["kwargs"])
 
         elif isinstance(parentID, float): # FIXME: Check for deviceID object when implemented
             assert self.devices[parentID] # FIXME: use another error (e.g. WrongIDError)
 
-            self.devices[parentID].openDevice(eval(config["deviceName"]),
+            self.devices[parentID].openDevice(eval("devicesModule." + config["deviceName"]),
                 input = config["inputNumber"], *config["args"], **config["kwargs"])
             device = self.devices[parentID].getDevice(input = config["inputNumber"])
             self.configs[parentID]["subDevices"][id] = config["inputNumber"]
@@ -280,7 +282,7 @@ class DeviceManager(object):
             import sys
             sys.stderr.write("KeyError in getLastRawValue (no value yet?)\n")
             
-            return NullValue()
+            return devicesModule.NullValue()
 
     def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
         """Return a calibrated value from the getLastRawValue method.
@@ -304,7 +306,7 @@ class DeviceManager(object):
             def resultFunction(x): return (calibration[0] * x + calibration[1])
             linearFunction = resultFunction
 
-        class __Value(Value):
+        class __Value(devicesModule.Value):
             value = None
             unit = None
 
@@ -384,7 +386,7 @@ class _GetValuesThread(threading.Thread):
         self.configs = configs
 
         for key in self.devices.iteritems():
-            self.rawValues[key] = NullValue()
+            self.rawValues[key] = devicesModule.NullValue()
 
     def run(self):
         while not self.stop_event.is_set():
