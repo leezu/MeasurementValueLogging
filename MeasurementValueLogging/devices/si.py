@@ -27,8 +27,9 @@ def splitNumber(x):
     (2.5, 7)
 
     """
+
     try:
-        return round(x * pow(10, -1 * math.floor(math.log(x,10))), 15), math.floor(math.log(x, 10))
+        return round(x * pow(10, -1 * math.floor(math.log(abs(x),10))), 15), math.floor(math.log(abs(x), 10))
     except ValueError: # If x == 0
         return 0.0, 0.0
 
