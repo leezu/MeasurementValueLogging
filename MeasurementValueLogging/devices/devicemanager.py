@@ -19,7 +19,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import threading
-# from .devices import Device, Value, NullValue, TecpelDMM8061, XLS200, KernPCB, BS600
 import devices as devicesModule
 import si
 
