@@ -439,7 +439,7 @@ class MainWindow(QtGui.QMainWindow):
         if self.tmpfile:
             popup = QtGui.QFileDialog()
             filename = QtGui.QFileDialog.getSaveFileName(self, self.tr("Save file"),
-                os.path.expanduser("~/" + self.tr("log") + ".csv"),
+                os.path.expanduser("~/" + str(self.tr("log", "Default filename of the exported log")) + ".csv"),
                 "CSV (*.csv)")
 
             if filename != "":

@@ -117,7 +117,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="ui.py" line="447"/>
+        <location filename="ui.py" line="451"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
@@ -127,7 +127,7 @@
         <translation>Sie haben bisher keine Aufnahme gespeichert.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="398"/>
+        <location filename="ui.py" line="402"/>
         <source>Stop</source>
         <translation></translation>
     </message>
@@ -137,24 +137,24 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="ui.py" line="413"/>
+        <location filename="ui.py" line="417"/>
         <source>Overwrite last log</source>
         <translation>Letzte Aufnahme überschreiben</translation>
     </message>
     <message>
-        <location filename="ui.py" line="413"/>
+        <location filename="ui.py" line="417"/>
         <source>Do you really want to overwrite the last (unsaved) log?
 </source>
         <translation>Möchten Sie wirklich die letzte Aufnahme verworfe?
 </translation>
     </message>
     <message>
-        <location filename="ui.py" line="413"/>
+        <location filename="ui.py" line="417"/>
         <source>If not, please cancel and save it first.</source>
         <translation>Sie können die letzte Aufnahme mit dem &quot;Speichern&quot; Knopf sichern.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="424"/>
+        <location filename="ui.py" line="428"/>
         <source>Stop logging</source>
         <translation>Aufnahme stoppen</translation>
     </message>
@@ -164,12 +164,12 @@
         <translation>Aufnahme starten</translation>
     </message>
     <message>
-        <location filename="ui.py" line="437"/>
+        <location filename="ui.py" line="441"/>
         <source>Save file</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="ui.py" line="447"/>
+        <location filename="ui.py" line="451"/>
         <source>You first have to log something, to save it.</source>
         <translation>Keine Aufnahme vorhanden, die gespeichert werden könnte.</translation>
     </message>
@@ -217,6 +217,17 @@
         <location filename="mainWindow.ui" line="128"/>
         <source>Open log with office</source>
         <translation>Aufnahme im Office öffnen</translation>
+    </message>
+    <message>
+        <location filename="ui.py" line="362"/>
+        <source>No device</source>
+        <translation>Kein Gerät</translation>
+    </message>
+    <message>
+        <location filename="ui.py" line="441"/>
+        <source>log</source>
+        <comment>Default filename of the exported log</comment>
+        <translation>aufnahme</translation>
     </message>
 </context>
 <context>
