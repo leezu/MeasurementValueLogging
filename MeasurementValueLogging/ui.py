@@ -246,8 +246,103 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.deviceID = deviceID
         self.dm = dm
 
+        self.settings = QtCore.QSettings()
+
         self.get1.clicked.connect(self.setCurrentValue1)
         self.get2.clicked.connect(self.setCurrentValue2)
+        self.saveButton.clicked.connect(self.save)
+        self.loadButton.clicked.connect(self.load)
+
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.update)
+        self.timer.start(50)
+
+    def update(self):
+        twoValueCalibration = ((self.is1.value() * si.getFactor(str(self.is1Prefix.currentText())),
+                self.should1.value()  * si.getFactor(str(self.should1Prefix.currentText()))),
+            (self.is2.value() * si.getFactor(str(self.is2Prefix.currentText())), 
+                self.should2.value() * si.getFactor(str(self.should2Prefix.currentText()))))
+
+        slopeInterceptCalibration = self.slope.value(), self.intercept.value()
+        
+        if self.slopeInterceptButton.isChecked():
+            calibration = slopeInterceptCalibration
+        elif self.valuesButton.isChecked():
+            calibration = twoValueCalibration
+
+
+        crv = self.dm.getCalibratedLastRawValue(self.deviceID, calibration, self.unit)
+        self.calibratedLabel.setText(str(crv.getDisplayedValue() * crv.getFactor()))
+
+        rv = self.dm.getLastRawValue(self.deviceID)
+        self.normalLabel.setText(str(rv.getDisplayedValue() * rv.getFactor()))
+
+
+    def save(self):
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "is1", 
+            self.is1.value())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "should1", 
+            self.should1.value())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "is2", 
+            self.is2.value())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "should2", 
+            self.should2.value())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "is1PrefixIndex", 
+            self.is1Prefix.currentIndex())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "should1PrefixIndex", 
+            self.should1Prefix.currentIndex())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "is2PrefixIndex", 
+            self.is2Prefix.currentIndex())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "should2PrefixIndex", 
+            self.should2Prefix.currentIndex())
+
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "slope",
+            self.slope.value())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "intercept",
+            self.intercept.value())
+
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "unit",
+            self.unit.text())
+
+    def load(self):
+        self.is1.setValue(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "is1", 0).toInt()[0])
+        self.should1.setValue(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "should1", 1).toInt()[0])
+        self.is2.setValue(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "is2", 1).toInt()[0])
+        self.should2.setValue(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "should2", 1).toInt()[0])
+        self.is1Prefix.setCurrentIndex(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "is1PrefixIndex", "").toInt()[0])
+        self.should1Prefix.setCurrentIndex(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "should1PrefixIndex", "").toInt()[0])
+        self.is2Prefix.setCurrentIndex(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "is2PrefixIndex", "").toInt()[0])
+        self.should2Prefix.setCurrentIndex(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "should2PrefixIndex", "").toInt()[0])
+
+        self.slope.setValue(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "slope", 1).toInt()[0])
+        self.intercept.setValue(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "intercept", 0).toInt()[0])
+
+        self.intercept.setValue(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "unit", 0).toInt()[0])
+
+        self.unit.setText(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "unit", "").toString())
 
     def setCurrentValue1(self):
         """Get current displayedValue from Device."""
@@ -309,7 +404,6 @@ class MainWindow(QtGui.QMainWindow):
         self.timer.timeout.connect(self.update)
         self.timer.start(50)
 
-        self.settings = QtCore.QSettings()
         self.officePath = str(self.settings.value("office/path", "").toString())
 
         self.loggingInterval.setValue(self.settings.value("logging/interval", 1).toInt()[0])
