@@ -61,7 +61,7 @@ def getFactor(x):
     """
 
     if len(x) == 1:
-        return _siPrefixValue[x.lower()]
+        return _siPrefixValue[x]
     else:
         return _siPrefixValue[_siNamePrefix[x.lower()]]
 
@@ -94,7 +94,7 @@ def getName(x):
     if isinstance(x, float):
         return _siPrefixName[_siValuePrefix[x]]
     else:
-        return _siPrefixName[x.lower()]
+        return _siPrefixName[x]
 
 
 def getSiNames():
