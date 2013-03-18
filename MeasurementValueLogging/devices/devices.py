@@ -21,7 +21,7 @@
 
 import si
 
-deviceClassNames = ["TecpelDMM8061", "VoltcraftVC820", "XLS200", "KernPCB", "BS600"]
+deviceClassNames = ("TecpelDMM8061", "VoltcraftVC820", "XLS200", "KernPCB", "BS600")
 
 class Device(object):
     """The base device class.

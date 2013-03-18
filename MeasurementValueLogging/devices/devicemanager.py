@@ -94,7 +94,7 @@ class DeviceManager(object):
         :rtype: List of strings
 
         """
-        names = devicesModule.deviceClassNames
+        names = list(devicesModule.deviceClassNames)
         names.sort()
         return names
 
