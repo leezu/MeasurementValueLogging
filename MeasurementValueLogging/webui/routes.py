@@ -1,14 +1,13 @@
-from __future__ import absolute_import
-
-import time
-
 from flask import Flask, render_template
 from devices.devicemanager import DeviceManager
+import console
  
 app = Flask(__name__)
 dm = DeviceManager()
 
-id = dm.openDevice("TecpelDMM8061", "/dev/ttyUSB1")
+deviceIDs = console.openDevicesFromConsoleArgs(dm)
+id = deviceIDs[0]
+
 dm.start()
 
 @app.route("/")
