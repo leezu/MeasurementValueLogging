@@ -22,11 +22,10 @@
 
 from devices.devicemanager import DeviceManager
 
-def main():
+def openDevicesFromConsoleArgs(devicemanager):
     import argparse
-    import time
 
-    dm = DeviceManager()
+    dm = devicemanager
 
     parser = argparse.ArgumentParser(description='Messwerterfassung')
     parser.add_argument('port', help="Serial Port (e.g. /dev/ttyUSB0 or COM1)")
@@ -66,9 +65,15 @@ def main():
             idd = dm.openSubdevice(args.input3, ida, 3)
             deviceIDs.append(idd)
 
+    return deviceIDs
 
+
+def main():
+    import time
+
+    dm = DeviceManager()
+    deviceIDs = openDevicesFromConsoleArgs(dm)
     starttime = time.time()
-
     dm.start()
 
     try:
