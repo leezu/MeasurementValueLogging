@@ -3,6 +3,8 @@
 {% block content %}
   <div class="jumbo">
     <h1>Welcome to the MeasurementValueLogging Web-Interface! <h1>
-    <h2>{{ val }} {{ pref }}{{ unit }}<h2>
+	{% for val in vals %}
+	  <h2>{{ val[0] }} {{ val[1] }}{{ val[2] }}<h2>
+	{% endfor %}
   </div>
 {% endblock %}
