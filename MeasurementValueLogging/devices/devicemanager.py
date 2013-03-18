@@ -355,11 +355,11 @@ class DeviceManager(object):
 
     def start(self):
         """Start the DeviceManager."""
-
-        self._stopEvent = threading.Event()
-        self._thread = _GetValuesThread(self._stopEvent, self.devices, self.configs)
-        self._thread.start()
-        self._running = True
+        if self._running == False:
+            self._stopEvent = threading.Event()
+            self._thread = _GetValuesThread(self._stopEvent, self.devices, self.configs)
+            self._thread.start()
+            self._running = True
 
     def stop(self):
         """Stop the DeviceManager."""
