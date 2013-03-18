@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>MeasurementValueLogging</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">;
-    <meta http-equiv="refresh" content="0.25">
-  </head>
-  <body>
-   
-    <header>
-      <div class="container">
-        <h1 class="logo">MeasurementValueLogging</h1>
-        <nav>
-          <ul class="menu">
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header> 
-     
-    <div class="container">
-      {% block content %}
-      {% endblock %}
-    </div>
-     
-  </body>
+	<head>
+		<title>MeasurementValueLogging</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">;
+	</head>
+	<body>
+	 
+		<header>
+			<div class="container">
+				<h1 class="logo">MeasurementValueLogging</h1>
+				<nav>
+					<ul class="menu">
+						<li><a href="{{ url_for('home') }}">Home</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header> 
+		 
+		<div class="container">
+			{% block content %}
+			{% endblock %}
+		</div>
+		 
+		<script type=text/javascript src="{{url_for('static', filename='js/jquery-1.9.1.min.js') }}"></script>
+		<script type=text/javascript src="{{url_for('static', filename='js/measurement.js') }}"></script>
+		<script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+	</body>
 </html>

@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+# -*- coding: utf-8 -*-
+
+from flask import Flask, render_template, jsonify
 from devices.devicemanager import DeviceManager
 import console
  
@@ -11,6 +13,12 @@ dm.start()
 
 @app.route("/")
 def home():
+    return render_template('measurement.html')
+
+@app.route("/_get_values")
+def getValues():
     rvs = [dm.getLastRawValue(id) for id in deviceIDs]
-    vals = [(x.getDisplayedValue(), x.getFactor("prefix"), x.getUnit()) for x in rvs]
-    return render_template('measurement.html', vals = vals)
+    return jsonify(displayvals = [x.getDisplayedValue() for x in rvs],
+        factors = [x.getFactor("prefix") for x in rvs],
+        units = [x.getUnit() for x in rvs],
+        len = len(rvs))
