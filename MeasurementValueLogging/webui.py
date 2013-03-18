@@ -1,3 +1,3 @@
 import webui.routes
 
-webui.routes.app.run(debug=True)
+webui.routes.app.run()

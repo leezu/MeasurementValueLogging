@@ -14,6 +14,3 @@ def home():
     rvs = [dm.getLastRawValue(id) for id in deviceIDs]
     vals = [(x.getDisplayedValue(), x.getFactor("prefix"), x.getUnit()) for x in rvs]
     return render_template('measurement.html', vals = vals)
-
-if __name__ == '__main__':
-    app.run(debug=True)
