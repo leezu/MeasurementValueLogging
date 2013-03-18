@@ -184,12 +184,8 @@ class DisplayWidget(QtGui.QWidget):
 
         popup.exec_()
 
-        self.twoValueCalibration = ((popup.is1.value() * si.getFactor(str(popup.is1Prefix.currentText())),
-                popup.should1.value()  * si.getFactor(str(popup.should1Prefix.currentText()))),
-            (popup.is2.value() * si.getFactor(str(popup.is2Prefix.currentText())), 
-                popup.should2.value() * si.getFactor(str(popup.should2Prefix.currentText()))))
-
-        self.slopeInterceptCalibration = popup.slope.value(), popup.intercept.value()
+        self.twoValueCalibration = popup.twoValueCalibration
+        self.slopeInterceptCalibration = popup.slopeInterceptCalibration
 
         self.is1 = popup.is1.value()
         self.should1 = popup.should1.value()
@@ -258,20 +254,20 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.timer.start(50)
 
     def update(self):
-        twoValueCalibration = ((self.is1.value() * si.getFactor(str(self.is1Prefix.currentText())),
+        self.twoValueCalibration = ((self.is1.value() * si.getFactor(str(self.is1Prefix.currentText())),
                 self.should1.value()  * si.getFactor(str(self.should1Prefix.currentText()))),
             (self.is2.value() * si.getFactor(str(self.is2Prefix.currentText())), 
                 self.should2.value() * si.getFactor(str(self.should2Prefix.currentText()))))
 
-        slopeInterceptCalibration = self.slope.value(), self.intercept.value()
+        self.slopeInterceptCalibration = self.slope.value(), self.intercept.value()
         
         if self.slopeInterceptButton.isChecked():
-            calibration = slopeInterceptCalibration
+            self = slopeInterceptCalibration
         elif self.valuesButton.isChecked():
-            calibration = twoValueCalibration
+            self = twoValueCalibration
 
 
-        crv = self.dm.getCalibratedLastRawValue(self.deviceID, calibration, self.unit)
+        crv = self.dm.getCalibratedLastRawValue(self.deviceID, self.calibration, self.unit)
         self.calibratedLabel.setText(str(crv.getDisplayedValue() * crv.getFactor()))
 
         rv = self.dm.getLastRawValue(self.deviceID)
