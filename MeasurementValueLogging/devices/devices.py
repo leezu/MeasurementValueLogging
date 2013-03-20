@@ -641,6 +641,9 @@ class XLS200(MultiboxDevice):
         elif input == 3:
             self._changeInput(3)
             return self._in3.getRawValue()
+        
+        else:
+            return None
 
     def getDevice(self, input):
         if input == 1:

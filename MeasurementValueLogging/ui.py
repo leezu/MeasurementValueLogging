@@ -455,27 +455,27 @@ class MainWindow(QtGui.QMainWindow):
 
                 if xls200Popup.result():
                     xls200ID = self.dm.openDevice(device, port)
-                    sub1 = str(xls200Popup.subdevice1ComboBox.currentText())
-                    sub2 = str(xls200Popup.subdevice2ComboBox.currentText())
-                    sub3 = str(xls200Popup.subdevice3ComboBox.currentText())
                     
                     if xls200Popup.subdevice1ComboBox.currentIndex() != 0:
-                            deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
-                            sub1Widget = DisplayWidget(deviceID, self.dm)
-                            self.verticalLayout.addWidget(sub1Widget)
-                            self.displayWidgets[deviceID] = sub1Widget
+                        sub1 = unicode(xls200Popup.subdevice1ComboBox.currentText())
+                        deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
+                        sub1Widget = DisplayWidget(deviceID, self.dm)
+                        self.verticalLayout.addWidget(sub1Widget)
+                        self.displayWidgets[deviceID] = sub1Widget
 
                     if xls200Popup.subdevice2ComboBox.currentIndex() != 0:
-                            deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
-                            sub2Widget = DisplayWidget(deviceID, self.dm)
-                            self.verticalLayout.addWidget(sub2Widget)
-                            self.displayWidgets[deviceID] = sub2Widget
+                        sub2 = unicode(xls200Popup.subdevice2ComboBox.currentText())
+                        deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
+                        sub2Widget = DisplayWidget(deviceID, self.dm)
+                        self.verticalLayout.addWidget(sub2Widget)
+                        self.displayWidgets[deviceID] = sub2Widget
 
                     if xls200Popup.subdevice3ComboBox.currentIndex() != 0:
-                            deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
-                            sub3Widget = DisplayWidget(deviceID, self.dm)
-                            self.verticalLayout.addWidget(sub3Widget)
-                            self.displayWidgets[deviceID] = sub3Widget
+                        sub3 = unicode(xls200Popup.subdevice3ComboBox.currentText())
+                        deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
+                        sub3Widget = DisplayWidget(deviceID, self.dm)
+                        self.verticalLayout.addWidget(sub3Widget)
+                        self.displayWidgets[deviceID] = sub3Widget
 
             else:
                 deviceID = self.dm.openDevice(device, port)

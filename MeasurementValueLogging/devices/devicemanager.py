@@ -34,16 +34,24 @@ class DeviceManager(object):
     _stopEvent = None
     _thread = None
 
+    _iterator = None
+
     devices = {}
     configs = {}
     rawValues = {}
 
     def __init__(self):
-        pass
+        self._iterator = self._getIterator()
 
-    def _checkConfig(self, config):
-        assert config["deviceName"] in devicesModule.deviceClassNames
-        assert isinstance(config["parent"], str) or isinstance(config["parent"], float)  # FIXME: Check for deviceID object when implemented
+    def _getIterator(self):
+        import random
+        i = random.getrandbits(32)
+        while True:
+            yield i
+            i += 1
+
+    def _getUniqueID(self):
+        return next(self._iterator)
 
     def _updateRawValues(self):
         if self._running:
@@ -191,29 +199,25 @@ class DeviceManager(object):
         :rtype: :class:`DeviceID`
 
         """
-
-        import time
-
+        
         assert self._running == False # FIXME: use another error
+        assert config["deviceName"] in devicesModule.deviceClassNames
 
-        self._checkConfig(config)
-        id = time.time()
-
-        parentID = config["parent"]
+        id = self._getUniqueID()
 
         config["subDevices"] = {}
 
-        if isinstance(parentID, str):
+        if isinstance(config["parent"], str):
             device = eval("devicesModule." + config["deviceName"]).openRS232(config["parent"],
                 *config["args"], **config["kwargs"])
 
-        elif isinstance(parentID, float): # FIXME: Check for deviceID object when implemented
-            assert self.devices[parentID] # FIXME: use another error (e.g. WrongIDError)
+        else:
+            assert self.devices[config["parent"]] # FIXME: use another error (e.g. WrongIDError)
 
-            self.devices[parentID].openDevice(eval("devicesModule." + config["deviceName"]),
+            self.devices[config["parent"]].openDevice(eval("devicesModule." + config["deviceName"]),
                 input = config["inputNumber"], *config["args"], **config["kwargs"])
-            device = self.devices[parentID].getDevice(input = config["inputNumber"])
-            self.configs[parentID]["subDevices"][id] = config["inputNumber"]
+            device = self.devices[config["parent"]].getDevice(input = config["inputNumber"])
+            self.configs[config["parent"]]["subDevices"][id] = config["inputNumber"]
 
         self.devices[id] = device
         self.configs[id] = config
@@ -245,7 +249,7 @@ class DeviceManager(object):
             del(self.devices[deviceID])
             del(self.configs[deviceID])
 
-        elif isinstance(config["parent"], float): # FIXME: Check for deviceID object when implemented
+        else:
             parentID = config["parent"]
             self.getDevice(parentID).closeDevice(input=config["inputNumber"])
             del(self.devices[deviceID])
@@ -278,8 +282,8 @@ class DeviceManager(object):
             return self.rawValues[deviceID]
 
         except KeyError:
-            import sys
-            sys.stderr.write("KeyError in getLastRawValue (no value yet?)\n")
+            # import sys
+            # sys.stderr.write("KeyError in getLastRawValue (no value yet?)\n")
             
             return devicesModule.NullValue()
 
