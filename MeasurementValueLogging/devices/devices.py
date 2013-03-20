@@ -426,6 +426,9 @@ class TecpelDMM8061(Device):
         assert self.isAvailable()
 
         read = self._ser.read(26)
+
+        self._ser.flushInput()
+
         idList = []
         for i in read:
             idList.append(ord(i) >> 4)
@@ -740,6 +743,7 @@ class KernPCB(Balance):
             # One value has 18 bytes, to make sure to get a complete one
             # (and not the second 1/2 of one, and the first 1/2 of another)
             # we read 35 bytes and match for one complete value
+            self._ser.flushInput()
 
             try:
                 result.string = self._regex.search(s).group()
@@ -757,6 +761,7 @@ class KernPCB(Balance):
             # One value has 18 bytes, to make sure to get a complete one
             # (and not the second 1/2 of one, and the first 1/2 of another)
             # we read 35 bytes and match for one complete value
+            self._ser.flushInput()
 
             try:
                 result.string = self._regex.search(s).group()
@@ -826,6 +831,7 @@ class BS600(Balance):
         # One value has 18 bytes, to make sure to get a complete one
         # (and not the second 1/2 of one, and the first 1/2 of another)
         # we read 35 bytes and match for one complete value
+        self._ser.flushInput()
 
         try:
             if self._typeOfValue == "stable":
