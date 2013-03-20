@@ -32,6 +32,7 @@ class DeviceManager(object):
 
     _running = False
     _stopEvent = None
+    _stoppedEvent = None
     _thread = None
 
     _iterator = None
@@ -361,7 +362,9 @@ class DeviceManager(object):
         """Start the DeviceManager."""
         if self._running == False:
             self._stopEvent = threading.Event()
-            self._thread = _GetValuesThread(self._stopEvent, self.devices, self.configs)
+            self._stoppedEvent = threading.Event()
+            self._thread = _GetValuesThread(self._stopEvent, self._stoppedEvent,
+                self.devices, self.configs)
             self._thread.start()
             self._running = True
 
@@ -370,9 +373,11 @@ class DeviceManager(object):
 
         if self._running == True:
             self._stopEvent.set()
-            self._running = False
+            self._stoppedEvent.wait() # wait until thread finishes
             self._thread = None
             self._stopEvent = None
+            self._stoppedEvent = None
+            self._running = False
 
 
 class _GetValuesThread(threading.Thread):
@@ -380,10 +385,11 @@ class _GetValuesThread(threading.Thread):
     configs = {}
     rawValues = {}
 
-    def __init__(self, stop_event, devices, configs):
+    def __init__(self, stop_event, stopped_event, devices, configs):
         threading.Thread.__init__(self)
         self.daemon = True
         self.stop_event = stop_event
+        self.stopped_event = stopped_event
 
         self.devices = devices
         self.configs = configs
@@ -395,10 +401,15 @@ class _GetValuesThread(threading.Thread):
         while not self.stop_event.is_set():
             self.updateValue()
 
+        self.stopped_event.set()
+
     def updateValue(self):
         # python3 incompatibility: iteritems
         try:
             for key, config in self.configs.iteritems():
+                if self.stop_event.is_set():
+                    break
+
                 if isinstance(config["parent"], str):
                     if len(config["subDevices"]) == 0 and config["deviceName"] != "XLS200":
                             # If there are no subdevices and it's not an "empty" Multiboxdevice
@@ -410,6 +421,9 @@ class _GetValuesThread(threading.Thread):
 
                     else:
                         for subID, subInput in config["subDevices"].iteritems():
+                            if self.stop_event.is_set():
+                                break
+
                             rv = self.devices[key].getRawValue(input = subInput)
                             if rv:
                                 self.rawValues[subID] = rv
