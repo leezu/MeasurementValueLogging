@@ -39,7 +39,7 @@ class Device(object):
     _dtr = False # data terminal ready rs232 flag (used for setting up the rs232 connection)
     _ownSer = False # does the device own the serial connection or is it just a user
     # (e.g. one of three devices, which are behind a multibox)
-    _timeout = 0.1 # timeout value for reading from serial device
+    _timeout = 0.2 # timeout value for reading from serial device
 
     def __init__(self, ser):
         """Setup a device as new device or as subdevice.
@@ -260,6 +260,7 @@ class TecpelDMM8061(Device):
     _baudrate = 2400
     _rts = False
     _dtr = True
+    _timeout = 0.5
 
     class __Value(Value):
         class __Digit:
