@@ -191,8 +191,9 @@ class Value(object):
     _time = 0
 
     def __repr__(self):
-        return "< {classname}: displaydValue={!s}), unit={!s}, factor={!s} >".format(
-            self.getDisplayedValue(), self.getUnit(), self.getFactor())
+        return "< {classname}: displaydValue={!s}, factor={!s} >".format(
+            self.getDisplayedValue(), self.getFactor(),
+            classname = self.__class__.__name__)
 
     def __str__(self):
         return "{} {}".format(self.getDisplayedValue(), self.getFactor())

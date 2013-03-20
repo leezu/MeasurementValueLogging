@@ -296,9 +296,7 @@ class DeviceManager(object):
             return self.rawValues[deviceID]
 
         except KeyError:
-            # import sys
-            # sys.stderr.write("KeyError in getLastRawValue (no value yet?)\n")
-            
+            # No value yet
             return devicesModule.NullValue()
 
     def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
