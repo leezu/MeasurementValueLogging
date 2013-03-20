@@ -597,6 +597,7 @@ class XLS200(MultiboxDevice):
             if self._in1:
                 self._ser.baudrate = self._in1._baudrate
                 self._ser.timeout = self._in1._timeout
+            self._ser.flushInput()
 
         elif input == 2:
             self._ser.setRTS(level=True)
@@ -604,6 +605,7 @@ class XLS200(MultiboxDevice):
             if self._in2:
                 self._ser.baudrate = self._in2._baudrate
                 self._ser.timeout = self._in2._timeout
+            self._ser.flushInput()
 
         elif input == 3:
             self._ser.setRTS(level=False)
@@ -611,6 +613,7 @@ class XLS200(MultiboxDevice):
             if self._in3:
                 self._ser.baudrate = self._in3._baudrate
                 self._ser.timeout = self._in3._timeout
+            self._ser.flushInput()
 
     def openDevice(self, deviceClass, input, *args, **kwargs):
         assert self.isAvailable()
@@ -712,8 +715,8 @@ class KernPCB(Balance):
             if type == "name":
                 return "gram"
 
-            elif type == "unit": 
-               return "g"
+            elif type == "unit":
+                return "g"
 
         def getFactor(self, type="value"):
             if type == "value":
