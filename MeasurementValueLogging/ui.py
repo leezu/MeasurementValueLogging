@@ -248,6 +248,11 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.timer.timeout.connect(self.update)
         self.timer.start(50)
 
+        self.finished.connect(self._finish)
+
+    def _finish(self):
+        self.timer.stop()
+
     def update(self):
         self.twoValueCalibration = ((self.is1.value() * si.getFactor(str(self.is1Prefix.currentText())),
                 self.should1.value()  * si.getFactor(str(self.should1Prefix.currentText()))),
@@ -257,10 +262,9 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.slopeInterceptCalibration = self.slope.value(), self.intercept.value()
         
         if self.slopeInterceptButton.isChecked():
-            self = slopeInterceptCalibration
+            self.calibration = self.slopeInterceptCalibration
         elif self.valuesButton.isChecked():
-            self = twoValueCalibration
-
+            self.calibration = self.twoValueCalibration
 
         crv = self.dm.getCalibratedLastRawValue(self.deviceID, self.calibration, self.unit)
         self.calibratedLabel.setText(str(crv.getDisplayedValue() * crv.getFactor()))
@@ -538,12 +542,8 @@ class MainWindow(QtGui.QMainWindow):
         self.dm.closeEmptyMultiboxDevices()
 
         for i in deviceIDsToBeDeleted:
-            try:
-                self.displayWidgets[i].delete()
-                del(self.displayWidgets[i])
-            except KeyError:
-                # Some devices don't have widgets (e.g. xls200), so there are no widgets to be deleted
-                pass
+            self.displayWidgets[i].delete()
+            del(self.displayWidgets[i])
 
         # update widgets
         for deviceID, widget in self.displayWidgets.iteritems():
