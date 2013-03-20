@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>597</width>
-    <height>302</height>
+    <width>582</width>
+    <height>283</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,25 +53,6 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetFixedSize</enum>
       </property>
-      <item>
-       <widget class="QPushButton" name="measurementButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Start</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QPushButton" name="loggingButton">
         <property name="sizePolicy">
@@ -157,7 +138,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>597</width>
+     <width>582</width>
      <height>27</height>
     </rect>
    </property>

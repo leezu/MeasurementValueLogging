@@ -214,12 +214,7 @@ class DisplayWidget(QtGui.QWidget):
     def close(self):
         """Close the device."""
 
-        if self.dm.getStatus() == False:
-            self.dm.closeDevice(self.deviceID)
-        else:
-            popup = DoReallyDialog(self.tr("Warning"),
-                self.tr("You have to stop the measurement to delete a device."))
-            popup.exec_()
+        self.dm.closeDevice(self.deviceID)
 
 
 class DeviceSettingsDialog(QtGui.QDialog):
@@ -369,8 +364,6 @@ class MainWindow(QtGui.QMainWindow):
     dm = None
     displayWidgets = {}
 
-    running = False
-
     log = False
     tmpfile = None
     starttime = 0
@@ -387,7 +380,6 @@ class MainWindow(QtGui.QMainWindow):
 
         self.settings = QtCore.QSettings()
 
-        self.measurementButton.clicked.connect(self.startStopMeasurement)
         self.loggingButton.clicked.connect(self.startStopLogging)
         self.saveButton.clicked.connect(self.saveLog)
         self.addDeviceButton.clicked.connect(self.addDevice)
@@ -483,19 +475,6 @@ class MainWindow(QtGui.QMainWindow):
                 self.verticalLayout.addWidget(deviceWidget)
                 self.displayWidgets[deviceID] = deviceWidget
 
-    def startStopMeasurement(self):
-        """Start/Stop measurement."""
-        
-        if self.dm.getStatus() == False:
-            self.dm.start()
-            self.running = True
-            self.measurementButton.setText(self.tr("Stop"))
-
-        elif self.dm.getStatus() == True:
-            self.dm.stop()
-            self.running = False
-            self.measurementButton.setText(self.tr("Start"))
-
     def startStopLogging(self):
         """Start/Stop logging."""
 
@@ -566,28 +545,27 @@ class MainWindow(QtGui.QMainWindow):
                 # Some devices don't have widgets (e.g. xls200), so there are no widgets to be deleted
                 pass
 
-        if self.running:
-            # update widgets
+        # update widgets
+        for deviceID, widget in self.displayWidgets.iteritems():
+            unit = None
+            if widget.unit != "":
+                unit = widget.unit
+
+            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
+            widget.lcdNumber.display(rv.getDisplayedValue())
+            widget.label.setText(rv.getFactor("prefix") + rv.getUnit())
+        
+        # log    
+        if self.log and ((time.time() - self.lasttime) > self.loggingInterval.value()):
             for deviceID, widget in self.displayWidgets.iteritems():
                 unit = None
                 if widget.unit != "":
                     unit = widget.unit
-
                 rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
-                widget.lcdNumber.display(rv.getDisplayedValue())
-                widget.label.setText(rv.getFactor("prefix") + rv.getUnit())
-            
-            # log    
-            if self.log and ((time.time() - self.lasttime) > self.loggingInterval.value()):
-                for deviceID, widget in self.displayWidgets.iteritems():
-                    unit = None
-                    if widget.unit != "":
-                        unit = widget.unit
-                    rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
-                    self.tmpfile.write(str(rv.getDisplayedValue() * rv.getFactor()) + ",")
+                self.tmpfile.write(str(rv.getDisplayedValue() * rv.getFactor()) + ",")
 
-                self.tmpfile.write("\n")
-                self.lasttime = time.time()
+            self.tmpfile.write("\n")
+            self.lasttime = time.time()
         
 
 class App(QtGui.QApplication):

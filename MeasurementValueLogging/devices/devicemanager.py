@@ -43,6 +43,7 @@ class DeviceManager(object):
 
     def __init__(self):
         self._iterator = self._getIterator()
+        self._start()
 
     def _getIterator(self):
         import random
@@ -53,6 +54,16 @@ class DeviceManager(object):
 
     def _getUniqueID(self):
         return next(self._iterator)
+
+    def _pause(function):
+        def decoratedFunction(self, *args, **kwargs):
+            self._stop()
+            returnValue = function(self, *args, **kwargs)
+            self._start()
+
+            return returnValue
+
+        return decoratedFunction
 
     def _updateRawValues(self):
         if self._running:
@@ -191,6 +202,7 @@ class DeviceManager(object):
                                     "args":args,
                                     "kwargs":kwargs})
 
+    @_pause
     def _openWithConfig(self, config):
         """Open a device with a config dictionary. Returns a deviceID.
 
@@ -225,6 +237,7 @@ class DeviceManager(object):
 
         return id
 
+    @_pause
     def closeDevice(self, deviceID):
         """Close device with deviceID.
         
@@ -358,7 +371,7 @@ class DeviceManager(object):
         except KeyError:
             return None
 
-    def start(self):
+    def _start(self):
         """Start the DeviceManager."""
         if self._running == False:
             self._stopEvent = threading.Event()
@@ -368,7 +381,7 @@ class DeviceManager(object):
             self._thread.start()
             self._running = True
 
-    def stop(self):
+    def _stop(self):
         """Stop the DeviceManager."""
 
         if self._running == True:
@@ -398,42 +411,30 @@ class _GetValuesThread(threading.Thread):
             self.rawValues[key] = devicesModule.NullValue()
 
     def run(self):
+        import time
+
         while not self.stop_event.is_set():
             self.updateValue()
+            time.sleep(0.2) # Prevent 100% CPU usage
 
         self.stopped_event.set()
 
     def updateValue(self):
         # python3 incompatibility: iteritems
-        try:
-            for key, config in self.configs.iteritems():
-                if self.stop_event.is_set():
-                    break
+        for deviceID, config in self.configs.iteritems():
+            if self.stop_event.is_set():
+                break
 
-                if isinstance(config["parent"], str):
-                    if len(config["subDevices"]) == 0 and config["deviceName"] != "XLS200":
-                            # If there are no subdevices and it's not an "empty" Multiboxdevice
-                        rv = self.devices[key].getRawValue()
-                        if rv:
-                            self.rawValues[key] = rv
-                        else:
-                            pass
+            if isinstance(config["parent"], str):
+                rv = self.devices[deviceID].getRawValue()
+                if rv:
+                    self.rawValues[deviceID] = rv
+                else:
+                    pass
 
-                    else:
-                        for subID, subInput in config["subDevices"].iteritems():
-                            if self.stop_event.is_set():
-                                break
-
-                            rv = self.devices[key].getRawValue(input = subInput)
-                            if rv:
-                                self.rawValues[subID] = rv
-                            else:
-                                pass
-
-        except RuntimeError:
-            # A RuntimeError: dictionary changed size during iteration
-            # may occur here, if a device is deleted, but this updateValue
-            # function is still trying to get an rawValue. (-> the devicemanager
-            # is therefore not closed yet) It does no harm though,
-            # as the device is going to be closed afterwards.
-            pass
+            else:
+                rv = self.devices[config["parent"]].getRawValue(config["inputNumber"])
+                if rv:
+                    self.rawValues[deviceID] = rv
+                else:
+                    pass

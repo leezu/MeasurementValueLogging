@@ -166,6 +166,10 @@ class MultiboxDevice(Device):
     def getDevice(self, input):
         """This returns the device object on input.
 
+        This does NOT sets the device to the right input.
+        If you want to do any actual communication with the
+        returned device, call changeInput(input) first.
+
         :param input: Input number of subdevice
         :type input: Input
         :returns: :class:`devices.devices.Device` on input
@@ -191,8 +195,11 @@ class Value(object):
             self.getDisplayedValue(), self.getUnit(), self.getFactor())
 
     def __str__(self):
+        return "{} {}".format(self.getDisplayedValue(), self.getFactor())
+
+    def __unicode__(self):
         return "{} {}{}".format(self.getDisplayedValue(),
-            self.getUnit(type="prefix"), self.getFactor())
+            self.getUnit(), self.getFactor())
 
     def getDisplayedValue(self):
         """Returns the displayed value (as a number).
@@ -577,30 +584,33 @@ class XLS200(MultiboxDevice):
 
         return string + ")"
 
-    def _changeInput(self, input):
+    def changeInput(self, input):
         # DTR True & RTS False = 1
         # DTR False & RTS True = 2
         # DTR False & RTS False = 3
         
         assert self.isAvailable()
 
-        if input == 1 and self._in1 is not None:
+        if input == 1:
             self._ser.setRTS(level=False)
             self._ser.setDTR(level=True)
-            self._ser.baudrate = self._in1._baudrate
-            self._ser.timeout = self._in1._timeout
+            if self._in1:
+                self._ser.baudrate = self._in1._baudrate
+                self._ser.timeout = self._in1._timeout
 
-        if input == 2 and self._in2 is not None:
+        elif input == 2:
             self._ser.setRTS(level=True)
             self._ser.setDTR(level=False)
-            self._ser.baudrate = self._in2._baudrate
-            self._ser.timeout = self._in2._timeout
+            if self._in2:
+                self._ser.baudrate = self._in2._baudrate
+                self._ser.timeout = self._in2._timeout
 
-        if input == 3 and self._in3 is not None:
+        elif input == 3:
             self._ser.setRTS(level=False)
             self._ser.setDTR(level=False)
-            self._ser.baudrate = self._in3._baudrate
-            self._ser.timeout = self._in3._timeout
+            if self._in3:
+                self._ser.baudrate = self._in3._baudrate
+                self._ser.timeout = self._in3._timeout
 
     def openDevice(self, deviceClass, input, *args, **kwargs):
         assert self.isAvailable()
@@ -630,17 +640,17 @@ class XLS200(MultiboxDevice):
             self._in3.close()
             self._in3 = None
 
-    def getRawValue(self, input):
+    def getRawValue(self, input=0):
         if input == 1:
-            self._changeInput(1)
+            self.changeInput(1)
             return self._in1.getRawValue()
 
         elif input == 2:
-            self._changeInput(2)
+            self.changeInput(2)
             return self._in2.getRawValue()
 
         elif input == 3:
-            self._changeInput(3)
+            self.changeInput(3)
             return self._in3.getRawValue()
         
         else:
@@ -648,15 +658,12 @@ class XLS200(MultiboxDevice):
 
     def getDevice(self, input):
         if input == 1:
-            self._changeInput(1)
             return self._in1
 
         elif input == 2:
-            self._changeInput(2)
             return self._in2
 
         elif input == 3:
-            self._changeInput(3)
             return self._in3
 
 
@@ -705,8 +712,8 @@ class KernPCB(Balance):
             if type == "name":
                 return "gram"
 
-            elif type == "unit":
-                return "g"
+            elif type == "unit": 
+               return "g"
 
         def getFactor(self, type="value"):
             if type == "value":
