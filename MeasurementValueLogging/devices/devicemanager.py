@@ -32,7 +32,6 @@ class DeviceManager(object):
 
     _running = False
     _stopEvent = None
-    _stoppedEvent = None
     _thread = None
 
     _iterator = None
@@ -373,8 +372,7 @@ class DeviceManager(object):
         """Start the DeviceManager."""
         if self._running == False:
             self._stopEvent = threading.Event()
-            self._stoppedEvent = threading.Event()
-            self._thread = _GetValuesThread(self._stopEvent, self._stoppedEvent,
+            self._thread = _GetValuesThread(self._stopEvent,
                 self.devices, self.configs)
             self._thread.start()
             self._running = True
@@ -384,10 +382,9 @@ class DeviceManager(object):
 
         if self._running == True:
             self._stopEvent.set()
-            self._stoppedEvent.wait() # wait until thread finishes
+            self._thread.join()
             self._thread = None
             self._stopEvent = None
-            self._stoppedEvent = None
             self._running = False
 
 
@@ -396,11 +393,10 @@ class _GetValuesThread(threading.Thread):
     configs = {}
     rawValues = {}
 
-    def __init__(self, stop_event, stopped_event, devices, configs):
+    def __init__(self, stop_event, devices, configs):
         threading.Thread.__init__(self)
         self.daemon = True
         self.stop_event = stop_event
-        self.stopped_event = stopped_event
 
         self.devices = devices
         self.configs = configs
@@ -414,8 +410,6 @@ class _GetValuesThread(threading.Thread):
         while not self.stop_event.is_set():
             self.updateValue()
             time.sleep(0.2) # Prevent 100% CPU usage
-
-        self.stopped_event.set()
 
     def updateValue(self):
         # python3 incompatibility: iteritems
