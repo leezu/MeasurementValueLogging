@@ -21,6 +21,7 @@
 import threading
 import devices as devicesModule
 import si
+import serial
 
 class DeviceManager(object):
     """The DeviceManager manages devices.
@@ -219,22 +220,27 @@ class DeviceManager(object):
 
         config["subDevices"] = {}
 
-        if isinstance(config["parent"], str):
-            device = eval("devicesModule." + config["deviceName"]).openRS232(config["parent"],
-                *config["args"], **config["kwargs"])
+        try:
+            if isinstance(config["parent"], str):
+                device = eval("devicesModule." + config["deviceName"]).openRS232(config["parent"],
+                    *config["args"], **config["kwargs"])
 
-        else:
-            assert self.devices[config["parent"]] # FIXME: use another error (e.g. WrongIDError)
+            else:
+                assert self.devices[config["parent"]] # FIXME: use another error (e.g. WrongIDError)
 
-            self.devices[config["parent"]].openDevice(eval("devicesModule." + config["deviceName"]),
-                input = config["inputNumber"], *config["args"], **config["kwargs"])
-            device = self.devices[config["parent"]].getDevice(input = config["inputNumber"])
-            self.configs[config["parent"]]["subDevices"][id] = config["inputNumber"]
+                self.devices[config["parent"]].openDevice(eval("devicesModule." + config["deviceName"]),
+                    input = config["inputNumber"], *config["args"], **config["kwargs"])
+                device = self.devices[config["parent"]].getDevice(input = config["inputNumber"])
+                self.configs[config["parent"]]["subDevices"][id] = config["inputNumber"]
 
-        self.devices[id] = device
-        self.configs[id] = config
+            self.devices[id] = device
+            self.configs[id] = config
 
-        return id
+            return id
+
+        except serial.serialutil.SerialException:
+            print("Caught SerialException: Could not configure port: (5, 'Input/output error')")
+            return None
 
     @_pause
     def closeDevice(self, deviceID):

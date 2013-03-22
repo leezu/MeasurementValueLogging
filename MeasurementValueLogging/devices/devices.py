@@ -20,6 +20,7 @@
 
 
 import si
+import serial
 
 deviceClassNames = ("TecpelDMM8061", "VoltcraftVC820", "XLS200", "KernPCB", "BS600")
 
@@ -30,8 +31,6 @@ class Device(object):
     or, when applicable inherit them unmodified.
 
     """
-
-    import serial
 
     _ser = None # this is the serial device / connection
     _baudrate = 2400 # baudrate
@@ -91,8 +90,6 @@ class Device(object):
             - COM1 (Windows)
 
         """
-
-        import serial
 
         ser = serial.Serial()
         ser.port = port

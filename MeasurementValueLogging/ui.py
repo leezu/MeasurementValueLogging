@@ -453,33 +453,37 @@ class MainWindow(QtGui.QMainWindow):
 
                 if xls200Popup.result():
                     xls200ID = self.dm.openDevice(device, port)
-                    
-                    if xls200Popup.subdevice1ComboBox.currentIndex() != 0:
-                        sub1 = unicode(xls200Popup.subdevice1ComboBox.currentText())
-                        deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
-                        sub1Widget = DisplayWidget(deviceID, self.dm)
-                        self.verticalLayout.addWidget(sub1Widget)
-                        self.displayWidgets[deviceID] = sub1Widget
 
-                    if xls200Popup.subdevice2ComboBox.currentIndex() != 0:
-                        sub2 = unicode(xls200Popup.subdevice2ComboBox.currentText())
-                        deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
-                        sub2Widget = DisplayWidget(deviceID, self.dm)
-                        self.verticalLayout.addWidget(sub2Widget)
-                        self.displayWidgets[deviceID] = sub2Widget
+                    if xls200ID:
+                        
+                        if xls200Popup.subdevice1ComboBox.currentIndex() != 0:
+                            sub1 = unicode(xls200Popup.subdevice1ComboBox.currentText())
+                            deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
+                            sub1Widget = DisplayWidget(deviceID, self.dm)
+                            self.verticalLayout.addWidget(sub1Widget)
+                            self.displayWidgets[deviceID] = sub1Widget
 
-                    if xls200Popup.subdevice3ComboBox.currentIndex() != 0:
-                        sub3 = unicode(xls200Popup.subdevice3ComboBox.currentText())
-                        deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
-                        sub3Widget = DisplayWidget(deviceID, self.dm)
-                        self.verticalLayout.addWidget(sub3Widget)
-                        self.displayWidgets[deviceID] = sub3Widget
+                        if xls200Popup.subdevice2ComboBox.currentIndex() != 0:
+                            sub2 = unicode(xls200Popup.subdevice2ComboBox.currentText())
+                            deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
+                            sub2Widget = DisplayWidget(deviceID, self.dm)
+                            self.verticalLayout.addWidget(sub2Widget)
+                            self.displayWidgets[deviceID] = sub2Widget
+
+                        if xls200Popup.subdevice3ComboBox.currentIndex() != 0:
+                            sub3 = unicode(xls200Popup.subdevice3ComboBox.currentText())
+                            deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
+                            sub3Widget = DisplayWidget(deviceID, self.dm)
+                            self.verticalLayout.addWidget(sub3Widget)
+                            self.displayWidgets[deviceID] = sub3Widget
 
             else:
                 deviceID = self.dm.openDevice(device, port)
-                deviceWidget = DisplayWidget(deviceID, self.dm)
-                self.verticalLayout.addWidget(deviceWidget)
-                self.displayWidgets[deviceID] = deviceWidget
+
+                if deviceID:
+                    deviceWidget = DisplayWidget(deviceID, self.dm)
+                    self.verticalLayout.addWidget(deviceWidget)
+                    self.displayWidgets[deviceID] = deviceWidget
 
     def startStopLogging(self):
         """Start/Stop logging."""
