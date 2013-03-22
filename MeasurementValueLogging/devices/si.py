@@ -97,16 +97,43 @@ def getName(x):
         return _siPrefixName[x]
 
 
-def getSiNames():
+def getSiNames(type="normal"):
     """Return list of SI-Names
 
     :returns: List of SI-Names
     :rtype: List of Strings
 
     """
-    l = list(_siNamePrefix)
-    l.sort()
-    return l
+    if type=="normal":
+        return normalNamesList[:]
+
+    elif type=="all":
+        return allNamesList[:]
+
+normalNamesList = ['nano',
+                'micro',
+                'mili',
+                '',
+                'kilo',
+                'mega']
+
+allNamesList = ['yocto',
+                'zepto',
+                'atto',
+                'femto',
+                'pico',
+                'nano',
+                'micro',
+                'mili',
+                '',
+                'kilo',
+                'mega',
+                'giga',
+                'tera',
+                'peta',
+                'exa',
+                'zetta',
+                'yotta']
 
 _siPrefixValue = { 'y': 1e-24,  # yocto
                 'z': 1e-21,  # zepto

@@ -115,10 +115,12 @@ class DisplayWidget(QtGui.QWidget):
     twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
     slopeInterceptCalibration = 1.0, 0.0
 
-    is1PrefixIndex = 0 # QComboBox Index
-    should1PrefixIndex = 0 # QComboBox Index
-    is2PrefixIndex = 0 # QComboBox Index
-    should2PrefixIndex = 0 # QComboBox Index
+    siNames = si.getSiNames("normal")
+
+    is1PrefixIndex = siNames.index("") # QComboBox Index
+    should1PrefixIndex = siNames.index("") # QComboBox Index
+    is2PrefixIndex = siNames.index("") # QComboBox Index
+    should2PrefixIndex = siNames.index("") # QComboBox Index
 
     is1 = 0
     should1 = 0
@@ -168,7 +170,7 @@ class DisplayWidget(QtGui.QWidget):
         # Add prefixes to combobox
         for i in [popup.is1Prefix, popup.should1Prefix, popup.is2Prefix, popup.should2Prefix]:
             i.clear()
-            i.addItems(si.getSiNames())
+            i.addItems(self.siNames)
 
         popup.is1Prefix.setCurrentIndex(self.is1PrefixIndex)
         popup.should1Prefix.setCurrentIndex(self.should1PrefixIndex)
