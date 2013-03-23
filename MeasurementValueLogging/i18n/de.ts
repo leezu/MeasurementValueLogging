@@ -13,37 +13,37 @@
         <translation>Kalibrierung</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="28"/>
+        <location filename="deviceSettingsDialog.ui" line="30"/>
         <source>Two values</source>
         <translation>2 Werte</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="37"/>
+        <location filename="deviceSettingsDialog.ui" line="39"/>
         <source>Should</source>
         <translation>Soll</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="47"/>
+        <location filename="deviceSettingsDialog.ui" line="49"/>
         <source>Should 2</source>
         <translation>Soll 2</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="207"/>
+        <location filename="deviceSettingsDialog.ui" line="209"/>
         <source>Slope and intercept</source>
         <translation>Steigung und Y-Achsenabschnitt</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="219"/>
+        <location filename="deviceSettingsDialog.ui" line="221"/>
         <source>Slope</source>
         <translation>Steigung</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="245"/>
+        <location filename="deviceSettingsDialog.ui" line="247"/>
         <source>Intercept</source>
         <translation>Y-Achsenabschnitt</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="287"/>
+        <location filename="deviceSettingsDialog.ui" line="292"/>
         <source>Unit</source>
         <translation>Einheit</translation>
     </message>
@@ -83,27 +83,54 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="57"/>
+        <location filename="deviceSettingsDialog.ui" line="59"/>
         <source>Get</source>
         <translation>Hole</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="64"/>
+        <location filename="deviceSettingsDialog.ui" line="66"/>
         <source>Get 2</source>
         <translation>Hole 2</translation>
     </message>
-</context>
-<context>
-    <name>DisplayWidget</name>
     <message>
-        <location filename="ui.py" line="224"/>
-        <source>Warning</source>
-        <translation>Warnung</translation>
+        <location filename="deviceSettingsDialog.ui" line="329"/>
+        <source>Save</source>
+        <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="ui.py" line="224"/>
-        <source>You have to stop the measurement to delete a device.</source>
-        <translation>Sie müssen die Messung stoppen, um ein Gerät entfernen zu können.</translation>
+        <location filename="deviceSettingsDialog.ui" line="336"/>
+        <source>Load</source>
+        <translation>Laden</translation>
+    </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="345"/>
+        <source>Slot</source>
+        <translation>Slot</translation>
+    </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="353"/>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="358"/>
+        <source>2</source>
+        <translation>2</translation>
+    </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="363"/>
+        <source>3</source>
+        <translation>3</translation>
+    </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="390"/>
+        <source>Normal</source>
+        <translation>Normal</translation>
+    </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="397"/>
+        <source>Calibrated</source>
+        <translation>Kalibriert</translation>
     </message>
 </context>
 <context>
@@ -117,59 +144,49 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="ui.py" line="451"/>
+        <location filename="ui.py" line="530"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="ui.py" line="340"/>
+        <location filename="ui.py" line="428"/>
         <source>You have not saved a log yet.</source>
         <translation>Sie haben bisher keine Aufnahme gespeichert.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="402"/>
-        <source>Stop</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainWindow.ui" line="71"/>
-        <source>Start</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui.py" line="417"/>
+        <location filename="ui.py" line="496"/>
         <source>Overwrite last log</source>
         <translation>Letzte Aufnahme überschreiben</translation>
     </message>
     <message>
-        <location filename="ui.py" line="417"/>
+        <location filename="ui.py" line="496"/>
         <source>Do you really want to overwrite the last (unsaved) log?
 </source>
         <translation>Möchten Sie wirklich die letzte Aufnahme verworfe?
 </translation>
     </message>
     <message>
-        <location filename="ui.py" line="417"/>
+        <location filename="ui.py" line="496"/>
         <source>If not, please cancel and save it first.</source>
         <translation>Sie können die letzte Aufnahme mit dem &quot;Speichern&quot; Knopf sichern.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="428"/>
+        <location filename="ui.py" line="507"/>
         <source>Stop logging</source>
         <translation>Aufnahme stoppen</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="90"/>
+        <location filename="mainWindow.ui" line="71"/>
         <source>Start logging</source>
         <translation>Aufnahme starten</translation>
     </message>
     <message>
-        <location filename="ui.py" line="441"/>
+        <location filename="ui.py" line="520"/>
         <source>Save file</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="ui.py" line="451"/>
+        <location filename="ui.py" line="530"/>
         <source>You first have to log something, to save it.</source>
         <translation>Keine Aufnahme vorhanden, die gespeichert werden könnte.</translation>
     </message>
@@ -179,27 +196,27 @@
         <translation>Messwerterfassung</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="109"/>
+        <location filename="mainWindow.ui" line="90"/>
         <source>Save last log</source>
         <translation>Aufnahme speichern</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="147"/>
+        <location filename="mainWindow.ui" line="128"/>
         <source>Add devices</source>
         <translation>Geräte hinzufügen</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="166"/>
+        <location filename="mainWindow.ui" line="147"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="175"/>
+        <location filename="mainWindow.ui" line="156"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="180"/>
+        <location filename="mainWindow.ui" line="161"/>
         <source>Devicemanager</source>
         <translation>Geräteverwaltung</translation>
     </message>
@@ -214,17 +231,17 @@
         <translation> Sekunden</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="128"/>
+        <location filename="mainWindow.ui" line="109"/>
         <source>Open log with office</source>
         <translation>Aufnahme im Office öffnen</translation>
     </message>
     <message>
-        <location filename="ui.py" line="362"/>
+        <location filename="ui.py" line="450"/>
         <source>No device</source>
         <translation>Kein Gerät</translation>
     </message>
     <message>
-        <location filename="ui.py" line="441"/>
+        <location filename="ui.py" line="520"/>
         <source>log</source>
         <comment>Default filename of the exported log</comment>
         <translation>aufnahme</translation>
