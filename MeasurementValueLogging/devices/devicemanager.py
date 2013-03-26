@@ -22,6 +22,7 @@ import threading
 import devices as devicesModule
 import si
 import serial
+import time
 
 class DeviceManager(object):
     """The DeviceManager manages devices.
@@ -376,6 +377,7 @@ class DeviceManager(object):
 
     def _start(self):
         """Start the DeviceManager."""
+
         if self._running == False:
             self._stopEvent = threading.Event()
             self._thread = _GetValuesThread(self._stopEvent,
@@ -392,6 +394,7 @@ class DeviceManager(object):
             self._thread = None
             self._stopEvent = None
             self._running = False
+            
 
 
 class _GetValuesThread(threading.Thread):
@@ -410,9 +413,8 @@ class _GetValuesThread(threading.Thread):
         for key in self.devices.iteritems():
             self.rawValues[key] = devicesModule.NullValue()
 
-    def run(self):
-        import time
 
+    def run(self):
         while not self.stop_event.is_set():
             self.updateValue()
             time.sleep(0.2) # Prevent 100% CPU usage
