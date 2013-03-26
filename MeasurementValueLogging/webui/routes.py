@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, jsonify
-from devices.devicemanager import DeviceManager
-import console
+from .. devices.devicemanager import DeviceManager
+from .. console import openDevicesFromConsoleArgs
  
 app = Flask(__name__)
 dm = DeviceManager()
 
-deviceIDs = console.openDevicesFromConsoleArgs(dm)
-
-dm.start()
+deviceIDs = openDevicesFromConsoleArgs(dm)
 
 @app.route("/")
 def home():
