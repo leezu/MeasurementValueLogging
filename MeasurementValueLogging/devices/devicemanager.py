@@ -394,7 +394,6 @@ class DeviceManager(object):
             self._thread = None
             self._stopEvent = None
             self._running = False
-            
 
 
 class _GetValuesThread(threading.Thread):
@@ -412,7 +411,6 @@ class _GetValuesThread(threading.Thread):
 
         for key in self.devices.iteritems():
             self.rawValues[key] = devicesModule.NullValue()
-
 
     def run(self):
         while not self.stop_event.is_set():
