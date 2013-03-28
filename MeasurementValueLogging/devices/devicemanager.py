@@ -23,6 +23,7 @@ import devices as devicesModule
 import si
 import serial
 import time
+import logging
 
 class DeviceManager(object):
     """The DeviceManager manages devices.
@@ -70,8 +71,7 @@ class DeviceManager(object):
         if self._running:
             self.rawValues = self._thread.rawValues
         else:
-            import sys
-            sys.stderr.write("GetValuesThread not running. Can't update values.\n")
+            logging.warn("GetValuesThread not running. Can't update values.\n")
 
     def _getLinearFunction(self, value1, value2):
         """Return a linear function, which contains value1 and value2.
@@ -85,8 +85,7 @@ class DeviceManager(object):
         try:
             m = (value1[1] - value2[1]) / (value1[0] - value2[0])
         except ZeroDivisionError:
-            import sys
-            sys.stderr.write("ZeroDivisionError during slope computation.\nSetting slope to 1\n")
+            logging.warning("ZeroDivisionError while computing the slope. Setting slope to 1")
             m = 1
 
         c = value1[1] - m*value1[0]
@@ -240,7 +239,7 @@ class DeviceManager(object):
             return id
 
         except serial.serialutil.SerialException:
-            print("Caught SerialException: Could not configure port: (5, 'Input/output error')")
+            logging.error("Caught SerialException: Could not configure port: (5, 'Input/output error')")
             return None
 
     @_pause
@@ -302,7 +301,7 @@ class DeviceManager(object):
             return self.rawValues[deviceID]
 
         except KeyError:
-            # No value yet
+            logging.info("No value yet. Device: %s %s", deviceID, self.getDevice(deviceID))
             return devicesModule.NullValue()
 
     def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
