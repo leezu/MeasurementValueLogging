@@ -22,6 +22,10 @@ import qr
 from PyQt4 import QtCore, QtGui, uic
 from devices.devicemanager import DeviceManager
 import devices.si as si
+import time
+import os
+import tempfile
+import subprocess
 
 class NewDeviceDialog(QtGui.QDialog):
     """Dialog to add new devices."""
@@ -98,7 +102,6 @@ class SettingsDialog(QtGui.QDialog):
     def openFile(self):
         """Open a QFileDialog and save the path."""
 
-        import os
         popup = QtGui.QFileDialog()
         self.path.setText(popup.getOpenFileName(self, self.tr("Search Office"), os.path.expanduser("~"), ""))
 
@@ -417,9 +420,6 @@ class MainWindow(QtGui.QMainWindow):
     def openLog(self):
         """Open last log with office."""
         
-        import subprocess
-        import os
-
         if self.pathToLogFile:
             subprocess.call('"' + self.officePath + '"' + ' ' + 
                 '"' + self.pathToLogFile + '"', shell=True)
@@ -488,9 +488,6 @@ class MainWindow(QtGui.QMainWindow):
     def startStopLogging(self):
         """Start/Stop logging."""
 
-        import time
-        import tempfile
-
         if self.log == False:
             if self.tmpfile:
                 popup = DoReallyDialog(self.tr("Overwrite last log"),
@@ -512,8 +509,6 @@ class MainWindow(QtGui.QMainWindow):
 
     def saveLog(self):
         """Save last log to file."""
-
-        import os
 
         if self.tmpfile:
             popup = QtGui.QFileDialog()
@@ -537,7 +532,6 @@ class MainWindow(QtGui.QMainWindow):
     def update(self):
         """Update the displayWidgets and, when logging enabled log."""
         
-        import time
         # python3 incompatibility: .iteritems()
         # Delete unnecessary widgets
         deviceIDsToBeDeleted = []

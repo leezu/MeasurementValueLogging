@@ -21,6 +21,8 @@
 
 import si
 import serial
+import re
+import time
 
 deviceClassNames = ("TecpelDMM8061", "VoltcraftVC820", "XLS200", "KernPCB", "BS600")
 
@@ -418,8 +420,6 @@ class TecpelDMM8061(Device):
             raise Exception
 
     def getRawValue(self):
-        import time
-        
         starttime = time.time()
         assert self.isAvailable()
 
@@ -696,7 +696,6 @@ class Balance(Device):
 class KernPCB(Balance):
     """This class represents the KernPCB Balance."""
 
-    import re
     _regex = re.compile(r"\s[\s-][\d\s\.]{10}\s.{3}\r\n")
 
     _baudrate = 9600
@@ -727,8 +726,6 @@ class KernPCB(Balance):
                 return ""
 
     def getRawValue(self):
-        import time
-
         starttime = time.time()
 
         assert self.isAvailable()
@@ -786,7 +783,6 @@ class KernPCB(Balance):
 class BS600(Balance):
     """This class represents the BS600 Balance."""
 
-    import re
     _stable = re.compile(r"[WCP][TC]ST[+-][\d\s\.]{7}.{4}")
     _all = re.compile(r"[WCP][TC][SU][TS][+-][\d\s\.]{7}.{4}")
 
@@ -817,8 +813,6 @@ class BS600(Balance):
                 return ""
     
     def getRawValue(self):
-        import time
-
         starttime = time.time()
 
         assert self.isAvailable()

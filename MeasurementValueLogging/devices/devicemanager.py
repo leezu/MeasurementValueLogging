@@ -24,6 +24,9 @@ import si
 import serial
 import time
 import logging
+import random
+import copy
+import serial.tools.list_ports
 
 class DeviceManager(object):
     """The DeviceManager manages devices.
@@ -48,7 +51,6 @@ class DeviceManager(object):
         self._start()
 
     def _getIterator(self):
-        import random
         i = random.getrandbits(32)
         while True:
             yield i
@@ -140,7 +142,6 @@ class DeviceManager(object):
 
         """
 
-        import serial.tools.list_ports
         portsTuple = serial.tools.list_ports.comports()
         portsList = []
 
@@ -256,7 +257,6 @@ class DeviceManager(object):
         config = self.configs[deviceID]
 
         if isinstance(config["parent"], str):
-            import copy
             relCopy = copy.copy(config["subDevices"])
             # prevent RuntimeError: dictionary changed size during iteration
             

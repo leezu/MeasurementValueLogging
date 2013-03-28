@@ -21,10 +21,10 @@
 """This module contains a console interface."""
 
 from devices.devicemanager import DeviceManager
+import time
+import argparse
 
 def openDevicesFromConsoleArgs(devicemanager):
-    import argparse
-
     parser = argparse.ArgumentParser(description='Messwerterfassung')
     parser.add_argument('port', help="Serial Port (e.g. /dev/ttyUSB0 or COM1)")
     subparser = parser.add_subparsers(dest="device", help="device to use with port")
@@ -67,15 +67,12 @@ def openDevicesFromConsoleArgs(devicemanager):
 
 
 def main():
-    import time
-
     dm = DeviceManager()
     deviceIDs = openDevicesFromConsoleArgs(dm)
     starttime = time.time()
 
     try:
         while True:
-            import time
             time.sleep(2)
             for i in deviceIDs:
                 rv = dm.getLastRawValue(i)
