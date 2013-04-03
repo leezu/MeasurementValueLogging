@@ -20,8 +20,8 @@ import sys
 import pkgutil
 import qr
 from PyQt4 import QtCore, QtGui, uic
-from devices.devicemanager import DeviceManager
-import devices.si as si
+from .. devices.devicemanager import DeviceManager
+from .. devices import si
 import time
 import os
 import tempfile

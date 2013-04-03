@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="close.png">close.png</file>
+        <file alias="settings.png">settings.png</file>
+    </qresource>
+    <qresource prefix="/ui">
+        <file alias="deviceSettingsDialog.ui">deviceSettingsDialog.ui</file>
+        <file alias="displayWidget.ui">displayWidget.ui</file>
+        <file alias="doReallyDialog.ui">doReallyDialog.ui</file>
+        <file alias="mainWindow.ui">mainWindow.ui</file>
+        <file alias="newDeviceDialog.ui">newDeviceDialog.ui</file>
+        <file alias="settingsDialog.ui">settingsDialog.ui</file>
+        <file alias="xls200Dialog.ui">xls200Dialog.ui</file>
+    </qresource>
+    <qresource prefix="/i18n">
+        <file alias="de.qm">i18n/de.qm</file>
+    </qresource>
+</RCC>

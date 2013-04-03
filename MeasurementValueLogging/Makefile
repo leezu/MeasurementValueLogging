@@ -1,9 +1,9 @@
 qresource:
-	pyrcc4 -o qr.py resource.qrc
+	pyrcc4 -o ui/qr.py ui/resource.qrc
 
 translation-files:
-	pylupdate4 -noobsolete ui.py ui/*.ui -ts i18n/de.ts
-	cd i18n; lrelease de.ts
+	pylupdate4 -noobsolete ui.py ui/*.ui -ts ui/i18n/de.ts
+	cd ui/i18n; lrelease de.ts
 	make qresource
 
 gh-pages:
