@@ -20,8 +20,8 @@ import sys
 import pkgutil
 import qr
 from PyQt4 import QtCore, QtGui, uic
-from .. devices.devicemanager import DeviceManager
-from .. devices import si
+from devices.devicemanager import DeviceManager
+from devices import si
 import time
 import os
 import tempfile
@@ -580,7 +580,7 @@ class App(QtGui.QApplication):
     def byebye(self):
         self.exit(0)
 
-if __name__ == "__main__":
+def main():
     app = App(sys.argv)
 
     QtCore.QCoreApplication.setOrganizationName("Lausen")
@@ -600,3 +600,6 @@ if __name__ == "__main__":
 
     app.setup()
     app.exec_()
+
+if __name__ == "__main__":
+    main()
