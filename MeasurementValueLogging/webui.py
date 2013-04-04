@@ -1,3 +1,3 @@
-import routes
+import webui.routes
 
-routes.app.run()
+webui.routes.main()

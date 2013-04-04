@@ -18,14 +18,15 @@
 
 import sys
 import pkgutil
-import qr
-from PyQt4 import QtCore, QtGui, uic
-from devices.devicemanager import DeviceManager
-from devices import si
 import time
 import os
 import tempfile
 import subprocess
+from PyQt4 import QtCore, QtGui, uic
+
+from devices.devicemanager import DeviceManager
+from devices import si
+import ui.qr
 
 class NewDeviceDialog(QtGui.QDialog):
     """Dialog to add new devices."""
