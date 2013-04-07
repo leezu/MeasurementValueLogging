@@ -26,7 +26,7 @@ from PyQt4 import QtCore, QtGui, uic
 
 from devices.devicemanager import DeviceManager
 from devices import si
-import ui.qr
+import ui_data.qr
 
 class NewDeviceDialog(QtGui.QDialog):
     """Dialog to add new devices."""

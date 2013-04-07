@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, jsonify
-from devices.devicemanager import DeviceManager
-from console import openDevicesFromConsoleArgs
+from .. devices.devicemanager import DeviceManager
+from .. console import openDevicesFromConsoleArgs
  
 app = Flask(__name__)
 dm = DeviceManager()

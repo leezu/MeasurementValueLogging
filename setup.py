@@ -1,14 +1,14 @@
 from distutils.core import setup
 
 setup(name="MeasurementValueLogging",
-	version="0.3.1",
+	version="0.3.2",
 	description="Display measurement values from various serial devices.",
 	long_description=open('README.md').read(),
 	author="Leonard Lausen",
 	author_email="leonard@lausen.nl",
 	url="https://github.com/leezu/MeasurementValueLogging",
 	packages = ['MeasurementValueLogging', 'MeasurementValueLogging.devices',
-		"MeasurementValueLogging.ui", "MeasurementValueLogging.webui"],
+		"MeasurementValueLogging.ui_data", "MeasurementValueLogging.webui_data"],
 	requires = ["pyserial", "PyQt"],
 	license = "GPLv3+",
 	provides = ["MeasurementValueLogging"],
