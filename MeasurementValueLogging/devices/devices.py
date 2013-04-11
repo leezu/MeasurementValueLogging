@@ -546,9 +546,15 @@ class XLS200(MultiboxDevice):
     This device passes one of the three input serial connections, depending
     in which combination DTR and RTS rs232 attributes are set.
 
-    - DTR True & RTS False: Input 1
-    - DTR False & RTS True: Input 2
-    - DTR False & RTS False: Input 3
+    +--------+-------+-------+
+    | RTS    | DTR   | Input |
+    +========+=======+=======+
+    | False  | True  | 1     |
+    +--------+-------+-------+
+    | True   | False | 2     |
+    +--------+-------+-------+
+    | False  | False | 3     |
+    +--------+-------+-------+
 
     """
 
