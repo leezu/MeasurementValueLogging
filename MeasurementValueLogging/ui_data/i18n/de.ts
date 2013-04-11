@@ -144,34 +144,34 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="ui.py" line="530"/>
+        <location filename="ui.py" line="529"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="ui.py" line="428"/>
+        <location filename="ui.py" line="432"/>
         <source>You have not saved a log yet.</source>
         <translation>Sie haben bisher keine Aufnahme gespeichert.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="496"/>
+        <location filename="ui.py" line="497"/>
         <source>Overwrite last log</source>
         <translation>Letzte Aufnahme überschreiben</translation>
     </message>
     <message>
-        <location filename="ui.py" line="496"/>
+        <location filename="ui.py" line="497"/>
         <source>Do you really want to overwrite the last (unsaved) log?
 </source>
         <translation>Möchten Sie wirklich die letzte Aufnahme verworfe?
 </translation>
     </message>
     <message>
-        <location filename="ui.py" line="496"/>
+        <location filename="ui.py" line="497"/>
         <source>If not, please cancel and save it first.</source>
         <translation>Sie können die letzte Aufnahme mit dem &quot;Speichern&quot; Knopf sichern.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="507"/>
+        <location filename="ui.py" line="508"/>
         <source>Stop logging</source>
         <translation>Aufnahme stoppen</translation>
     </message>
@@ -181,12 +181,12 @@
         <translation>Aufnahme starten</translation>
     </message>
     <message>
-        <location filename="ui.py" line="520"/>
+        <location filename="ui.py" line="519"/>
         <source>Save file</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="ui.py" line="530"/>
+        <location filename="ui.py" line="529"/>
         <source>You first have to log something, to save it.</source>
         <translation>Keine Aufnahme vorhanden, die gespeichert werden könnte.</translation>
     </message>
@@ -194,11 +194,6 @@
         <location filename="mainWindow.ui" line="14"/>
         <source>Measurement value logging</source>
         <translation>Messwerterfassung</translation>
-    </message>
-    <message>
-        <location filename="mainWindow.ui" line="90"/>
-        <source>Save last log</source>
-        <translation>Aufnahme speichern</translation>
     </message>
     <message>
         <location filename="mainWindow.ui" line="128"/>
@@ -231,26 +226,31 @@
         <translation> Sekunden</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="109"/>
-        <source>Open log with office</source>
-        <translation>Aufnahme im Office öffnen</translation>
-    </message>
-    <message>
-        <location filename="ui.py" line="450"/>
+        <location filename="ui.py" line="454"/>
         <source>No device</source>
         <translation>Kein Gerät</translation>
     </message>
     <message>
-        <location filename="ui.py" line="520"/>
+        <location filename="ui.py" line="519"/>
         <source>log</source>
         <comment>Default filename of the exported log</comment>
         <translation>aufnahme</translation>
+    </message>
+    <message>
+        <location filename="mainWindow.ui" line="90"/>
+        <source>Save log</source>
+        <translation>Aufnahme speichern</translation>
+    </message>
+    <message>
+        <location filename="mainWindow.ui" line="109"/>
+        <source>Open in spreadsheet</source>
+        <translation>Aufnahme mit Tabellenkalkulation öffnen</translation>
     </message>
 </context>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="ui.py" line="103"/>
+        <location filename="ui.py" line="107"/>
         <source>Search Office</source>
         <translation>Office suchen</translation>
     </message>
@@ -263,34 +263,44 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="settingsDialog.ui" line="25"/>
-        <source>Path to office</source>
-        <translation>Pfad zum Office</translation>
-    </message>
-    <message>
-        <location filename="settingsDialog.ui" line="37"/>
+        <location filename="settingsDialog.ui" line="44"/>
         <source>Search path</source>
         <translation>Pfad suchen</translation>
     </message>
     <message>
-        <location filename="settingsDialog.ui" line="69"/>
+        <location filename="settingsDialog.ui" line="76"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="settingsDialog.ui" line="46"/>
+        <location filename="settingsDialog.ui" line="53"/>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="settingsDialog.ui" line="54"/>
+        <location filename="settingsDialog.ui" line="61"/>
         <source>English</source>
         <translation>Englisch</translation>
     </message>
     <message>
-        <location filename="settingsDialog.ui" line="59"/>
+        <location filename="settingsDialog.ui" line="66"/>
         <source>German</source>
         <translation>Deutsch</translation>
+    </message>
+    <message>
+        <location filename="settingsDialog.ui" line="25"/>
+        <source>Spreadsheet</source>
+        <translation>Tabellenkalkulation</translation>
+    </message>
+    <message>
+        <location filename="settingsDialog.ui" line="34"/>
+        <source>Command to open the spreadsheet.</source>
+        <translation>Befehl zum Öffnen der Tabellenkalkulation.</translation>
+    </message>
+    <message>
+        <location filename="settingsDialog.ui" line="41"/>
+        <source>Search the spreadsheet executable.</source>
+        <translation>Suche die Tabellenkalkulations Executable.</translation>
     </message>
 </context>
 </TS>
