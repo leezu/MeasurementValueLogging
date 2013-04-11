@@ -425,9 +425,9 @@ class MainWindow(QtGui.QMainWindow):
         """Open last log with office."""
         
         if self.pathToLogFile:
-            subprocess.call('"' + self.officePath + '"' + ' ' + 
+            subprocess.Popen('"' + self.officePath + '"' + ' ' + 
                 '"' + self.pathToLogFile + '"', shell=True)
-                    # FIXME: security flaw: shell=True 
+                    # FIXME: security flaw: shell=True
         else:
             popup = DoReallyDialog(self.tr("Warning"),
                 self.tr("You have not saved a log yet."))
