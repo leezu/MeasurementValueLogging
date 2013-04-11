@@ -132,6 +132,11 @@
         <source>Calibrated</source>
         <translation>Kalibriert</translation>
     </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="14"/>
+        <source>Device settings</source>
+        <translation>Geräteeinstellungen</translation>
+    </message>
 </context>
 <context>
     <name>Form</name>
