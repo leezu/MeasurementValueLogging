@@ -239,8 +239,8 @@ class DeviceManager(object):
 
             return id
 
-        except serial.serialutil.SerialException:
-            logging.error("Caught SerialException: Could not configure port: (5, 'Input/output error')")
+        except serial.serialutil.SerialException as e:
+            logging.error("Caught SerialException: " + str(e))
             return None
 
     @_pause
@@ -422,16 +422,16 @@ class _GetValuesThread(threading.Thread):
             if self.stop_event.is_set():
                 break
 
-            if isinstance(config["parent"], str):
-                rv = self.devices[deviceID].getRawValue()
-                if rv:
-                    self.rawValues[deviceID] = rv
-                else:
-                    pass
+            try:
+                if isinstance(config["parent"], str):
+                    rv = self.devices[deviceID].getRawValue()
+                    if rv:
+                        self.rawValues[deviceID] = rv
 
-            else:
-                rv = self.devices[config["parent"]].getRawValue(config["inputNumber"])
-                if rv:
-                    self.rawValues[deviceID] = rv
                 else:
-                    pass
+                    rv = self.devices[config["parent"]].getRawValue(config["inputNumber"])
+                    if rv:
+                        self.rawValues[deviceID] = rv
+
+            except serial.serialutil.SerialException as e:
+                logging.critical("Caught serial exception: " + str(e))
