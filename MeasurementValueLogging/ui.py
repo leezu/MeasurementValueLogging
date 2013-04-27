@@ -22,6 +22,7 @@ import time
 import os
 import tempfile
 import subprocess
+import locale
 from PyQt4 import QtCore, QtGui, uic
 
 from devices.devicemanager import DeviceManager
@@ -566,7 +567,7 @@ class MainWindow(QtGui.QMainWindow):
                 if widget.unit != "":
                     unit = widget.unit
                 rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
-                self.tmpfile.write(str(rv.getDisplayedValue() * rv.getFactor()) + ",")
+                self.tmpfile.write("{:n}".format(rv.getDisplayedValue() * rv.getFactor()) + ";")
 
             self.tmpfile.write("\n")
             self.lasttime = time.time()
@@ -593,10 +594,12 @@ def main():
 
     translator = QtCore.QTranslator()
     langVal = QtCore.QSettings().value("i18n", -1).toInt()[0]
+
+    locale.setlocale(locale.LC_ALL, '')
     
     if langVal == -1:
-        locale = QtCore.QLocale.system().name()
-        if translator.load(":/i18n/" + locale + "qm"):
+        loc = QtCore.QLocale.system().name()
+        if translator.load(":/i18n/" + loc + "qm"):
             app.installTranslator(translator)
     if langVal == 1:
         translator.load(":/i18n/de.qm")
