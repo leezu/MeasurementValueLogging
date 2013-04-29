@@ -400,8 +400,9 @@ class _GetValuesThread(threading.Thread):
         self.devices = devices
         self.configs = configs
 
-        for key in self.devices.iteritems():
-            self.rawValues[key] = devicesModule.NullValue()
+        for key, val in self.devices.iteritems():
+            if key not in self.rawValues:
+                self.rawValues[key] = devicesModule.NullValue()
 
     def run(self):
         while not self.stop_event.is_set():
