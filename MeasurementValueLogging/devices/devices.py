@@ -190,7 +190,7 @@ class Value(object):
 
     def __repr__(self):
         return "< {classname}: {:n} * {}>".format(
-            self.value, self.factor
+            self.value, self.factor,
             classname = self.__class__.__name__)
 
     def __str__(self):
