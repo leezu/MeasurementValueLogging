@@ -29,3 +29,9 @@ GUI
 To use the GUI simply run::
 
     python2 -m MeasurementValueLogging.ui
+
+Web Interface
+-------------
+The Web Interface uses the same syntax as the Console Interface. It starts a webserver on localhost:5000::
+
+	python2 -m MeasurementValueLogging.webui [-h] port device [-h] [device options...]

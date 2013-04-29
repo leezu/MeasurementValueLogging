@@ -168,7 +168,7 @@ class MultiboxDevice(Device):
 
         This does NOT sets the device to the right input.
         If you want to do any actual communication with the
-        returned device, call changeInput(input) first.
+        returned device, call :meth:`changeInput` first.
 
         :param input: Input number of subdevice
         :type input: Input
