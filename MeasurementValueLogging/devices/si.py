@@ -74,6 +74,9 @@ def getPrefix(x):
     :rtype: String
 
     """
+
+    if isinstance(x, int):
+        x = float(x)
     
     if isinstance(x, float):
         return _siValuePrefix[x]
@@ -90,6 +93,9 @@ def getName(x):
     :rtype: String
 
     """
+
+    if isinstance(x, int):
+        x = float(x)
     
     if isinstance(x, float):
         return _siPrefixName[_siValuePrefix[x]]
