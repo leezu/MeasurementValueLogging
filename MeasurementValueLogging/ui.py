@@ -273,7 +273,7 @@ class DeviceSettingsDialog(QtGui.QDialog):
         elif self.valuesButton.isChecked():
             self.calibration = self.twoValueCalibration
 
-        crv = self.dm.getCalibratedLastRawValue(self.deviceID, self.calibration, str(self.unit))
+        crv = self.dm.getCalibratedLastRawValue(self.deviceID, self.calibration, self.unit.text())
         self.calibratedLabel.setText(u"{:n} {}{}".format(crv.value, crv.prefix, crv.unit))
 
         rv = self.dm.getLastRawValue(self.deviceID)
