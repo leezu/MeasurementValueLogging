@@ -189,16 +189,16 @@ class Value(object):
     """
 
     def __repr__(self):
-        return "< {classname}: displaydValue={!s} >".format(
-            self.getDisplayedValue(),
+        return "< {classname}: {:n} * {}>".format(
+            self.value, self.factor
             classname = self.__class__.__name__)
 
     def __str__(self):
-        return "{:n}".format(self.getDisplayedValue())
+        return "{:n} * {}".format(self.value, self.factor)
 
     def __unicode__(self):
-        return "{:n} {}".format(self.getDisplayedValue(),
-            self.getUnit())
+        return "{:n} {}{}".format(self.value,
+            self.prefix, self.unit)
 
     @property
     def value(self):
