@@ -24,7 +24,8 @@ import serial
 import re
 import time
 
-deviceClassNames = ("TecpelDMM8061", "VoltcraftVC820", "XLS200", "KernPCB", "BS600")
+deviceClassNames = ("TecpelDMM8061", "VoltcraftVC820", "VoltcraftVC840",
+    "XLS200", "KernPCB", "BS600")
 
 class Device(object):
     """The base device class.
@@ -189,8 +190,8 @@ class Value(object):
     """
 
     def __repr__(self):
-        return "< {classname}: {:n} * {}>".format(
-            self.value, self.factor,
+        return "< {classname}: {:n} * {} at {}>".format(
+            self.value, self.factor, self.time,
             classname = self.__class__.__name__)
 
     def __str__(self):
@@ -296,7 +297,11 @@ class TecpelDMM8061(Device):
     _timeout = 0.5
 
     class __Value(Value):
-        time = None
+        def __init__(self):
+            self.d4 = self.__Digit()
+            self.d3 = self.__Digit()
+            self.d2 = self.__Digit()
+            self.d1 = self.__Digit()
 
         class __Digit:
             """Represents one digit on the screen"""
@@ -357,11 +362,6 @@ class TecpelDMM8061(Device):
         dc = 0
         ac = 0
 
-        d4 = __Digit()
-        d3 = __Digit()
-        d2 = __Digit()
-        d1 = __Digit()
-
         nano = 0
         micro = 0
         milli = 0
@@ -373,6 +373,9 @@ class TecpelDMM8061(Device):
         hertz = 0
         volt = 0
         ampere = 0
+
+
+        time = None
 
         @property
         def value(self):
@@ -547,9 +550,17 @@ class TecpelDMM8061(Device):
 
 
 class VoltcraftVC820(TecpelDMM8061):
+    """This class represents a VOLTCRAFT VC 820 multimeter
+
+    The VC 820 is identical to the TecpelDMM8061.
+
+    """
+
+
+class VoltcraftVC840(TecpelDMM8061):
     """This class represents a VOLTCRAFT VC 840 multimeter
 
-    The VC 40 is identical to the TecpelDMM8061.
+    The VC 840 is identical to the TecpelDMM8061.
 
     """
 
