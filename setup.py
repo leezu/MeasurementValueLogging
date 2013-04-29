@@ -12,7 +12,7 @@ Please see http://leezu.github.com/MeasurementValueLogging/ for documentation an
 
 
 setup(name="MeasurementValueLogging",
-	version="0.3.3",
+	version="0.3.4",
 	description="Display measurement values from various serial devices.",
 	long_description=desc,
 	author="Leonard Lausen",
