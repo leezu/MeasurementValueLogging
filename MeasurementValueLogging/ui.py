@@ -550,7 +550,7 @@ class MainWindow(QtGui.QMainWindow):
             if widget.unit != "":
                 unit = widget.unit
 
-            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
+            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, unit)
             widget.lcdNumber.display(rv.value)
             widget.label.setText(rv.prefix + rv.unit)
         
@@ -560,7 +560,7 @@ class MainWindow(QtGui.QMainWindow):
                 unit = None
                 if widget.unit != "":
                     unit = widget.unit
-                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
+                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, unit)
                 self.tmpfile.write("{:n}".format(rv.completeValue) + ";")
 
             self.tmpfile.write("\n")
