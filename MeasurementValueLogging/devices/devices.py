@@ -813,6 +813,7 @@ class BS600(Balance):
 
             return v
 
+        @property
         def unit(self):
             try:
                 return self.string[12:16].strip()
