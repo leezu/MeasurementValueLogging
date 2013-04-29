@@ -48,21 +48,22 @@ MeasurementValueLogging Modules
 
 Devices module
 ^^^^^^^^^^^^^^^
-The devices module contains code representing physical devices as well as the code necessary to manage them. It is furthermore divided into
+The devices module contains code representing physical devices as well as the code necessary to manage them. In addition there is a module which helps converting between si-prefixes, their factors etc. The devices module is divided into
 
 devices.devices
 """""""""""""""""
-The devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object). 
+The devices.devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object). 
 
 .. automethod:: devices.devices.Device.getRawValue
 
-The (hopefully) returned Value object then has functions to access its data:
+The returned Value object has some attributes which hold its data:
 
-.. automethod:: devices.devices.Value.getDisplayedValue
-.. automethod:: devices.devices.Value.getUnit
-.. automethod:: devices.devices.Value.getFactor
+.. autoattribute:: devices.devices.Value.value
+.. autoattribute:: devices.devices.Value.factor
+.. autoattribute:: devices.devices.Value.unit
+.. autoattribute:: devices.devices.Value.time
 
-In particular there are so called MutliboxDevices like the `XLS200 <http://www.xlsmess.de/html/xls_200.html>`_, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or "get" one of their subdevices.
+Furthermore there are so called MutliboxDevices like the `XLS200 <http://www.xlsmess.de/html/xls_200.html>`_, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or "get" one of their subdevices.
 
 .. automethod:: devices.devices.MultiboxDevice.openDevice
 .. automethod:: devices.devices.MultiboxDevice.closeDevice
@@ -76,9 +77,26 @@ For a complete overview please see the :class:`devices.devices` documentation.
 
 devices.devicemanager
 """""""""""""""""""""
-The devicemanager module contains a DeviceManager class to manage devices. Please see :class:`devices.devicemanager.DeviceManager`.
+The devicemanager module contains a DeviceManager class to manage devices. It runs it's own thread, constantly updating measurement values. 
 
-The DeviceManager can run it's own thread, constantly updating measurement values. It has methods which give instant access to the last acquired value from a device (identified by a deviceID).
+There are methods to open or close devices, acquiere their most recent measurement values as well as more sophisticated methods which allow to calibrate the measurement values. Devices are identified by a so called deviceID which is returned when opening a device.
+
+.. automethod:: devices.devicemanager.DeviceManager.openDevice
+.. automethod:: devices.devicemanager.DeviceManager.closeDevice
+.. automethod:: devices.devicemanager.DeviceManager.getLastRawValue
+
+For a complete overview please see the :class:`devices.devicemanager.DeviceManager` documentation.
+
+devices.si
+"""""""""""
+The si module contains method to convert between different representations of SI prefixes, factors etc.
+
+.. autofunction:: devices.si.getPrefix
+.. autofunction:: devices.si.getName
+.. autofunction:: devices.si.getNumberPrefix
+
+For a complete overview please see the :class:`devices.si` documentation.
+
 
 .. _ui-module:
 

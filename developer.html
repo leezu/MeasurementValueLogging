@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developer information &mdash; MeasurementValueLogging 0.2 documentation</title>
+    <title>Developer information &mdash; MeasurementValueLogging 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="MeasurementValueLogging 0.2 documentation" href="index.html" />
+    <link rel="top" title="MeasurementValueLogging 0.3 documentation" href="index.html" />
     <link rel="prev" title="Installation" href="intro.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -47,7 +47,7 @@
         <li class="right" >
           <a href="intro.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -97,10 +97,10 @@ Wikipedia describes Sphinx as follows:</p>
 <h3>MeasurementValueLogging Modules<a class="headerlink" href="#measurementvaluelogging-modules" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="devices-module">
 <span id="id4"></span><h4>Devices module<a class="headerlink" href="#devices-module" title="Permalink to this headline">¶</a></h4>
-<p>The devices module contains code representing physical devices as well as the code necessary to manage them. It is furthermore divided into</p>
+<p>The devices module contains code representing physical devices as well as the code necessary to manage them. In addition there is a module which helps converting between si-prefixes, their factors etc. The devices module is divided into</p>
 <div class="section" id="devices-devices">
 <h5>devices.devices<a class="headerlink" href="#devices-devices" title="Permalink to this headline">¶</a></h5>
-<p>The devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object).</p>
+<p>The devices.devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object).</p>
 <dl class="method">
 <dt id="devices.devices.Device.getRawValue">
 <tt class="descclassname">Device.</tt><tt class="descname">getRawValue</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Device.getRawValue" title="Permalink to this definition">¶</a></dt>
@@ -117,16 +117,16 @@ Wikipedia describes Sphinx as follows:</p>
 </table>
 </dd></dl>
 
-<p>The (hopefully) returned Value object then has functions to access its data:</p>
-<dl class="method">
-<dt id="devices.devices.Value.getDisplayedValue">
-<tt class="descclassname">Value.</tt><tt class="descname">getDisplayedValue</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Value.getDisplayedValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the displayed value (as a number).</p>
+<p>The returned Value object has some attributes which hold its data:</p>
+<dl class="attribute">
+<dt id="devices.devices.Value.value">
+<tt class="descclassname">Value.</tt><tt class="descname">value</tt><a class="headerlink" href="#devices.devices.Value.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value (as a number).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Displayed value</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Value</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
 </tr>
@@ -134,9 +134,25 @@ Wikipedia describes Sphinx as follows:</p>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="devices.devices.Value.getUnit">
-<tt class="descclassname">Value.</tt><tt class="descname">getUnit</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Value.getUnit" title="Permalink to this definition">¶</a></dt>
+<dl class="attribute">
+<dt id="devices.devices.Value.factor">
+<tt class="descclassname">Value.</tt><tt class="descname">factor</tt><a class="headerlink" href="#devices.devices.Value.factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the factor (as a number).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SI-Factor</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="devices.devices.Value.unit">
+<tt class="descclassname">Value.</tt><tt class="descname">unit</tt><a class="headerlink" href="#devices.devices.Value.unit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the unit (e.g. &#8220;g&#8221; (gram) or &#8220;V&#8221; (volt)).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -150,25 +166,23 @@ Wikipedia describes Sphinx as follows:</p>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="devices.devices.Value.getFactor">
-<tt class="descclassname">Value.</tt><tt class="descname">getFactor</tt><big>(</big><em>type='value'</em><big>)</big><a class="headerlink" href="#devices.devices.Value.getFactor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the factor of the displayed value (According to the SI-Prefixes).</p>
-<p>For example 10^(-3) for the milli prefix.
-If type == &#8220;prefix&#8221; it returns the SI-Prefixes.</p>
+<dl class="attribute">
+<dt id="devices.devices.Value.time">
+<tt class="descclassname">Value.</tt><tt class="descname">time</tt><a class="headerlink" href="#devices.devices.Value.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the time the measurement value was taken in seconds since the epoch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Factor of the displayed value as a number or a SI-Prefix</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Time the measurement value was taken</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Int or String</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>In particular there are so called MutliboxDevices like the <a class="reference external" href="http://www.xlsmess.de/html/xls_200.html">XLS200</a>, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or &#8220;get&#8221; one of their subdevices.</p>
+<p>Furthermore there are so called MutliboxDevices like the <a class="reference external" href="http://www.xlsmess.de/html/xls_200.html">XLS200</a>, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or &#8220;get&#8221; one of their subdevices.</p>
 <dl class="method">
 <dt id="devices.devices.MultiboxDevice.openDevice">
 <tt class="descclassname">MultiboxDevice.</tt><tt class="descname">openDevice</tt><big>(</big><em>deviceClass</em>, <em>input</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devices.MultiboxDevice.openDevice" title="Permalink to this definition">¶</a></dt>
@@ -206,6 +220,9 @@ If type == &#8220;prefix&#8221; it returns the SI-Prefixes.</p>
 <dt id="devices.devices.MultiboxDevice.getDevice">
 <tt class="descclassname">MultiboxDevice.</tt><tt class="descname">getDevice</tt><big>(</big><em>input</em><big>)</big><a class="headerlink" href="#devices.devices.MultiboxDevice.getDevice" title="Permalink to this definition">¶</a></dt>
 <dd><p>This returns the device object on input.</p>
+<p>This does NOT sets the device to the right input.
+If you want to do any actual communication with the
+returned device, call <tt class="xref py py-meth docutils literal"><span class="pre">changeInput()</span></tt> first.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -241,8 +258,122 @@ For more information please see the Device&#8217;s manual.</p>
 </div>
 <div class="section" id="devices-devicemanager">
 <h5>devices.devicemanager<a class="headerlink" href="#devices-devicemanager" title="Permalink to this headline">¶</a></h5>
-<p>The devicemanager module contains a DeviceManager class to manage devices. Please see <a class="reference internal" href="#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a>.</p>
-<p>The DeviceManager can run it&#8217;s own thread, constantly updating measurement values. It has methods which give instant access to the last acquired value from a device (identified by a deviceID).</p>
+<p>The devicemanager module contains a DeviceManager class to manage devices. It runs it&#8217;s own thread, constantly updating measurement values.</p>
+<p>There are methods to open or close devices, acquiere their most recent measurement values as well as more sophisticated methods which allow to calibrate the measurement values. Devices are identified by a so called deviceID which is returned when opening a device.</p>
+<dl class="method">
+<dt id="devices.devicemanager.DeviceManager.openDevice">
+<tt class="descclassname">DeviceManager.</tt><tt class="descname">openDevice</tt><big>(</big><em>deviceName</em>, <em>serialPort</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.openDevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a device.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>deviceName</strong> (<em>String</em>) &#8211; Classname of the device to openDevice</li>
+<li><strong>serialPort</strong> (<em>String</em>) &#8211; Serial port on which the device sits</li>
+<li><strong>args</strong> &#8211; args to pass to the devices init method</li>
+<li><strong>kwargs</strong> &#8211; kwargs to pass to the devices init method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DeviceID of opened device</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">DeviceID</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devices.devicemanager.DeviceManager.closeDevice">
+<tt class="descclassname">DeviceManager.</tt><tt class="descname">closeDevice</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.closeDevice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="devices.devicemanager.DeviceManager.getLastRawValue">
+<tt class="descclassname">DeviceManager.</tt><tt class="descname">getLastRawValue</tt><big>(</big><em>deviceID</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getLastRawValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the last raw value of device with ID deviceID.</p>
+<p>If there is no last value (last value == None), it returns a NullValue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; deviceID (e.g. XLS200, TecpelDMM8061 etc.)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Last Value object of device with deviceID</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>For a complete overview please see the <a class="reference internal" href="#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a> documentation.</p>
+</div>
+<div class="section" id="devices-si">
+<h5>devices.si<a class="headerlink" href="#devices-si" title="Permalink to this headline">¶</a></h5>
+<p>The si module contains method to convert between different representations of SI prefixes, factors etc.</p>
+<dl class="function">
+<dt id="devices.si.getPrefix">
+<tt class="descclassname">devices.si.</tt><tt class="descname">getPrefix</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the corresponding prefix of a SI-Factor or SI-Name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>Float or String</em>) &#8211; SI-Factor or SI-Name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SI-Prefix</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="devices.si.getName">
+<tt class="descclassname">devices.si.</tt><tt class="descname">getName</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the corresponding name of a SI-Prefix or SI-Factor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>String or Float</em>) &#8211; SI-Prefix or SI-Factor</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SI-Name</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="devices.si.getNumberPrefix">
+<tt class="descclassname">devices.si.</tt><tt class="descname">getNumberPrefix</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getNumberPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple containing the parameter splitted to a number and SI-Prefix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>Float or Int</em>) &#8211; Value to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(number, prefix)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getNumberPrefix</span><span class="p">(</span><span class="mf">2.5e6</span><span class="p">)</span>
+<span class="go">(2.5, &quot;M&quot;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>For a complete overview please see the <a class="reference internal" href="#module-devices.si" title="devices.si"><tt class="xref py py-class docutils literal"><span class="pre">devices.si</span></tt></a> documentation.</p>
 </div>
 </div>
 <div class="section" id="ui-module">
@@ -279,11 +410,6 @@ To setup the device as a new device one has to use the openRS232 classmethod.</p
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
-<dt id="devices.devices.BS600.re">
-<tt class="descname">re</tt><em class="property"> = &lt;module 're' from '/usr/lib/python2.7/re.py'&gt;</em><a class="headerlink" href="#devices.devices.BS600.re" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -364,22 +490,6 @@ To setup the device as a new device one has to use the openRS232 classmethod.</p
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="devices.devices.Device.isAvailable">
-<tt class="descname">isAvailable</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Device.isAvailable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the device status (available or not)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Device status</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Boolean</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="classmethod">
 <dt id="devices.devices.Device.openRS232">
 <em class="property">classmethod </em><tt class="descname">openRS232</tt><big>(</big><em>port</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devices.Device.openRS232" title="Permalink to this definition">¶</a></dt>
@@ -406,6 +516,22 @@ To setup the device as a new device one has to use the openRS232 classmethod.</p
 </dl>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="devices.devices.Device.status">
+<tt class="descname">status</tt><a class="headerlink" href="#devices.devices.Device.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The device status (available or not)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Device status</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -426,11 +552,6 @@ To setup the device as a new device one has to use the openRS232 classmethod.</p
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
-<dt id="devices.devices.KernPCB.re">
-<tt class="descname">re</tt><em class="property"> = &lt;module 're' from '/usr/lib/python2.7/re.py'&gt;</em><a class="headerlink" href="#devices.devices.KernPCB.re" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="devices.devices.KernPCB.setTara">
 <tt class="descname">setTara</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.KernPCB.setTara" title="Permalink to this definition">¶</a></dt>
@@ -479,6 +600,9 @@ To setup the device as a new device one has to use the openRS232 classmethod.</p
 <dt>
 <tt class="descname">getDevice</tt><big>(</big><em>input</em><big>)</big></dt>
 <dd><p>This returns the device object on input.</p>
+<p>This does NOT sets the device to the right input.
+If you want to do any actual communication with the
+returned device, call <tt class="xref py py-meth docutils literal"><span class="pre">changeInput()</span></tt> first.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -523,7 +647,7 @@ To setup the device as a new device one has to use the openRS232 classmethod.</p
 <dl class="class">
 <dt id="devices.devices.TecpelDMM8061">
 <em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">TecpelDMM8061</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.TecpelDMM8061" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents a TECPEL DMM 8061 or VOLTCRAFT VC 840 Multimeter.</p>
+<dd><p>This class represents a TECPEL DMM 8061 multimeter.</p>
 <p>Setup a device as new device or as subdevice.</p>
 <p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
 set the in the class defined attributes and open the serial connection.
@@ -546,15 +670,15 @@ To setup the device as a new device one has to use the openRS232 classmethod.</p
 <dd><p>This class represents one measurement result.</p>
 <p>Device classes must implement their own value subclass with at least the
 methods defined in this base class.</p>
-<dl class="method">
-<dt>
-<tt class="descname">getDisplayedValue</tt><big>(</big><big>)</big></dt>
-<dd><p>Returns the displayed value (as a number).</p>
+<dl class="attribute">
+<dt id="devices.devices.Value.completeValue">
+<tt class="descname">completeValue</tt><a class="headerlink" href="#devices.devices.Value.completeValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the complete value (value * factor).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Displayed value</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Value * Factor</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
 </tr>
@@ -562,27 +686,57 @@ methods defined in this base class.</p>
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt>
-<tt class="descname">getFactor</tt><big>(</big><em>type='value'</em><big>)</big></dt>
-<dd><p>Returns the factor of the displayed value (According to the SI-Prefixes).</p>
-<p>For example 10^(-3) for the milli prefix.
-If type == &#8220;prefix&#8221; it returns the SI-Prefixes.</p>
+<tt class="descname">factor</tt></dt>
+<dd><p>Returns the factor (as a number).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Factor of the displayed value as a number or a SI-Prefix</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SI-Factor</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Int or String</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="devices.devices.Value.getTime">
-<tt class="descname">getTime</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Value.getTime" title="Permalink to this definition">¶</a></dt>
+<dl class="attribute">
+<dt id="devices.devices.Value.prefix">
+<tt class="descname">prefix</tt><a class="headerlink" href="#devices.devices.Value.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the SI-Prefix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SI-Prefix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="devices.devices.Value.prefixName">
+<tt class="descname">prefixName</tt><a class="headerlink" href="#devices.devices.Value.prefixName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the SI-Prefix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Name of SI-Prefix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">time</tt></dt>
 <dd><p>Returns the time the measurement value was taken in seconds since the epoch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -596,9 +750,9 @@ If type == &#8220;prefix&#8221; it returns the SI-Prefixes.</p>
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt>
-<tt class="descname">getUnit</tt><big>(</big><big>)</big></dt>
+<tt class="descname">unit</tt></dt>
 <dd><p>Returns the unit (e.g. &#8220;g&#8221; (gram) or &#8220;V&#8221; (volt)).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -612,6 +766,43 @@ If type == &#8220;prefix&#8221; it returns the SI-Prefixes.</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt>
+<tt class="descname">value</tt></dt>
+<dd><p>Returns the value (as a number).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="devices.devices.VoltcraftVC820">
+<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">VoltcraftVC820</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.VoltcraftVC820" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents a VOLTCRAFT VC 840 multimeter</p>
+<p>The VC 40 is identical to the TecpelDMM8061.</p>
+<p>Setup a device as new device or as subdevice.</p>
+<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
+set the in the class defined attributes and open the serial connection.
+If the connection has to be openend, _ownSer flag is set.</p>
+<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
+To setup the device as a new device one has to use the openRS232 classmethod.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -621,11 +812,33 @@ If type == &#8220;prefix&#8221; it returns the SI-Prefixes.</p>
 <p><a class="reference external" href="http://www.xlsmess.de/html/xls_200.html">http://www.xlsmess.de/html/xls_200.html</a></p>
 <p>This device passes one of the three input serial connections, depending
 in which combination DTR and RTS rs232 attributes are set.</p>
-<ul class="simple">
-<li>DTR True &amp; RTS False: Input 1</li>
-<li>DTR False &amp; RTS True: Input 2</li>
-<li>DTR False &amp; RTS False: Input 3</li>
-</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="32%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">RTS</th>
+<th class="head">DTR</th>
+<th class="head">Input</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>False</td>
+<td>True</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>True</td>
+<td>False</td>
+<td>2</td>
+</tr>
+<tr class="row-even"><td>False</td>
+<td>False</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -637,20 +850,6 @@ in which combination DTR and RTS rs232 attributes are set.</p>
 <dd><p>The DeviceManager manages devices.</p>
 <p>It provides methods to add or delete devices,
 get their most recent measurement values and various other things.</p>
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.closeDevice">
-<tt class="descname">closeDevice</tt><big>(</big><em>deviceID</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.closeDevice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close device with deviceID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID of device to close</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="devices.devicemanager.DeviceManager.closeEmptyMultiboxDevices">
 <tt class="descname">closeEmptyMultiboxDevices</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.closeEmptyMultiboxDevices" title="Permalink to this definition">¶</a></dt>
@@ -731,8 +930,8 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getLastRawValue">
-<tt class="descname">getLastRawValue</tt><big>(</big><em>deviceID</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getLastRawValue" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descname">getLastRawValue</tt><big>(</big><em>deviceID</em><big>)</big></dt>
 <dd><p>Returns the last raw value of device with ID deviceID.</p>
 <p>If there is no last value (last value == None), it returns a NullValue.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -801,8 +1000,8 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="devices.devicemanager.DeviceManager.openDevice">
-<tt class="descname">openDevice</tt><big>(</big><em>deviceName</em>, <em>serialPort</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.openDevice" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descname">openDevice</tt><big>(</big><em>deviceName</em>, <em>serialPort</em>, <em>*args</em>, <em>**kwargs</em><big>)</big></dt>
 <dd><p>Open a device.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -853,18 +1052,6 @@ used to compute m and c.</p>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.start">
-<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start the DeviceManager.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.stop">
-<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.stop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stop the DeviceManager.</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -873,7 +1060,7 @@ used to compute m and c.</p>
 <dl class="function">
 <dt id="devices.si.getFactor">
 <tt class="descclassname">devices.si.</tt><tt class="descname">getFactor</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getFactor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get factor of SI-Prefix or SI-Name</p>
+<dd><p>Return the corresponding factor of a SI-Prefix or SI-Name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -889,9 +1076,9 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="devices.si.getName">
-<tt class="descclassname">devices.si.</tt><tt class="descname">getName</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get name of SI-Prefix or SI-Factor</p>
+<dt>
+<tt class="descclassname">devices.si.</tt><tt class="descname">getName</tt><big>(</big><em>x</em><big>)</big></dt>
+<dd><p>Return the corresponding name of a SI-Prefix or SI-Factor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -907,9 +1094,21 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="devices.si.getNumberPrefix">
-<tt class="descclassname">devices.si.</tt><tt class="descname">getNumberPrefix</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getNumberPrefix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a tuple containing x splitted to a number and SI-Prefix.</p>
+<dt>
+<tt class="descclassname">devices.si.</tt><tt class="descname">getNumberPrefix</tt><big>(</big><em>x</em><big>)</big></dt>
+<dd><p>Return a tuple containing the parameter splitted to a number and SI-Prefix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>Float or Int</em>) &#8211; Value to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(number, prefix)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getNumberPrefix</span><span class="p">(</span><span class="mf">2.5e6</span><span class="p">)</span>
 <span class="go">(2.5, &quot;M&quot;)</span>
 </pre></div>
@@ -917,9 +1116,9 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="devices.si.getPrefix">
-<tt class="descclassname">devices.si.</tt><tt class="descname">getPrefix</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getPrefix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get prefix of SI-Factor or SI-Name</p>
+<dt>
+<tt class="descclassname">devices.si.</tt><tt class="descname">getPrefix</tt><big>(</big><em>x</em><big>)</big></dt>
+<dd><p>Return the corresponding prefix of a SI-Factor or SI-Name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -936,8 +1135,9 @@ used to compute m and c.</p>
 
 <dl class="function">
 <dt id="devices.si.getSiNames">
-<tt class="descclassname">devices.si.</tt><tt class="descname">getSiNames</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.si.getSiNames" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return list of SI-Names</p>
+<tt class="descclassname">devices.si.</tt><tt class="descname">getSiNames</tt><big>(</big><em>type='normal'</em><big>)</big><a class="headerlink" href="#devices.si.getSiNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of SI-Names.</p>
+<p>The list is ordered by significance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -979,18 +1179,6 @@ used to compute m and c.</p>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="ui.DeviceSettingsDialog.setCurrentValue1">
-<tt class="descname">setCurrentValue1</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.DeviceSettingsDialog.setCurrentValue1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get current displayedValue from Device.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.DeviceSettingsDialog.setCurrentValue2">
-<tt class="descname">setCurrentValue2</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.DeviceSettingsDialog.setCurrentValue2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get current displayedValue from Device.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -1082,12 +1270,6 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="ui.MainWindow.startStopMeasurement">
-<tt class="descname">startStopMeasurement</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.startStopMeasurement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start/Stop measurement.</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="ui.MainWindow.update">
 <tt class="descname">update</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the displayWidgets and, when logging enabled log.</p>
@@ -1163,6 +1345,7 @@ used to compute m and c.</p>
 <li><a class="reference internal" href="#devices-module">Devices module</a><ul>
 <li><a class="reference internal" href="#devices-devices">devices.devices</a></li>
 <li><a class="reference internal" href="#devices-devicemanager">devices.devicemanager</a></li>
+<li><a class="reference internal" href="#devices-si">devices.si</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#ui-module">UI module</a></li>
@@ -1215,7 +1398,7 @@ used to compute m and c.</p>
         <li class="right" >
           <a href="intro.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
 
