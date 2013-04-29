@@ -59,7 +59,7 @@ class Device(object):
 
         self._ser = ser
         
-        if self.isAvailable() is False:
+        if self.status is False:
             # only do the following if the serial connection is not set up yet
             # (e.g. if the device is not behind a multimeter)
             self._ser.baudrate = self._baudrate
@@ -108,8 +108,9 @@ class Device(object):
             serialport=self._ser.port,
             serialbaudr=self._baudrate)
 
-    def isAvailable(self):
-        """Returns the device status (available or not)
+    @property
+    def status(self):
+        """The device status (available or not)
         
         :returns: Device status
         :rtype: Boolean
@@ -187,31 +188,75 @@ class Value(object):
 
     """
 
-    _time = 0
-
     def __repr__(self):
-        return "< {classname}: displaydValue={!s}, factor={!s} >".format(
-            self.getDisplayedValue(), self.getFactor(),
+        return "< {classname}: displaydValue={!s} >".format(
+            self.getDisplayedValue(),
             classname = self.__class__.__name__)
 
     def __str__(self):
-        return "{} {}".format(self.getDisplayedValue(), self.getFactor())
+        return "{:n}".format(self.getDisplayedValue())
 
     def __unicode__(self):
-        return "{} {}{}".format(self.getDisplayedValue(),
-            self.getUnit(), self.getFactor())
+        return "{:n} {}".format(self.getDisplayedValue(),
+            self.getUnit())
 
-    def getDisplayedValue(self):
-        """Returns the displayed value (as a number).
+    @property
+    def value(self):
+        """Returns the value (as a number).
 
-        :returns: Displayed value
+        :returns: Value
         :rtype: Float
 
         """
 
         raise NotImplementedError
 
-    def getUnit(self):
+    @property
+    def factor(self):
+        """Returns the factor (as a number).
+
+        :returns: SI-Factor
+        :rtype: Float
+
+        """
+
+        raise NotImplementedError
+
+    @property
+    def completeValue(self):
+        """Returns the complete value (value * factor).
+
+        :returns: Value * Factor
+        :rtype: Float
+
+        """
+
+        return self.value * self.factor
+
+    @property
+    def prefix(self):
+        """Returns the SI-Prefix.
+
+        :returns: SI-Prefix
+        :rtype: Float
+
+        """
+
+        return si.getPrefix(self.factor)
+
+    @property
+    def prefixName(self):
+        """Returns the name of the SI-Prefix.
+
+        :returns: Name of SI-Prefix
+        :rtype: Float
+
+        """
+
+        return si.getName(self.factor)
+
+    @property
+    def unit(self):
         """Returns the unit (e.g. "g" (gram) or "V" (volt)).
 
         :returns: Unit
@@ -221,20 +266,8 @@ class Value(object):
 
         raise NotImplementedError
 
-    def getFactor(self, type="value"):
-        """Returns the factor of the displayed value (According to the SI-Prefixes).
-
-        For example 10^(-3) for the milli prefix.
-        If type == "prefix" it returns the SI-Prefixes.
-
-        :returns: Factor of the displayed value as a number or a SI-Prefix
-        :rtype: Int or String
-
-        """
-
-        raise NotImplementedError
-
-    def getTime(self):
+    @property
+    def time(self):
         """Returns the time the measurement value was taken in seconds since the epoch.
     
         :returns: Time the measurement value was taken
@@ -242,23 +275,16 @@ class Value(object):
 
         """
 
-        return self._time
+        raise NotImplementedError
 
 
 class NullValue(Value):
     """This class represents an "empty" measurement value."""
 
-    def getDisplayedValue(self):
-        return 0
-
-    def getUnit(self):
-        return ""
-
-    def getFactor(self, type="value"):
-        if type == "value":
-            return pow(10, 0)
-        elif type == "prefix":
-            return ""
+    value = 0
+    factor = 1e0
+    unit = ""
+    time = time.time()
 
 
 class TecpelDMM8061(Device):
@@ -270,6 +296,8 @@ class TecpelDMM8061(Device):
     _timeout = 0.5
 
     class __Value(Value):
+        time = None
+
         class __Digit:
             """Represents one digit on the screen"""
 
@@ -346,7 +374,8 @@ class TecpelDMM8061(Device):
         volt = 0
         ampere = 0
 
-        def getDisplayedValue(self):
+        @property
+        def value(self):
             result = self.d4.getDigit() * 1000 + self.d3.getDigit() * 100 + self.d2.getDigit() * 10 + self.d1.getDigit()
             if (self.d4.ex):
                 result *= -1
@@ -359,53 +388,41 @@ class TecpelDMM8061(Device):
 
             return result
 
-        def getUnit(self, type="unit"):
-            if type == "name":
-                if self.ohm:
-                    return "ohm"
-                elif self.farad:
-                    return "farad"
-                elif self.hertz:
-                    return "hertz"
-                elif self.volt:
-                    return "volt"
-                elif self.ampere:
-                    return "ampere"
-                else:
-                    return "celsius"
+        @property
+        def unit(self):
+            if self.ohm:
+                return u"Ω"
+            elif self.farad:
+                return "F"
+            elif self.hertz:
+                return "Hz"
+            elif self.volt:
+                return "V"
+            elif self.ampere:
+                return "A"
+            else:
+                return u"°C"
 
-            elif type == "unit":
-                if self.ohm:
-                    return u"Ω"
-                elif self.farad:
-                    return "F"
-                elif self.hertz:
-                    return "Hz"
-                elif self.volt:
-                    return "V"
-                elif self.ampere:
-                    return "A"
-                else:
-                    return u"°C"
+        @property
+        def factor(self):
+            return si.getFactor(self.prefix)
 
-        def getFactor(self, type="value"):
-            if type == "value":
-                return si.getFactor(self.getFactor("prefix"))
+        @property
+        def prefix(self):
+            if self.nano:
+                return "n"
+            elif self.micro:
+                return u"µ"
+            elif self.milli:
+                return "m"
+            elif self.kilo:
+                return "k"
+            elif self.mega:
+                return "M"
+            else:
+                return ""
 
-            elif type == "prefix":
-                if self.nano:
-                    return "n"
-                elif self.micro:
-                    return u"µ"
-                elif self.milli:
-                    return "m"
-                elif self.kilo:
-                    return "k"
-                elif self.mega:
-                    return "M"
-                else:
-                    return ""
-
+        @property
         def batteryLow(self):
             return self.battery_low
 
@@ -421,7 +438,6 @@ class TecpelDMM8061(Device):
 
     def getRawValue(self):
         starttime = time.time()
-        assert self.isAvailable()
 
         read = self._ser.read(26)
 
@@ -520,7 +536,7 @@ class TecpelDMM8061(Device):
                 result.volt = self._testBit(b, 2)
                 result.ampere = self._testBit(b, 3)
 
-                result._time = time.time()
+                result.time = time.time()
 
                 return result
 
@@ -595,8 +611,6 @@ class XLS200(MultiboxDevice):
         # DTR True & RTS False = 1
         # DTR False & RTS True = 2
         # DTR False & RTS False = 3
-        
-        assert self.isAvailable()
 
         if input == 1:
             self._ser.setRTS(level=False)
@@ -623,8 +637,6 @@ class XLS200(MultiboxDevice):
             self._ser.flushInput()
 
     def openDevice(self, deviceClass, input, *args, **kwargs):
-        assert self.isAvailable()
-
         if input == 1:
             self._in1 = deviceClass(self._ser, *args, **kwargs)
 
@@ -707,34 +719,29 @@ class KernPCB(Balance):
     _baudrate = 9600
 
     class __Value(Value):
-        string = None
+        _string = None
 
-        def getDisplayedValue(self):
-            v = float(self.string[2:12])
+        time = None
+        factor = 1e0
+        @property
+        def value(self):
+            v = float(self._string[2:12])
 
-            if self.string[1] is "-":
+            if self._string[1] is "-":
                 v *= -1
 
             return v
 
-        def getUnit(self, type="unit"):
+        @property
+        def unit(self, type="unit"):
             if type == "name":
                 return "gram"
 
             elif type == "unit":
                 return "g"
 
-        def getFactor(self, type="value"):
-            if type == "value":
-                return pow(10, 0)
-
-            elif type == "prefix":
-                return ""
-
     def getRawValue(self):
         starttime = time.time()
-
-        assert self.isAvailable()
 
         result = self.__Value()
 
@@ -747,8 +754,8 @@ class KernPCB(Balance):
             self._ser.flushInput()
 
             try:
-                result.string = self._regex.search(s).group()
-                result._time = time.time()
+                result._string = self._regex.search(s).group()
+                result.time = time.time()
                 return result
 
             except AttributeError:
@@ -765,8 +772,8 @@ class KernPCB(Balance):
             self._ser.flushInput()
 
             try:
-                result.string = self._regex.search(s).group()
-                result._time = time.time()
+                result._string = self._regex.search(s).group()
+                result.time = time.time()
                 return result
 
             except AttributeError:
@@ -780,8 +787,6 @@ class KernPCB(Balance):
         For more information see device manual.
 
         """
-
-        assert self.isAvailable()
 
         return self._ser.write("t") # Should be 1 if write succeeds
 
@@ -797,7 +802,10 @@ class BS600(Balance):
     class __Value(Value):
         string = None
 
-        def getDisplayedValue(self):
+        time = None
+        factor = 1e0
+        @property
+        def value(self):
             v = float(self.string[5:12])
 
             if self.string[4] is "-":
@@ -805,23 +813,14 @@ class BS600(Balance):
 
             return v
 
-        def getUnit(self):
+        def unit(self):
             try:
                 return self.string[12:16].strip()
             except IndexError:
                 return ""
-
-        def getFactor(self, type="value"):
-            if type == "value":
-                return pow(10, 0)
-
-            elif type == "prefix":
-                return ""
     
     def getRawValue(self):
         starttime = time.time()
-
-        assert self.isAvailable()
 
         result = self.__Value()
 
@@ -834,12 +833,12 @@ class BS600(Balance):
         try:
             if self._typeOfValue == "stable":
                 result.string = self._stable.search(val).group()
-                result._time = time.time()
+                result.time = time.time()
                 return result
 
             elif self._typeOfValue == "all":
                 result.string = self._all.search(val).group()
-                result._time = time.time()
+                result.time = time.time()
                 return result
 
         except AttributeError:

@@ -21,6 +21,7 @@
 """This module contains a console interface."""
 
 from devices.devicemanager import DeviceManager
+import devices.si as si
 import time
 import argparse
 
@@ -76,9 +77,10 @@ def main():
             time.sleep(2)
             for i in deviceIDs:
                 rv = dm.getLastRawValue(i)
-                print(str(round(time.time() - starttime, 1)) + ": " + 
-                    str(rv.getDisplayedValue()) + " " + rv.getFactor("prefix") +
-                    rv.getUnit())
+                print(u"{time}: {value} {factor}{unit}".format(
+                    time=round(time.time() - starttime, 1),
+                    value=rv.value, factor=rv.prefix, unit=rv.unit)
+                )
             
     except KeyboardInterrupt:
         print("Closing")
