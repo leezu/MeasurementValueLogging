@@ -417,11 +417,17 @@ class _GetValuesThread(threading.Thread):
 
             try:
                 if isinstance(config["parent"], str):
+                    # If the parent of the device is a string (e.g. "COM1" or 
+                    # "/dev/ttyUSB0") then its a normal device -> So just gather
+                    # the value.
                     rv = self.devices[deviceID].getRawValue()
                     if rv:
                         self.rawValues[deviceID] = rv
 
                 else:
+                    # If the parent of the device is not a string but a deviceID
+                    # then its a subdevice -> So we need to ask the parent device
+                    # for the value.
                     rv = self.devices[config["parent"]].getRawValue(config["inputNumber"])
                     if rv:
                         self.rawValues[deviceID] = rv
