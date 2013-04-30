@@ -24,7 +24,7 @@ import serial
 import re
 import time
 
-deviceClassNames = ("TecpelDMM8061", "VoltcraftVC820", "VoltcraftVC840",
+deviceClassNames = ("TecpelDMM8061", "VoltcraftVC840",
     "XLS200", "KernPCB", "BS600")
 
 class Device(object):
@@ -547,14 +547,6 @@ class TecpelDMM8061(Device):
             pass
 
         return None
-
-
-class VoltcraftVC820(TecpelDMM8061):
-    """This class represents a VOLTCRAFT VC 820 multimeter
-
-    The VC 820 is identical to the TecpelDMM8061.
-
-    """
 
 
 class VoltcraftVC840(TecpelDMM8061):
