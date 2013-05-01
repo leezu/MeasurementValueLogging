@@ -46,7 +46,7 @@ class DeviceManager(object):
 
     devices = {}
     configs = {}
-    rawValues = {}
+    latestValues = {}
 
     def __init__(self):
         self._iterator = self._getIterator()
@@ -72,11 +72,11 @@ class DeviceManager(object):
 
         return decoratedFunction
 
-    def _updateRawValues(self):
+    def _update(self):
         try:
-            i = self._queue.get_nowait()
-            print(i)
-            self.rawValues[i[0]] = i[1]
+            while True:
+                i = self._queue.get_nowait()
+                self.latestValues[i[0]] = i[1]
         except Queue.Empty:
             pass
 
@@ -300,10 +300,10 @@ class DeviceManager(object):
         
         """
 
-        self._updateRawValues()
+        self._update()
 
         try:
-            return self.rawValues[deviceID]
+            return self.latestValues[deviceID]
 
         except KeyError:
             logging.info("No value yet. Device: %s %s", deviceID, self.getDevice(deviceID))
