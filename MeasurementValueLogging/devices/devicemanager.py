@@ -54,7 +54,7 @@ class DeviceManager(object):
         self._queue = Queue.Queue()
 
     def _getIterator(self):
-        i = random.getrandbits(32)
+        i = 0
         while True:
             yield i
             i += 1
@@ -393,9 +393,6 @@ class DeviceManager(object):
 
 
 class GetValuesThread(threading.Thread):
-    devices = {}
-    configs = {}
-
     def __init__(self, stop_event, devices, configs, queue):
         threading.Thread.__init__(self)
         self.daemon = True
