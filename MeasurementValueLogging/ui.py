@@ -479,7 +479,7 @@ class MainWindow(QtGui.QMainWindow):
             else:
                 deviceID = self.dm.openDevice(device, port)
 
-                if deviceID:
+                if deviceID != None:
                     deviceWidget = DisplayWidget(deviceID, self.dm)
                     self.verticalLayout.addWidget(deviceWidget)
                     self.displayWidgets[deviceID] = deviceWidget
