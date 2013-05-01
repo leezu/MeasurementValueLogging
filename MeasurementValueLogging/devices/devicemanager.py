@@ -27,6 +27,7 @@ import logging
 import random
 import copy
 import serial.tools.list_ports
+import Queue
 
 class DeviceManager(object):
     """The DeviceManager manages devices.
@@ -41,6 +42,7 @@ class DeviceManager(object):
     _thread = None
 
     _iterator = None
+    _queue = None
 
     devices = {}
     configs = {}
@@ -49,6 +51,7 @@ class DeviceManager(object):
     def __init__(self):
         self._iterator = self._getIterator()
         self._start()
+        self._queue = Queue.Queue()
 
     def _getIterator(self):
         i = random.getrandbits(32)
@@ -70,10 +73,12 @@ class DeviceManager(object):
         return decoratedFunction
 
     def _updateRawValues(self):
-        if self._running:
-            self.rawValues = self._thread.rawValues
-        else:
-            logging.warn("GetValuesThread not running. Can't update values.\n")
+        try:
+            i = self._queue.get_nowait()
+            print(i)
+            self.rawValues[i[0]] = i[1]
+        except Queue.Empty:
+            pass
 
     def _getLinearFunction(self, value1, value2):
         """Return a linear function, which contains value1 and value2.
@@ -371,8 +376,8 @@ class DeviceManager(object):
 
         if self._running == False:
             self._stopEvent = threading.Event()
-            self._thread = _GetValuesThread(self._stopEvent,
-                self.devices, self.configs)
+            self._thread = GetValuesThread(self._stopEvent,
+                self.devices, self.configs, self._queue)
             self._thread.start()
             self._running = True
 
@@ -387,12 +392,11 @@ class DeviceManager(object):
             self._running = False
 
 
-class _GetValuesThread(threading.Thread):
+class GetValuesThread(threading.Thread):
     devices = {}
     configs = {}
-    rawValues = {}
 
-    def __init__(self, stop_event, devices, configs):
+    def __init__(self, stop_event, devices, configs, queue):
         threading.Thread.__init__(self)
         self.daemon = True
         self.stop_event = stop_event
@@ -400,9 +404,7 @@ class _GetValuesThread(threading.Thread):
         self.devices = devices
         self.configs = configs
 
-        for key, val in self.devices.iteritems():
-            if key not in self.rawValues:
-                self.rawValues[key] = devicesModule.NullValue()
+        self.queue = queue
 
     def run(self):
         while not self.stop_event.is_set():
@@ -422,7 +424,7 @@ class _GetValuesThread(threading.Thread):
                     # the value.
                     rv = self.devices[deviceID].getRawValue()
                     if rv:
-                        self.rawValues[deviceID] = rv
+                        self.queue.put((deviceID,rv))
 
                 else:
                     # If the parent of the device is not a string but a deviceID
@@ -430,7 +432,7 @@ class _GetValuesThread(threading.Thread):
                     # for the value.
                     rv = self.devices[config["parent"]].getRawValue(config["inputNumber"])
                     if rv:
-                        self.rawValues[deviceID] = rv
+                        self.queue.put((deviceID,rv))
 
             except serial.serialutil.SerialException as e:
                 logging.critical("Caught serial exception: " + str(e))
