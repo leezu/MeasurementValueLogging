@@ -373,6 +373,7 @@ class TecpelDMM8061(Device):
         hertz = 0
         volt = 0
         ampere = 0
+        celsius = 0
 
 
         time = None
@@ -403,8 +404,12 @@ class TecpelDMM8061(Device):
                 return "V"
             elif self.ampere:
                 return "A"
-            else:
+            elif self.celsius:
                 return u"°C"
+            elif self.duty_cycle:
+                return "%"
+            else:
+                return ""
 
         @property
         def factor(self):
@@ -457,7 +462,7 @@ class TecpelDMM8061(Device):
             if idList[startIndex + 1] == 2 and idList[startIndex + 4] == 5 and idList[startIndex + 7] == 8 and\
                     idList[startIndex + 10] == 11 and idList[startIndex + 12] == 13:
                 
-                valueString = read[startIndex:(startIndex+13)]
+                valueString = read[startIndex:(startIndex+14)]
 
                 result = self.__Value()
 
@@ -538,6 +543,9 @@ class TecpelDMM8061(Device):
                 result.hertz = self._testBit(b, 1)
                 result.volt = self._testBit(b, 2)
                 result.ampere = self._testBit(b, 3)
+
+                b = ord(valueString[13])
+                result.celsius = self._testBit(b, 0)
 
                 result.time = time.time()
 
