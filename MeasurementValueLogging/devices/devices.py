@@ -394,22 +394,26 @@ class TecpelDMM8061(Device):
 
         @property
         def unit(self):
+            r = ""
+            if self.delta:
+                r += u"Δ"
+
             if self.ohm:
-                return u"Ω"
+                return r + u"Ω"
             elif self.farad:
-                return "F"
+                return r + "F"
             elif self.hertz:
-                return "Hz"
+                return r + "Hz"
             elif self.volt:
-                return "V"
+                return r + "V"
             elif self.ampere:
-                return "A"
+                return r + "A"
             elif self.celsius:
-                return u"°C"
+                return r + u"°C"
             elif self.duty_cycle:
-                return "%"
+                return r + "%"
             else:
-                return ""
+                return r + ""
 
         @property
         def factor(self):
