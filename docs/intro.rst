@@ -6,13 +6,19 @@ There are stand-alone executables, compiled with `PyInstaller <http://www.pyinst
 
 Python Package
 --------------
-To use the program as a Python package, make sure you have a recent version of `PySerial <http://pyserial.sourceforge.net/>`_ installed. To use the GUI you need a recent version of `PyQT <http://www.riverbankcomputing.co.uk/software/pyqt/>`_ as well.
+For easy installation the python package was uploaded to `PyPi <https://pypi.python.org/pypi/MeasurementValueLogging>`_. For installation with pip simply run::
+	
+	pip2 install MeasurementValueLogging
 
-Then download and install the package from `PyPi <https://pypi.python.org/pypi/MeasurementValueLogging>`_.
+If you want to install the package by hand please make sure that you have a recent version of `PySerial <http://pyserial.sourceforge.net/>`_ installed. To use the GUI you need a recent version of `PyQT <http://www.riverbankcomputing.co.uk/software/pyqt/>`_ as well. If you want to try the webui you need the `Flask <http://flask.pocoo.org/>`_ microframework as well.
+
+Then download and extract the tar.gz package from `PyPi <https://pypi.python.org/pypi/MeasurementValueLogging>`_. To install it change into the directory and run::
+
+	python2 setup.py install
 
 Source Code
 -----------
-The complete source code is available on `Github <https://github.com/leezu/MeasurementValueLogging>`_.
+The complete source code is available on `Github <https://github.com/leezu/MeasurementValueLogging>`_. You may report bugs or create pull requests there.
 
 Usage
 ======

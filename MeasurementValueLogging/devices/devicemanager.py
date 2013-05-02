@@ -35,6 +35,10 @@ class DeviceManager(object):
     It provides methods to add or delete devices,
     get their most recent measurement values and various other things.
 
+    .. attribute:: queue
+        The queue queues all incoming values.
+        They are stored in the format (deviceID, value)
+
     """
 
     _running = False

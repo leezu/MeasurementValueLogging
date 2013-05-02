@@ -4,7 +4,9 @@ Developer information
 
 Structure
 =========
-MeasurementValueLogging is grouped into three python modules: :ref:`devices-module`, :ref:`ui-module` and :ref:`console-module`. Furthermore MeasurementValueLogging uses some third-party tools to achieve various goals, like creating documentation, providing stand-alone executables or gaining (simple & multi-platform) access to serial ports.
+MeasurementValueLogging is divided into two parts: The devices backend, which contains the logic to gather values and manage devices as well as the frontend part which includes various frontends (command line, GUI, website) which use the backend to display measurement values and configure devices.
+
+To provide it's functionality MeasurementValueLogging uses some third-party tools. They are used for example to generate documentation, provide stand-alone executables or gain (simple & multi-platform) access to serial ports.
 
 Third-party tools and modules
 ------------------------------
@@ -48,11 +50,11 @@ MeasurementValueLogging Modules
 
 Devices module
 ^^^^^^^^^^^^^^^
-The devices module contains code representing physical devices as well as the code necessary to manage them. In addition there is a module which helps converting between si-prefixes, their factors etc. The devices module is divided into
+The devices module contains the logic to gather measurement values from various devices and manage them. In addition there is a module which helps converting between SI stuff. The devices module is divided into
 
 devices.devices
 """""""""""""""""
-The devices.devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object). 
+The devices.devices module contains classes, representing phyiscal devices as well as their measurement values. The Device objects have varoius methods, for example to return a measurement value (a Value object). 
 
 .. automethod:: devices.devices.Device.getRawValue
 
@@ -63,11 +65,10 @@ The returned Value object has some attributes which hold its data:
 .. autoattribute:: devices.devices.Value.unit
 .. autoattribute:: devices.devices.Value.time
 
-Furthermore there are so called MutliboxDevices like the `XLS200 <http://www.xlsmess.de/html/xls_200.html>`_, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or "get" one of their subdevices.
+Furthermore there are so called MutliboxDevices like the `XLS200 <http://www.xlsmess.de/html/xls_200.html>`_, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or get values from one of their subdevices.
 
 .. automethod:: devices.devices.MultiboxDevice.openDevice
 .. automethod:: devices.devices.MultiboxDevice.closeDevice
-.. automethod:: devices.devices.MultiboxDevice.getDevice
 
 Some devices, like balances provide - in additon to the base device methods - more methods.
 
@@ -77,13 +78,16 @@ For a complete overview please see the :class:`devices.devices` documentation.
 
 devices.devicemanager
 """""""""""""""""""""
-The devicemanager module contains a DeviceManager class to manage devices. It runs it's own thread, constantly updating measurement values. 
+The devicemanager module contains a DeviceManager class to manage devices. It runs it's own thread, constantly updating measurement values and provides easy access to them.
 
-There are methods to open or close devices, acquiere their most recent measurement values as well as more sophisticated methods which allow to calibrate the measurement values. Devices are identified by a so called deviceID which is returned when opening a device.
+There are methods to open or close devices as well as more sophisticated methods which allow to calibrate gained values measurement values. Devices are identified by a deviceID which is returned when opening a device.
 
 .. automethod:: devices.devicemanager.DeviceManager.openDevice
 .. automethod:: devices.devicemanager.DeviceManager.closeDevice
-.. automethod:: devices.devicemanager.DeviceManager.getLastRawValue
+
+Access to the measurement values is provided with an first-in-first-out queue.
+
+.. autoattribute:: devices.devicemanager.DeviceManager.queue
 
 For a complete overview please see the :class:`devices.devicemanager.DeviceManager` documentation.
 
@@ -100,48 +104,82 @@ For a complete overview please see the :class:`devices.si` documentation.
 
 .. _ui-module:
 
-UI module
+Frontend
 ^^^^^^^^^^
-This module contains a graphical user interface to the DeviceManager.
+GUI
+"""
+This module contains a graphical user interface to the DeviceManager. It allows to open and close devices, displays their values and enables the user to calibrate device with an easy to use GUI.
 For more information see :class:`ui`.
 
 .. _console-module:
 
-Console module
-^^^^^^^^^^^^^^^
-This module contains a console user interface to the DeviceManager.
+Console
+""""""""
+The console module contains code for opening devices from command-line arguments. Furthermore it provides a simple main function which prints the gained values to the standard output.
 For more information see :class:`console`.
 
+Web-Interface
+""""""""""""""
+The webui module is a proof-of-concept. It opens devices with the code provided by the console module and displays their values on a website running on localhost:5000. It uses the `Flask <http://flask.pocoo.org/>`_ microframework.
 
-Module documentation
-=====================
 
-Devices
---------
 
-.. automodule:: devices.devices
-	:members:
 
-Devicemanager
---------------
+Directory layout
+====================
+::
 
-.. automodule:: devices.devicemanager
-	:members:
-
-SI
---
-
-.. automodule:: devices.si
-	:members:
-
-UI
----
-
-.. automodule:: ui
-	:members:
-
-Console
---------
-
-.. automodule:: console
-	:members:
+	.                                     	
+	|-- docs                              	Files used to generate the documentation with sphinx-doc
+	|   |-- conf.py                       	
+	|   |-- developer.rst                 	
+	|   |-- index.rst                     	
+	|   |-- intro.rst                     	
+	|   |-- make.bat                      	
+	|   |-- Makefile                      	Makefiles with options to build the docs to pdf, html etc.
+	|   `-- _templates                    	
+	|       `-- layout.html               	
+	|-- LICENSE.txt                       	GPLv3+
+	|-- MeasurementValueLogging           	Contains the true program
+	|   |-- console.py                    	Console module
+	|   |-- devices                       	Devices module
+	|   |   |-- devicemanager.py          	
+	|   |   |-- devices.py                	
+	|   |   |-- __init__.py               	
+	|   |   `-- si.py                     	
+	|   |-- __init__.py                   	
+	|   |-- Makefile                      	Makefile with options to compile the ui files or generate translation
+	|   |-- ui_data                       	Data used by the gui, ui files are generated with the QT Designer
+	|   |   |-- close.png                 	
+	|   |   |-- close.svg                 	
+	|   |   |-- deviceSettingsDialog.ui   	
+	|   |   |-- displayWidget.ui          	
+	|   |   |-- doReallyDialog.ui         	
+	|   |   |-- i18n                      	Translation files
+	|   |   |   |-- de.qm                 	
+	|   |   |   `-- de.ts                 	
+	|   |   |-- __init__.py               	
+	|   |   |-- mainWindow.ui             	
+	|   |   |-- newDeviceDialog.ui        	
+	|   |   |-- qr.py                     	*.ui files and translations compiled to a QResource file
+	|   |   |-- resource.qrc              	defines the files to be compiled to a QResource
+	|   |   |-- settingsDialog.ui         	
+	|   |   |-- settings.png              	
+	|   |   |-- settings.svg              	
+	|   |   `-- xls200Dialog.ui           	
+	|   |-- ui.py                         	gui module
+	|   |-- webui_data                    	data used by the web-interface
+	|   |   |-- __init__.py               	
+	|   |   |-- routes.py                 	flask routes
+	|   |   |-- static                    	
+	|   |   |   |-- css                   	
+	|   |   |   |   `-- main.css          	
+	|   |   |   `-- js                    	
+	|   |   |       |-- jquery-1.9.1.min.j	
+	|   |   |       `-- measurement.js    	
+	|   |   `-- templates                 	
+	|   |       |-- layout.html           	
+	|   |       `-- measurement.html      	
+	|   `-- webui.py                      	web-interface module
+	|-- README.md                         	
+	`-- setup.py                          	Python Distribution Utilities
