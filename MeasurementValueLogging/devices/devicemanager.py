@@ -373,9 +373,9 @@ class GetValuesThread(threading.Thread):
         self.queue = queue
 
     def run(self):
-        while not self.stop_event.is_set():
-            self.updateValue()
-            time.sleep(0.2) # Prevent 100% CPU usage
+        if len(self.devices):
+            while not self.stop_event.is_set():
+                self.updateValue()
 
     def updateValue(self):
         # python3 incompatibility: iteritems
