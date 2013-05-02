@@ -73,12 +73,9 @@ class DeviceManager(object):
         return decoratedFunction
 
     def _update(self):
-        try:
-            while True:
-                i = self._queue.get_nowait()
-                self.latestValues[i[0]] = i[1]
-        except Queue.Empty:
-            pass
+        while not self._queue.empty():
+            i = self._queue.get_nowait()
+            self.latestValues[i[0]] = i[1]
 
     def _getLinearFunction(self, value1, value2):
         """Return a linear function, which contains value1 and value2.
@@ -302,10 +299,9 @@ class DeviceManager(object):
 
         self._update()
 
-        try:
+        if deviceID in self.latestValues:
             return self.latestValues[deviceID]
-
-        except KeyError:
+        else:
             logging.info("No value yet. Device: %s %s", deviceID, self.getDevice(deviceID))
             return devicesModule.NullValue()
 
