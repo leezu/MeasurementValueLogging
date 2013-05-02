@@ -5,7 +5,7 @@ $(function() {
 				$(".display").remove()
 				for (i = 0; i < data.len; i++) {
 					$("<h2>")
-					.text(data.displayvals[i] + " " + data.factors[i] + data.units[i])
+					.text(data.displayvals[i] + " " + data.prefixes[i] + data.units[i])
 					.addClass("display")
 					.appendTo(".jumbo");
 				}

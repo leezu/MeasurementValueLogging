@@ -42,16 +42,16 @@ class DeviceManager(object):
     _thread = None
 
     _iterator = None
-    _queue = None
+    
+    queue = None
 
     devices = {}
     configs = {}
-    latestValues = {}
 
     def __init__(self):
         self._iterator = self._getIterator()
         self._start()
-        self._queue = Queue.Queue()
+        self.queue = Queue.Queue()
 
     def _getIterator(self):
         i = 0
@@ -71,11 +71,6 @@ class DeviceManager(object):
             return returnValue
 
         return decoratedFunction
-
-    def _update(self):
-        while not self._queue.empty():
-            i = self._queue.get_nowait()
-            self.latestValues[i[0]] = i[1]
 
     def _getLinearFunction(self, value1, value2):
         """Return a linear function, which contains value1 and value2.
@@ -152,7 +147,8 @@ class DeviceManager(object):
 
         return tuple(portsList)
 
-    def getStatus(self):
+    @property
+    def status(self):
         """Returns the status of the deviceManager.
         
         True if deviceManager is running, otherwise False.
@@ -285,35 +281,15 @@ class DeviceManager(object):
             if len(config["subDevices"]) == 0 and config["deviceName"] == "XLS200":
                 self.closeDevice(i)
 
-    def getLastRawValue(self, deviceID):
-        """Returns the last raw value of device with ID deviceID.
-
-        If there is no last value (last value == None), it returns a NullValue.
-
-        :param deviceID: deviceID (e.g. XLS200, TecpelDMM8061 etc.)
-        :type deviceID: DeviceID
-        :returns: Last Value object of device with deviceID
-        :rtype: Value
+    def calibrate(self, rv, calibration, unit=""):
+        """Return a calibrated version of the value.
         
-        """
-
-        self._update()
-
-        if deviceID in self.latestValues:
-            return self.latestValues[deviceID]
-        else:
-            logging.info("No value yet. Device: %s %s", deviceID, self.getDevice(deviceID))
-            return devicesModule.NullValue()
-
-    def getCalibratedLastRawValue(self, deviceID, calibration, unit=None):
-        """Return a calibrated value from the getLastRawValue method.
-        
-        :param deviceID: DeviceID
-        :type deviceID: DeviceID
+        :param rv: Value to be calibrated
+        :type rv: Value
         :param calibration: Calibration tuple
         :type calibration: Tuple
-        :param unit: Unit or None
-        :type unit: String or None
+        :param unit: Unit
+        :type unit: String
 
         The calibration tuple must contain either two integers m, c
         to create a function of style f(x) = m x + c
@@ -335,9 +311,6 @@ class DeviceManager(object):
             @property
             def factor(self):
                 return si.getFactor(self.prefix)
-
-        rv = self.getLastRawValue(deviceID)
-        if rv == None: return None
 
         result = __Value()
 
@@ -373,7 +346,7 @@ class DeviceManager(object):
         if self._running == False:
             self._stopEvent = threading.Event()
             self._thread = GetValuesThread(self._stopEvent,
-                self.devices, self.configs, self._queue)
+                self.devices, self.configs, self.queue)
             self._thread.start()
             self._running = True
 

@@ -25,19 +25,22 @@ import devices.si as si
 import time
 import argparse
 
-def openDevicesFromConsoleArgs(devicemanager):
+def openDevicesFromConsoleArgs(dm):
     parser = argparse.ArgumentParser(description='Messwerterfassung')
     parser.add_argument('port', help="Serial Port (e.g. /dev/ttyUSB0 or COM1)")
     subparser = parser.add_subparsers(dest="device", help="device to use with port")
 
-    parserTecpelDMM8061 = subparser.add_parser('TecpelDMM8061')
-    parserKernPCB = subparser.add_parser('KernPCB')
-    parserBS600 = subparser.add_parser('BS600')
+    validDevices = dm.getValidDevices()
+    validDevices.remove("XLS200")
+
+    for i in validDevices:
+        subparser.add_parser(i)
+
     parserXLS200 = subparser.add_parser('XLS200', help="At least one of the sub-arguments must be specified.")
 
-    parserXLS200.add_argument('input1', choices=devicemanager.getValidDevices() + ["None"], help="device to use with input 1")
-    parserXLS200.add_argument('input2', choices=devicemanager.getValidDevices() + ["None"], help="device to use with input 2")
-    parserXLS200.add_argument('input3', choices=devicemanager.getValidDevices() + ["None"], help="device to use with input 3")
+    parserXLS200.add_argument('input1', choices=dm.getValidDevices() + ["None"], help="device to use with input 1")
+    parserXLS200.add_argument('input2', choices=dm.getValidDevices() + ["None"], help="device to use with input 2")
+    parserXLS200.add_argument('input3', choices=dm.getValidDevices() + ["None"], help="device to use with input 3")
 
     args = parser.parse_args()
 
@@ -46,22 +49,22 @@ def openDevicesFromConsoleArgs(devicemanager):
 
     deviceIDs = []
 
-    ida = devicemanager.openDevice(args.device, args.port)
+    ida = dm.openDevice(args.device, args.port)
 
     deviceIDs.append(ida)
 
     if args.device == "XLS200":
         deviceIDs = []
         if args.input1 != "None":
-            idb = devicemanager.openSubdevice(args.input1, ida, 1)
+            idb = dm.openSubdevice(args.input1, ida, 1)
             deviceIDs.append(idb)
 
         if args.input2 != "None":
-            idc = devicemanager.openSubdevice(args.input2, ida, 2)
+            idc = dm.openSubdevice(args.input2, ida, 2)
             deviceIDs.append(idc)
 
         if args.input3 != "None":
-            idd = devicemanager.openSubdevice(args.input3, ida, 3)
+            idd = dm.openSubdevice(args.input3, ida, 3)
             deviceIDs.append(idd)
 
     return deviceIDs
@@ -74,13 +77,11 @@ def main():
 
     try:
         while True:
-            time.sleep(2)
-            for i in deviceIDs:
-                rv = dm.getLastRawValue(i)
-                print(u"{time}: {value} {factor}{unit}".format(
-                    time=round(time.time() - starttime, 1),
-                    value=rv.value, factor=rv.prefix, unit=rv.unit)
-                )
+            deviceID, rv = dm.queue.get()
+            print(u"{time}: {value} {factor}{unit}".format(
+                time=round(time.time() - starttime, 1),
+                value=rv.value, factor=rv.prefix, unit=rv.unit)
+            )
             
     except KeyboardInterrupt:
         print("Closing")

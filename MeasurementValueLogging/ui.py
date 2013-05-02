@@ -149,6 +149,7 @@ class DisplayWidget(QtGui.QWidget):
         qfile = QtCore.QFile(":/ui/displayWidget.ui")
         qfile.open(QtCore.QIODevice.ReadOnly)
         self.ui = uic.loadUi(qfile, self)
+        self.setObjectName(str(deviceID))
 
         self.deviceID = deviceID
         self.dm = dm
@@ -213,15 +214,17 @@ class DisplayWidget(QtGui.QWidget):
 
         self.unit = popup.unit.text()
 
-    def delete(self):
-        """Delete Widget."""
+    def update(self, rv):
+        crv = self.dm.calibrate(rv, self.calibration, self.unit)
 
-        self.deleteLater()
+        self.lcdNumber.display(crv.value)
+        self.label.setText(crv.prefix + crv.unit)
 
     def close(self):
         """Close the device."""
 
         self.dm.closeDevice(self.deviceID)
+        self.deleteLater()
 
 
 class DeviceSettingsDialog(QtGui.QDialog):
@@ -273,11 +276,11 @@ class DeviceSettingsDialog(QtGui.QDialog):
         elif self.valuesButton.isChecked():
             self.calibration = self.twoValueCalibration
 
-        crv = self.dm.getCalibratedLastRawValue(self.deviceID, self.calibration, self.unit.text())
-        self.calibratedLabel.setText(u"{:n} {}{}".format(crv.value, crv.prefix, crv.unit))
-
         rv = self.dm.getLastRawValue(self.deviceID)
         self.normalLabel.setText(u"{:n} {}{}".format(rv.value, rv.prefix, rv.unit))
+
+        crv = self.dm.calibrate(rv, self.calibration, self.unit.text())
+        self.calibratedLabel.setText(u"{:n} {}{}".format(crv.value, crv.prefix, crv.unit))
 
 
     def save(self):
@@ -370,7 +373,6 @@ class MainWindow(QtGui.QMainWindow):
     """Main window."""
 
     dm = None
-    displayWidgets = {}
 
     log = False
     tmpfile = None
@@ -379,6 +381,8 @@ class MainWindow(QtGui.QMainWindow):
     pathToLogFile = None
 
     officePath = None
+
+    latestValues = {}
 
     def __init__(self, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
@@ -454,27 +458,25 @@ class MainWindow(QtGui.QMainWindow):
                     xls200ID = self.dm.openDevice(device, port)
 
                     if xls200ID:
-                        
+
+                        # Index 0 --> "No device"
                         if xls200Popup.subdevice1ComboBox.currentIndex() != 0:
                             sub1 = unicode(xls200Popup.subdevice1ComboBox.currentText())
                             deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
                             sub1Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub1Widget)
-                            self.displayWidgets[deviceID] = sub1Widget
 
                         if xls200Popup.subdevice2ComboBox.currentIndex() != 0:
                             sub2 = unicode(xls200Popup.subdevice2ComboBox.currentText())
                             deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
                             sub2Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub2Widget)
-                            self.displayWidgets[deviceID] = sub2Widget
 
                         if xls200Popup.subdevice3ComboBox.currentIndex() != 0:
                             sub3 = unicode(xls200Popup.subdevice3ComboBox.currentText())
                             deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
                             sub3Widget = DisplayWidget(deviceID, self.dm)
                             self.verticalLayout.addWidget(sub3Widget)
-                            self.displayWidgets[deviceID] = sub3Widget
 
             else:
                 deviceID = self.dm.openDevice(device, port)
@@ -482,7 +484,6 @@ class MainWindow(QtGui.QMainWindow):
                 if deviceID != None:
                     deviceWidget = DisplayWidget(deviceID, self.dm)
                     self.verticalLayout.addWidget(deviceWidget)
-                    self.displayWidgets[deviceID] = deviceWidget
 
     def startStopLogging(self):
         """Start/Stop logging."""
@@ -531,37 +532,23 @@ class MainWindow(QtGui.QMainWindow):
     def update(self):
         """Update the displayWidgets and, when logging enabled log."""
         
-        # python3 incompatibility: .iteritems()
-        # Delete unnecessary widgets
-        deviceIDsToBeDeleted = []
-        for deviceID, widget in self.displayWidgets.iteritems():
-            if deviceID not in self.dm.getAllDeviceIDs():
-                deviceIDsToBeDeleted.append(deviceID)
-        
         self.dm.closeEmptyMultiboxDevices()
 
-        for i in deviceIDsToBeDeleted:
-            self.displayWidgets[i].delete()
-            del(self.displayWidgets[i])
-
         # update widgets
-        for deviceID, widget in self.displayWidgets.iteritems():
-            unit = None
-            if widget.unit != "":
-                unit = widget.unit
+        while not self.dm.queue.empty():
+            deviceID, rv = self.dm.queue.get_nowait()
+            widget = self.findChild(DisplayWidget,str(deviceID))
+            if widget != 0:
+                widget.update(rv)
 
-            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, unit)
-            widget.lcdNumber.display(rv.value)
-            widget.label.setText(rv.prefix + rv.unit)
+            self.latestValues[deviceID] = rv
         
         # log    
         if self.log and ((time.time() - self.lasttime) > self.loggingInterval.value()):
-            for deviceID, widget in self.displayWidgets.iteritems():
-                unit = None
-                if widget.unit != "":
-                    unit = widget.unit
-                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, unit)
-                self.tmpfile.write("{:n}".format(rv.completeValue) + ";")
+            for widget in self.findChildren(DisplayWidget):
+                crv = self.dm.calibrate(self.latestValues[widget.deviceID],
+                    widget.calibration, widget.unit)
+                self.tmpfile.write("{:n}".format(crv.completeValue) + ";")
 
             self.tmpfile.write("\n")
             self.lasttime = time.time()

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, jsonify
-from .. devices.devicemanager import DeviceManager
-from .. console import openDevicesFromConsoleArgs
+from devices.devicemanager import DeviceManager
+from console import openDevicesFromConsoleArgs
  
 app = Flask(__name__)
 dm = DeviceManager()
 
 deviceIDs = openDevicesFromConsoleArgs(dm)
+
+lastValues = {}
 
 @app.route("/")
 def home():
@@ -15,11 +17,14 @@ def home():
 
 @app.route("/_get_values")
 def getValues():
-    rvs = [dm.getLastRawValue(id) for id in deviceIDs]
-    return jsonify(displayvals = [x.getDisplayedValue() for x in rvs],
-        factors = [x.getFactor("prefix") for x in rvs],
-        units = [x.getUnit() for x in rvs],
-        len = len(rvs))
+    while not dm.queue.empty():
+        deviceID, rv = dm.queue.get()
+        lastValues[deviceID] = rv
+
+    return jsonify(displayvals = [x.value for x in lastValues.values()],
+        prefixes = [x.prefix for x in lastValues.values()],
+        units = [x.unit for x in lastValues.values()],
+        len = len(lastValues))
 
 def main():
-	app.run()
+    app.run()
