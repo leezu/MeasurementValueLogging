@@ -328,33 +328,25 @@ class DeviceManager(object):
 
         class __Value(devicesModule.Value):
             value = None
+            prefix = None
             unit = None
-
-            def getDisplayedValue(self):
-                x = si.getNumberPrefix(self.value)
-                return x[0]
-
-            def getUnit(self):
-                return self.unit
-
-            def getFactor(self, type="value"):
-                x = si.getNumberPrefix(self.value)
-                
-                if type == "value":
-                    return si.getFactor(x[1])
-                elif type == "prefix":
-                    return x[1]
+            time = None
+            @property
+            def factor(self):
+                return si.getFactor(self.prefix)
 
         rv = self.getLastRawValue(deviceID)
         if rv == None: return None
 
         result = __Value()
 
-        result.value = linearFunction(rv.getDisplayedValue() * rv.getFactor())
-        result._time = rv.getTime()
+        result.value, result.prefix = si.getNumberPrefix(linearFunction(rv.completeValue))
+        result.time = rv.time
 
-        if unit: result.unit = unit
-        else: result.unit = rv.getUnit()
+        if unit:
+            result.unit = unit
+        else:
+            result.unit = rv.unit
 
         return result
 
@@ -408,8 +400,9 @@ class _GetValuesThread(threading.Thread):
         self.devices = devices
         self.configs = configs
 
-        for key in self.devices.iteritems():
-            self.rawValues[key] = devicesModule.NullValue()
+        for key, val in self.devices.iteritems():
+            if key not in self.rawValues:
+                self.rawValues[key] = devicesModule.NullValue()
 
     def run(self):
         while not self.stop_event.is_set():

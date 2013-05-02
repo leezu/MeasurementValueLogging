@@ -34,7 +34,12 @@ def splitNumber(x):
         return 0.0, 0.0
 
 def getNumberPrefix(x):
-    """Return a tuple containing x splitted to a number and SI-Prefix.
+    """Return a tuple containing the parameter splitted to a number and SI-Prefix.
+    
+    :param x: Value to be converted
+    :type x: Float or Int
+    :returns: (number, prefix)
+    :rtype: tuple
 
     >>> getNumberPrefix(2.5e6)
     (2.5, "M")
@@ -51,7 +56,7 @@ def getNumberPrefix(x):
     return tuple(split)
 
 def getFactor(x):
-    """Get factor of SI-Prefix or SI-Name
+    """Return the corresponding factor of a SI-Prefix or SI-Name.
 
     :param x: SI-Prefix or SI-Name
     :type x: String
@@ -66,7 +71,7 @@ def getFactor(x):
         return _siPrefixValue[_siNamePrefix[x.lower()]]
 
 def getPrefix(x):
-    """Get prefix of SI-Factor or SI-Name
+    """Return the corresponding prefix of a SI-Factor or SI-Name.
 
     :param x: SI-Factor or SI-Name
     :type x: Float or String
@@ -74,6 +79,9 @@ def getPrefix(x):
     :rtype: String
 
     """
+
+    if isinstance(x, int):
+        x = float(x)
     
     if isinstance(x, float):
         return _siValuePrefix[x]
@@ -82,7 +90,7 @@ def getPrefix(x):
 
 
 def getName(x):
-    """Get name of SI-Prefix or SI-Factor
+    """Return the corresponding name of a SI-Prefix or SI-Factor.
 
     :param x: SI-Prefix or SI-Factor
     :type x: String or Float
@@ -90,6 +98,9 @@ def getName(x):
     :rtype: String
 
     """
+
+    if isinstance(x, int):
+        x = float(x)
     
     if isinstance(x, float):
         return _siPrefixName[_siValuePrefix[x]]
@@ -98,7 +109,9 @@ def getName(x):
 
 
 def getSiNames(type="normal"):
-    """Return list of SI-Names
+    """Return a list of SI-Names.
+
+    The list is ordered by significance.
 
     :returns: List of SI-Names
     :rtype: List of Strings

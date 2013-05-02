@@ -25,6 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="MeasurementValueLogging 0.3 documentation" href="index.html" />
+    <link rel="next" title="Module documentation" href="modules.html" />
     <link rel="prev" title="Installation" href="intro.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -45,6 +46,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="modules.html" title="Module documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="intro.html" title="Installation"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">MeasurementValueLogging 0.3 documentation</a> &raquo;</li> 
@@ -60,7 +64,8 @@
 <h1>Developer information<a class="headerlink" href="#developer-information" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="structure">
 <h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
-<p>MeasurementValueLogging is grouped into three python modules: <a class="reference internal" href="#devices-module"><em>Devices module</em></a>, <a class="reference internal" href="#ui-module"><em>UI module</em></a> and <a class="reference internal" href="#console-module"><em>Console module</em></a>. Furthermore MeasurementValueLogging uses some third-party tools to achieve various goals, like creating documentation, providing stand-alone executables or gaining (simple &amp; multi-platform) access to serial ports.</p>
+<p>MeasurementValueLogging is divided into two parts: The devices backend, which contains the logic to gather values and manage devices as well as the frontend part which includes various frontends (command line, GUI, website) which use the backend to display measurement values and configure devices.</p>
+<p>To provide it&#8217;s functionality MeasurementValueLogging uses some third-party tools. They are used for example to generate documentation, provide stand-alone executables or gain (simple &amp; multi-platform) access to serial ports.</p>
 <div class="section" id="third-party-tools-and-modules">
 <h3>Third-party tools and modules<a class="headerlink" href="#third-party-tools-and-modules" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="sphinx">
@@ -97,10 +102,10 @@ Wikipedia describes Sphinx as follows:</p>
 <h3>MeasurementValueLogging Modules<a class="headerlink" href="#measurementvaluelogging-modules" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="devices-module">
 <span id="id4"></span><h4>Devices module<a class="headerlink" href="#devices-module" title="Permalink to this headline">¶</a></h4>
-<p>The devices module contains code representing physical devices as well as the code necessary to manage them. In addition there is a module which helps converting between si-prefixes, their factors etc. The devices module is divided into</p>
+<p>The devices module contains the logic to gather measurement values from various devices and manage them. In addition there is a module which helps converting between SI stuff. The devices module is divided into</p>
 <div class="section" id="devices-devices">
 <h5>devices.devices<a class="headerlink" href="#devices-devices" title="Permalink to this headline">¶</a></h5>
-<p>The devices.devices module contains classes, representing phyiscal devices and measurement values. Device objects have varoius methods, for example to return a measurement value (a Value object).</p>
+<p>The devices.devices module contains classes, representing phyiscal devices as well as their measurement values. The Device objects have varoius methods, for example to return a measurement value (a Value object).</p>
 <dl class="method">
 <dt id="devices.devices.Device.getRawValue">
 <tt class="descclassname">Device.</tt><tt class="descname">getRawValue</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Device.getRawValue" title="Permalink to this definition">¶</a></dt>
@@ -109,9 +114,9 @@ Wikipedia describes Sphinx as follows:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Value" title="devices.devices.Value"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Value</span></tt></a> or <tt class="xref py py-class docutils literal"><span class="pre">None</span></tt></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="modules.html#devices.devices.Value" title="devices.devices.Value"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Value</span></tt></a> or <tt class="xref py py-class docutils literal"><span class="pre">None</span></tt></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Value" title="devices.devices.Value"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Value</span></tt></a> or <tt class="xref py py-class docutils literal"><span class="pre">None</span></tt></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="modules.html#devices.devices.Value" title="devices.devices.Value"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Value</span></tt></a> or <tt class="xref py py-class docutils literal"><span class="pre">None</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -182,7 +187,7 @@ Wikipedia describes Sphinx as follows:</p>
 </table>
 </dd></dl>
 
-<p>Furthermore there are so called MutliboxDevices like the <a class="reference external" href="http://www.xlsmess.de/html/xls_200.html">XLS200</a>, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or &#8220;get&#8221; one of their subdevices.</p>
+<p>Furthermore there are so called MutliboxDevices like the <a class="reference external" href="http://www.xlsmess.de/html/xls_200.html">XLS200</a>, which allow to use multiple devices on just one serial connection. They additionally provide methods to open, close or get values from one of their subdevices.</p>
 <dl class="method">
 <dt id="devices.devices.MultiboxDevice.openDevice">
 <tt class="descclassname">MultiboxDevice.</tt><tt class="descname">openDevice</tt><big>(</big><em>deviceClass</em>, <em>input</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devices.MultiboxDevice.openDevice" title="Permalink to this definition">¶</a></dt>
@@ -193,7 +198,7 @@ Wikipedia describes Sphinx as follows:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deviceClass</strong> (<a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a>) &#8211; Class of the subdevice</li>
+<li><strong>deviceClass</strong> (<a class="reference internal" href="modules.html#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a>) &#8211; Class of the subdevice</li>
 <li><strong>input</strong> (<em>Input</em>) &#8211; Input number of subdevice</li>
 </ul>
 </td>
@@ -216,27 +221,6 @@ Wikipedia describes Sphinx as follows:</p>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="devices.devices.MultiboxDevice.getDevice">
-<tt class="descclassname">MultiboxDevice.</tt><tt class="descname">getDevice</tt><big>(</big><em>input</em><big>)</big><a class="headerlink" href="#devices.devices.MultiboxDevice.getDevice" title="Permalink to this definition">¶</a></dt>
-<dd><p>This returns the device object on input.</p>
-<p>This does NOT sets the device to the right input.
-If you want to do any actual communication with the
-returned device, call <tt class="xref py py-meth docutils literal"><span class="pre">changeInput()</span></tt> first.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input</strong> (<em>Input</em>) &#8211; Input number of subdevice</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a> on input</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <p>Some devices, like balances provide - in additon to the base device methods - more methods.</p>
 <dl class="method">
 <dt id="devices.devices.Balance.setTypeOfValue">
@@ -254,12 +238,12 @@ For more information please see the Device&#8217;s manual.</p>
 </table>
 </dd></dl>
 
-<p>For a complete overview please see the <a class="reference internal" href="#module-devices.devices" title="devices.devices"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices</span></tt></a> documentation.</p>
+<p>For a complete overview please see the <a class="reference internal" href="modules.html#module-devices.devices" title="devices.devices"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices</span></tt></a> documentation.</p>
 </div>
 <div class="section" id="devices-devicemanager">
 <h5>devices.devicemanager<a class="headerlink" href="#devices-devicemanager" title="Permalink to this headline">¶</a></h5>
-<p>The devicemanager module contains a DeviceManager class to manage devices. It runs it&#8217;s own thread, constantly updating measurement values.</p>
-<p>There are methods to open or close devices, acquiere their most recent measurement values as well as more sophisticated methods which allow to calibrate the measurement values. Devices are identified by a so called deviceID which is returned when opening a device.</p>
+<p>The devicemanager module contains a DeviceManager class to manage devices. It runs it&#8217;s own thread, constantly updating measurement values and provides easy access to them.</p>
+<p>There are methods to open or close devices as well as more sophisticated methods which allow to calibrate gained values measurement values. Devices are identified by a deviceID which is returned when opening a device.</p>
 <dl class="method">
 <dt id="devices.devicemanager.DeviceManager.openDevice">
 <tt class="descclassname">DeviceManager.</tt><tt class="descname">openDevice</tt><big>(</big><em>deviceName</em>, <em>serialPort</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.openDevice" title="Permalink to this definition">¶</a></dt>
@@ -291,26 +275,13 @@ For more information please see the Device&#8217;s manual.</p>
 <tt class="descclassname">DeviceManager.</tt><tt class="descname">closeDevice</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.closeDevice" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getLastRawValue">
-<tt class="descclassname">DeviceManager.</tt><tt class="descname">getLastRawValue</tt><big>(</big><em>deviceID</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getLastRawValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the last raw value of device with ID deviceID.</p>
-<p>If there is no last value (last value == None), it returns a NullValue.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; deviceID (e.g. XLS200, TecpelDMM8061 etc.)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Last Value object of device with deviceID</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Value</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<p>Access to the measurement values is provided with an first-in-first-out queue.</p>
+<dl class="attribute">
+<dt id="devices.devicemanager.DeviceManager.queue">
+<tt class="descclassname">DeviceManager.</tt><tt class="descname">queue</tt><em class="property"> = None</em><a class="headerlink" href="#devices.devicemanager.DeviceManager.queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<p>For a complete overview please see the <a class="reference internal" href="#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a> documentation.</p>
+<p>For a complete overview please see the <a class="reference internal" href="modules.html#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a> documentation.</p>
 </div>
 <div class="section" id="devices-si">
 <h5>devices.si<a class="headerlink" href="#devices-si" title="Permalink to this headline">¶</a></h5>
@@ -373,952 +344,84 @@ For more information please see the Device&#8217;s manual.</p>
 </div>
 </dd></dl>
 
-<p>For a complete overview please see the <a class="reference internal" href="#module-devices.si" title="devices.si"><tt class="xref py py-class docutils literal"><span class="pre">devices.si</span></tt></a> documentation.</p>
+<p>For a complete overview please see the <a class="reference internal" href="modules.html#module-devices.si" title="devices.si"><tt class="xref py py-class docutils literal"><span class="pre">devices.si</span></tt></a> documentation.</p>
 </div>
 </div>
-<div class="section" id="ui-module">
-<span id="id5"></span><h4>UI module<a class="headerlink" href="#ui-module" title="Permalink to this headline">¶</a></h4>
-<p>This module contains a graphical user interface to the DeviceManager.
-For more information see <a class="reference internal" href="#module-ui" title="ui"><tt class="xref py py-class docutils literal"><span class="pre">ui</span></tt></a>.</p>
+<div class="section" id="frontend">
+<span id="ui-module"></span><h4>Frontend<a class="headerlink" href="#frontend" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="gui">
+<h5>GUI<a class="headerlink" href="#gui" title="Permalink to this headline">¶</a></h5>
+<p>This module contains a graphical user interface to the DeviceManager. It allows to open and close devices, displays their values and enables the user to calibrate device with an easy to use GUI.
+For more information see <a class="reference internal" href="modules.html#module-ui" title="ui"><tt class="xref py py-class docutils literal"><span class="pre">ui</span></tt></a>.</p>
 </div>
-<div class="section" id="console-module">
-<span id="id6"></span><h4>Console module<a class="headerlink" href="#console-module" title="Permalink to this headline">¶</a></h4>
-<p>This module contains a console user interface to the DeviceManager.
-For more information see <a class="reference internal" href="#module-console" title="console"><tt class="xref py py-class docutils literal"><span class="pre">console</span></tt></a>.</p>
+<div class="section" id="console">
+<span id="console-module"></span><h5>Console<a class="headerlink" href="#console" title="Permalink to this headline">¶</a></h5>
+<p>The console module contains code for opening devices from command-line arguments. Furthermore it provides a simple main function which prints the gained values to the standard output.
+For more information see <a class="reference internal" href="modules.html#module-console" title="console"><tt class="xref py py-class docutils literal"><span class="pre">console</span></tt></a>.</p>
+</div>
+<div class="section" id="web-interface">
+<h5>Web-Interface<a class="headerlink" href="#web-interface" title="Permalink to this headline">¶</a></h5>
+<p>The webui module is a proof-of-concept. It opens devices with the code provided by the console module and displays their values on a website running on localhost:5000. It uses the <a class="reference external" href="http://flask.pocoo.org/">Flask</a> microframework.</p>
 </div>
 </div>
 </div>
-<div class="section" id="module-documentation">
-<h2>Module documentation<a class="headerlink" href="#module-documentation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-devices.devices">
-<span id="devices"></span><h3>Devices<a class="headerlink" href="#module-devices.devices" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="devices.devices.BS600">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">BS600</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.BS600" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents the BS600 Balance.</p>
-<p>Setup a device as new device or as subdevice.</p>
-<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
-set the in the class defined attributes and open the serial connection.
-If the connection has to be openend, _ownSer flag is set.</p>
-<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
-To setup the device as a new device one has to use the openRS232 classmethod.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.Balance">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">Balance</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.Balance" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents Balance Devices.</p>
-<p>Setup a device as new device or as subdevice.</p>
-<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
-set the in the class defined attributes and open the serial connection.
-If the connection has to be openend, _ownSer flag is set.</p>
-<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
-To setup the device as a new device one has to use the openRS232 classmethod.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt>
-<tt class="descname">setTypeOfValue</tt><big>(</big><em>typeOfValue</em><big>)</big></dt>
-<dd><p>Balance Devices have two different kind of values: Stable and unstable Values.</p>
-<p>This method sets, which kind of values should be returned by the getRawValue method.
-For more information please see the Device&#8217;s manual.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>typeOfValue</strong> (<em>String</em>) &#8211; Type of values, which should be returned by the getRawValue method - &#8220;stable&#8221; or &#8220;all&#8221;</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.Device">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">Device</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.Device" title="Permalink to this definition">¶</a></dt>
-<dd><p>The base device class.</p>
-<p>Subclasses must define at least the methods defined in this base class
-or, when applicable inherit them unmodified.</p>
-<p>Setup a device as new device or as subdevice.</p>
-<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
-set the in the class defined attributes and open the serial connection.
-If the connection has to be openend, _ownSer flag is set.</p>
-<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
-To setup the device as a new device one has to use the openRS232 classmethod.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="devices.devices.Device.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Device.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Closes the serial connection if the device ownes the serial connection (if its not a subdevice).</p>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<tt class="descname">getRawValue</tt><big>(</big><big>)</big></dt>
-<dd><p>Return a Value object or None.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Value" title="devices.devices.Value"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Value</span></tt></a> or <tt class="xref py py-class docutils literal"><span class="pre">None</span></tt></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Value" title="devices.devices.Value"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Value</span></tt></a> or <tt class="xref py py-class docutils literal"><span class="pre">None</span></tt></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="devices.devices.Device.openRS232">
-<em class="property">classmethod </em><tt class="descname">openRS232</tt><big>(</big><em>port</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devices.Device.openRS232" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a new serial connection and create a Device object with it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>port</strong> (<em>String</em>) &#8211; Serial port (see pyserial documentation)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Device object</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Device</td>
-</tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>Valid port parameters are for example:</dt>
-<dd><ul class="first last simple">
-<li>/dev/ttyUSB0 (Linux)</li>
-<li>COM1 (Windows)</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="devices.devices.Device.status">
-<tt class="descname">status</tt><a class="headerlink" href="#devices.devices.Device.status" title="Permalink to this definition">¶</a></dt>
-<dd><p>The device status (available or not)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Device status</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Boolean</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.KernPCB">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">KernPCB</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.KernPCB" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents the KernPCB Balance.</p>
-<p>Setup a device as new device or as subdevice.</p>
-<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
-set the in the class defined attributes and open the serial connection.
-If the connection has to be openend, _ownSer flag is set.</p>
-<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
-To setup the device as a new device one has to use the openRS232 classmethod.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="devices.devices.KernPCB.setTara">
-<tt class="descname">setTara</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.KernPCB.setTara" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set taring.</p>
-<p>For more information see device manual.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.MultiboxDevice">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">MultiboxDevice</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.MultiboxDevice" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a special MultiboxDevice, which allows to use multiple
-subdevices on just one serial connection.</p>
-<p>Every subclass must implement at least the in this class defined methods
-and the methods of the base device class.</p>
-<p>Setup a device as new device or as subdevice.</p>
-<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
-set the in the class defined attributes and open the serial connection.
-If the connection has to be openend, _ownSer flag is set.</p>
-<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
-To setup the device as a new device one has to use the openRS232 classmethod.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt>
-<tt class="descname">closeDevice</tt><big>(</big><em>input</em><big>)</big></dt>
-<dd><p>Close the device on input.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input</strong> (<em>Input</em>) &#8211; Input number of subdevice</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<tt class="descname">getDevice</tt><big>(</big><em>input</em><big>)</big></dt>
-<dd><p>This returns the device object on input.</p>
-<p>This does NOT sets the device to the right input.
-If you want to do any actual communication with the
-returned device, call <tt class="xref py py-meth docutils literal"><span class="pre">changeInput()</span></tt> first.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input</strong> (<em>Input</em>) &#8211; Input number of subdevice</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a> on input</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<tt class="descname">openDevice</tt><big>(</big><em>deviceClass</em>, <em>input</em>, <em>*args</em>, <em>**kwargs</em><big>)</big></dt>
-<dd><p>Open a device of deviceClass on input.</p>
-<p>*args and **kwargs are passed on to the devices __init__ methods.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deviceClass</strong> (<a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a>) &#8211; Class of the subdevice</li>
-<li><strong>input</strong> (<em>Input</em>) &#8211; Input number of subdevice</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.NullValue">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">NullValue</tt><a class="headerlink" href="#devices.devices.NullValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents an &#8220;empty&#8221; measurement value.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.TecpelDMM8061">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">TecpelDMM8061</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.TecpelDMM8061" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents a TECPEL DMM 8061 multimeter.</p>
-<p>Setup a device as new device or as subdevice.</p>
-<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
-set the in the class defined attributes and open the serial connection.
-If the connection has to be openend, _ownSer flag is set.</p>
-<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
-To setup the device as a new device one has to use the openRS232 classmethod.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.Value">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">Value</tt><a class="headerlink" href="#devices.devices.Value" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents one measurement result.</p>
-<p>Device classes must implement their own value subclass with at least the
-methods defined in this base class.</p>
-<dl class="attribute">
-<dt id="devices.devices.Value.completeValue">
-<tt class="descname">completeValue</tt><a class="headerlink" href="#devices.devices.Value.completeValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the complete value (value * factor).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Value * Factor</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<tt class="descname">factor</tt></dt>
-<dd><p>Returns the factor (as a number).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SI-Factor</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="devices.devices.Value.prefix">
-<tt class="descname">prefix</tt><a class="headerlink" href="#devices.devices.Value.prefix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the SI-Prefix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SI-Prefix</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="devices.devices.Value.prefixName">
-<tt class="descname">prefixName</tt><a class="headerlink" href="#devices.devices.Value.prefixName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the name of the SI-Prefix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Name of SI-Prefix</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<tt class="descname">time</tt></dt>
-<dd><p>Returns the time the measurement value was taken in seconds since the epoch.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Time the measurement value was taken</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<tt class="descname">unit</tt></dt>
-<dd><p>Returns the unit (e.g. &#8220;g&#8221; (gram) or &#8220;V&#8221; (volt)).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Unit</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">String</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<tt class="descname">value</tt></dt>
-<dd><p>Returns the value (as a number).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Value</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.VoltcraftVC820">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">VoltcraftVC820</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.VoltcraftVC820" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents a VOLTCRAFT VC 840 multimeter</p>
-<p>The VC 40 is identical to the TecpelDMM8061.</p>
-<p>Setup a device as new device or as subdevice.</p>
-<p>Assign ser to self._ser and if ser is not already openend (the device is not a sub device)
-set the in the class defined attributes and open the serial connection.
-If the connection has to be openend, _ownSer flag is set.</p>
-<p>To setup the device as a subdevice simply pass the serial connection to the class constructor.
-To setup the device as a new device one has to use the openRS232 classmethod.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ser</strong> (<em>Serial</em>) &#8211; Serial connection (pyserial module)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="devices.devices.XLS200">
-<em class="property">class </em><tt class="descclassname">devices.devices.</tt><tt class="descname">XLS200</tt><big>(</big><em>ser</em><big>)</big><a class="headerlink" href="#devices.devices.XLS200" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents the XLS200 MultiboxDevice.</p>
-<p><a class="reference external" href="http://www.xlsmess.de/html/xls_200.html">http://www.xlsmess.de/html/xls_200.html</a></p>
-<p>This device passes one of the three input serial connections, depending
-in which combination DTR and RTS rs232 attributes are set.</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="36%" />
-<col width="32%" />
-<col width="32%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">RTS</th>
-<th class="head">DTR</th>
-<th class="head">Input</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>False</td>
-<td>True</td>
-<td>1</td>
-</tr>
-<tr class="row-odd"><td>True</td>
-<td>False</td>
-<td>2</td>
-</tr>
-<tr class="row-even"><td>False</td>
-<td>False</td>
-<td>3</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
-<div class="section" id="module-devices.devicemanager">
-<span id="devicemanager"></span><h3>Devicemanager<a class="headerlink" href="#module-devices.devicemanager" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="devices.devicemanager.DeviceManager">
-<em class="property">class </em><tt class="descclassname">devices.devicemanager.</tt><tt class="descname">DeviceManager</tt><a class="headerlink" href="#devices.devicemanager.DeviceManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>The DeviceManager manages devices.</p>
-<p>It provides methods to add or delete devices,
-get their most recent measurement values and various other things.</p>
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.closeEmptyMultiboxDevices">
-<tt class="descname">closeEmptyMultiboxDevices</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.closeEmptyMultiboxDevices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close all MultiboxDevices without subDevices.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getAllDeviceIDs">
-<tt class="descname">getAllDeviceIDs</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getAllDeviceIDs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a complete list of registered deviceIDs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Complete list of registered deviceIDs</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List of deviceIDs</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getAvailiablePorts">
-<tt class="descname">getAvailiablePorts</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getAvailiablePorts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of valid and availiable serial ports.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of valid and availiable serial ports</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List of strings</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getCalibratedLastRawValue">
-<tt class="descname">getCalibratedLastRawValue</tt><big>(</big><em>deviceID</em>, <em>calibration</em>, <em>unit=None</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getCalibratedLastRawValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a calibrated value from the getLastRawValue method.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID</li>
-<li><strong>calibration</strong> (<em>Tuple</em>) &#8211; Calibration tuple</li>
-<li><strong>unit</strong> (<em>String or None</em>) &#8211; Unit or None</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>The calibration tuple must contain either two integers m, c
-to create a function of style f(x) = m x + c
-or two tuples containing two points on such a linear function,
-used to compute m and c.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getDevice">
-<tt class="descname">getDevice</tt><big>(</big><em>deviceID</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getDevice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return device with deviceID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a> with deviceID</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#devices.devices.Device" title="devices.devices.Device"><tt class="xref py py-class docutils literal"><span class="pre">devices.devices.Device</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<tt class="descname">getLastRawValue</tt><big>(</big><em>deviceID</em><big>)</big></dt>
-<dd><p>Returns the last raw value of device with ID deviceID.</p>
-<p>If there is no last value (last value == None), it returns a NullValue.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; deviceID (e.g. XLS200, TecpelDMM8061 etc.)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Last Value object of device with deviceID</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Value</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getStatus">
-<tt class="descname">getStatus</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the status of the deviceManager.</p>
-<p>True if deviceManager is running, otherwise False.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Status of deviceManager</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Boolean</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.getValidDevices">
-<tt class="descname">getValidDevices</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.getValidDevices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of valid deviceNames.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of valid deviceNames</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List of strings</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.isValidDevice">
-<tt class="descname">isValidDevice</tt><big>(</big><em>deviceName</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.isValidDevice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests whether deviceName is a valid device.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>deviceName</strong> (<em>String</em>) &#8211; DeviceName (e.g. XLS200, TecpelDMM8061 etc.)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Whether deviceName is a valid deviceName</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Boolean</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<tt class="descname">openDevice</tt><big>(</big><em>deviceName</em>, <em>serialPort</em>, <em>*args</em>, <em>**kwargs</em><big>)</big></dt>
-<dd><p>Open a device.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>deviceName</strong> (<em>String</em>) &#8211; Classname of the device to openDevice</li>
-<li><strong>serialPort</strong> (<em>String</em>) &#8211; Serial port on which the device sits</li>
-<li><strong>args</strong> &#8211; args to pass to the devices init method</li>
-<li><strong>kwargs</strong> &#8211; kwargs to pass to the devices init method</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DeviceID of opened device</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">DeviceID</span></tt></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="devices.devicemanager.DeviceManager.openSubdevice">
-<tt class="descname">openSubdevice</tt><big>(</big><em>deviceName</em>, <em>parentDeviceID</em>, <em>inputNumber</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devices.devicemanager.DeviceManager.openSubdevice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a device as subdevice of the device with parentDeviceID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>deviceName</strong> (<em>String</em>) &#8211; Classname of the device to openDevice</li>
-<li><strong>parentDeviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID of the parent device (the multiboxdevice)</li>
-<li><strong>inputNumber</strong> (<em>Int</em>) &#8211; Input the device sits on</li>
-<li><strong>args</strong> &#8211; args to pass to the devices init method</li>
-<li><strong>kwargs</strong> &#8211; kwargs to pass to the devices init method</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DeviceID of opened device</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">DeviceID</span></tt></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-devices.si">
-<span id="si"></span><h3>SI<a class="headerlink" href="#module-devices.si" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="devices.si.getFactor">
-<tt class="descclassname">devices.si.</tt><tt class="descname">getFactor</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getFactor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the corresponding factor of a SI-Prefix or SI-Name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>String</em>) &#8211; SI-Prefix or SI-Name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SI-Factor</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt>
-<tt class="descclassname">devices.si.</tt><tt class="descname">getName</tt><big>(</big><em>x</em><big>)</big></dt>
-<dd><p>Return the corresponding name of a SI-Prefix or SI-Factor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>String or Float</em>) &#8211; SI-Prefix or SI-Factor</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SI-Name</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt>
-<tt class="descclassname">devices.si.</tt><tt class="descname">getNumberPrefix</tt><big>(</big><em>x</em><big>)</big></dt>
-<dd><p>Return a tuple containing the parameter splitted to a number and SI-Prefix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>Float or Int</em>) &#8211; Value to be converted</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(number, prefix)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">getNumberPrefix</span><span class="p">(</span><span class="mf">2.5e6</span><span class="p">)</span>
-<span class="go">(2.5, &quot;M&quot;)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt>
-<tt class="descclassname">devices.si.</tt><tt class="descname">getPrefix</tt><big>(</big><em>x</em><big>)</big></dt>
-<dd><p>Return the corresponding prefix of a SI-Factor or SI-Name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>Float or String</em>) &#8211; SI-Factor or SI-Name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SI-Prefix</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="devices.si.getSiNames">
-<tt class="descclassname">devices.si.</tt><tt class="descname">getSiNames</tt><big>(</big><em>type='normal'</em><big>)</big><a class="headerlink" href="#devices.si.getSiNames" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of SI-Names.</p>
-<p>The list is ordered by significance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of SI-Names</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List of Strings</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="devices.si.splitNumber">
-<tt class="descclassname">devices.si.</tt><tt class="descname">splitNumber</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.splitNumber" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split x into a float and an exponent.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">splitNumber</span><span class="p">(</span><span class="mf">2.5e7</span><span class="p">)</span>
-<span class="go">(2.5, 7)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</div>
-<div class="section" id="module-ui">
-<span id="ui"></span><h3>UI<a class="headerlink" href="#module-ui" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="ui.DeviceSettingsDialog">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">DeviceSettingsDialog</tt><big>(</big><em>deviceID</em>, <em>dm</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#ui.DeviceSettingsDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Settings dialog for device specific settings.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID</li>
-<li><strong>dm</strong> (<em>DeviceManager</em>) &#8211; DeviceManager</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="ui.DisplayWidget">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">DisplayWidget</tt><big>(</big><em>deviceID</em>, <em>dm</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#ui.DisplayWidget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Widget containing a lcd display and buttons to modify or delete a device.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID</li>
-<li><strong>dm</strong> (<em>DeviceManager</em>) &#8211; DeviceManager</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="ui.DisplayWidget.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.DisplayWidget.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close the device.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.DisplayWidget.delete">
-<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.DisplayWidget.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete Widget.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.DisplayWidget.deviceSettings">
-<tt class="descname">deviceSettings</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.DisplayWidget.deviceSettings" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a DeviceSettingsDialog.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="ui.DoReallyDialog">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">DoReallyDialog</tt><big>(</big><em>title</em>, <em>text</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#ui.DoReallyDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dialog to ask whether a user wants really to do something.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>title</strong> (<em>String</em>) &#8211; Dialog title</li>
-<li><strong>text</strong> (<em>String</em>) &#8211; Dialog text</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="ui.MainWindow">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">MainWindow</tt><big>(</big><em>parent=None</em><big>)</big><a class="headerlink" href="#ui.MainWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main window.</p>
-<dl class="method">
-<dt id="ui.MainWindow.addDevice">
-<tt class="descname">addDevice</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.addDevice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a NewDeviceDialog.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.MainWindow.openLog">
-<tt class="descname">openLog</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.openLog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open last log with office.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.MainWindow.saveLog">
-<tt class="descname">saveLog</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.saveLog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save last log to file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.MainWindow.settingsDialog">
-<tt class="descname">settingsDialog</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.settingsDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a SettingsDialog.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.MainWindow.startStopLogging">
-<tt class="descname">startStopLogging</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.startStopLogging" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start/Stop logging.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.MainWindow.update">
-<tt class="descname">update</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.MainWindow.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the displayWidgets and, when logging enabled log.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="ui.NewDeviceDialog">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">NewDeviceDialog</tt><big>(</big><em>dm</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#ui.NewDeviceDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dialog to add new devices.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dm</strong> (<em>DeviceManager</em>) &#8211; DeviceManager</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="ui.SettingsDialog">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">SettingsDialog</tt><big>(</big><em>parent=None</em><big>)</big><a class="headerlink" href="#ui.SettingsDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>The general settings dialog.</p>
-<dl class="method">
-<dt id="ui.SettingsDialog.openFile">
-<tt class="descname">openFile</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.SettingsDialog.openFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a QFileDialog and save the path.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ui.SettingsDialog.save">
-<tt class="descname">save</tt><big>(</big><big>)</big><a class="headerlink" href="#ui.SettingsDialog.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the settings to QSettings.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="ui.Xls200Dialog">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">Xls200Dialog</tt><big>(</big><em>parent=None</em><big>)</big><a class="headerlink" href="#ui.Xls200Dialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dialog to chose XLS200 subdevices.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-console">
-<span id="console"></span><h3>Console<a class="headerlink" href="#module-console" title="Permalink to this headline">¶</a></h3>
-<p>This module contains a console interface.</p>
+<div class="section" id="directory-layout">
+<h2>Directory layout<a class="headerlink" href="#directory-layout" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>.
+|-- docs                                Files used to generate the documentation with sphinx-doc
+|   |-- conf.py
+|   |-- developer.rst
+|   |-- index.rst
+|   |-- intro.rst
+|   |-- make.bat
+|   |-- Makefile                        Makefiles with options to build the docs to pdf, html etc.
+|   `-- _templates
+|       `-- layout.html
+|-- LICENSE.txt                         GPLv3+
+|-- MeasurementValueLogging             Contains the true program
+|   |-- console.py                      Console module
+|   |-- devices                         Devices module
+|   |   |-- devicemanager.py
+|   |   |-- devices.py
+|   |   |-- __init__.py
+|   |   `-- si.py
+|   |-- __init__.py
+|   |-- Makefile                        Makefile with options to compile the ui files or generate translation
+|   |-- ui_data                         Data used by the gui, ui files are generated with the QT Designer
+|   |   |-- close.png
+|   |   |-- close.svg
+|   |   |-- deviceSettingsDialog.ui
+|   |   |-- displayWidget.ui
+|   |   |-- doReallyDialog.ui
+|   |   |-- i18n                        Translation files
+|   |   |   |-- de.qm
+|   |   |   `-- de.ts
+|   |   |-- __init__.py
+|   |   |-- mainWindow.ui
+|   |   |-- newDeviceDialog.ui
+|   |   |-- qr.py                       *.ui files and translations compiled to a QResource file
+|   |   |-- resource.qrc                defines the files to be compiled to a QResource
+|   |   |-- settingsDialog.ui
+|   |   |-- settings.png
+|   |   |-- settings.svg
+|   |   `-- xls200Dialog.ui
+|   |-- ui.py                           gui module
+|   |-- webui_data                      data used by the web-interface
+|   |   |-- __init__.py
+|   |   |-- routes.py                   flask routes
+|   |   |-- static
+|   |   |   |-- css
+|   |   |   |   `-- main.css
+|   |   |   `-- js
+|   |   |       |-- jquery-1.9.1.min.j
+|   |   |       `-- measurement.js
+|   |   `-- templates
+|   |       |-- layout.html
+|   |       `-- measurement.html
+|   `-- webui.py                        web-interface module
+|-- README.md
+`-- setup.py                            Python Distribution Utilities</pre>
 </div>
 </div>
 </div>
@@ -1348,20 +451,17 @@ used to compute m and c.</p>
 <li><a class="reference internal" href="#devices-si">devices.si</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#ui-module">UI module</a></li>
-<li><a class="reference internal" href="#console-module">Console module</a></li>
+<li><a class="reference internal" href="#frontend">Frontend</a><ul>
+<li><a class="reference internal" href="#gui">GUI</a></li>
+<li><a class="reference internal" href="#console">Console</a></li>
+<li><a class="reference internal" href="#web-interface">Web-Interface</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-documentation">Module documentation</a><ul>
-<li><a class="reference internal" href="#module-devices.devices">Devices</a></li>
-<li><a class="reference internal" href="#module-devices.devicemanager">Devicemanager</a></li>
-<li><a class="reference internal" href="#module-devices.si">SI</a></li>
-<li><a class="reference internal" href="#module-ui">UI</a></li>
-<li><a class="reference internal" href="#module-console">Console</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#directory-layout">Directory layout</a></li>
 </ul>
 </li>
 </ul>
@@ -1369,6 +469,9 @@ used to compute m and c.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="intro.html"
                         title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">Module documentation</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -1395,6 +498,9 @@ used to compute m and c.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Module documentation"
+             >next</a> |</li>
         <li class="right" >
           <a href="intro.html" title="Installation"
              >previous</a> |</li>

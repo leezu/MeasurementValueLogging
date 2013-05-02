@@ -273,11 +273,11 @@ class DeviceSettingsDialog(QtGui.QDialog):
         elif self.valuesButton.isChecked():
             self.calibration = self.twoValueCalibration
 
-        crv = self.dm.getCalibratedLastRawValue(self.deviceID, self.calibration, self.unit)
-        self.calibratedLabel.setText(str(crv.getDisplayedValue() * crv.getFactor()))
+        crv = self.dm.getCalibratedLastRawValue(self.deviceID, self.calibration, self.unit.text())
+        self.calibratedLabel.setText(u"{:n} {}{}".format(crv.value, crv.prefix, crv.unit))
 
         rv = self.dm.getLastRawValue(self.deviceID)
-        self.normalLabel.setText(str(rv.getDisplayedValue() * rv.getFactor()))
+        self.normalLabel.setText(u"{:n} {}{}".format(rv.value, rv.prefix, rv.unit))
 
 
     def save(self):
@@ -350,24 +350,18 @@ class DeviceSettingsDialog(QtGui.QDialog):
             self.slotComboBox.currentText() + "unit", "").toString())
 
     def setCurrentValue1(self):
-        """Get current displayedValue from Device."""
-
         rv = self.dm.getLastRawValue(self.deviceID)
-        self.is1.setValue(rv.getDisplayedValue())
+        self.is1.setValue(rv.value)
 
-        name = si.getName(rv.getFactor())
-        index = self.is1Prefix.findText(name)
+        index = self.is1Prefix.findText(rv.prefixName)
         self.is1Prefix.setCurrentIndex(index)
         self.should1Prefix.setCurrentIndex(index)
 
     def setCurrentValue2(self):
-        """Get current displayedValue from Device."""
-
         rv = self.dm.getLastRawValue(self.deviceID)
-        self.is2.setValue(rv.getDisplayedValue())
+        self.is2.setValue(rv.value)
 
-        name = si.getName(rv.getFactor())
-        index = self.is1Prefix.findText(name)
+        index = self.is1Prefix.findText(rv.prefixName)
         self.is2Prefix.setCurrentIndex(index)
         self.should2Prefix.setCurrentIndex(index)
 
@@ -556,9 +550,9 @@ class MainWindow(QtGui.QMainWindow):
             if widget.unit != "":
                 unit = widget.unit
 
-            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
-            widget.lcdNumber.display(rv.getDisplayedValue())
-            widget.label.setText(rv.getFactor("prefix") + rv.getUnit())
+            rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, unit)
+            widget.lcdNumber.display(rv.value)
+            widget.label.setText(rv.prefix + rv.unit)
         
         # log    
         if self.log and ((time.time() - self.lasttime) > self.loggingInterval.value()):
@@ -566,8 +560,8 @@ class MainWindow(QtGui.QMainWindow):
                 unit = None
                 if widget.unit != "":
                     unit = widget.unit
-                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, widget.unit)
-                self.tmpfile.write("{:n}".format(rv.getDisplayedValue() * rv.getFactor()) + ";")
+                rv = self.dm.getCalibratedLastRawValue(widget.deviceID, widget.calibration, unit)
+                self.tmpfile.write("{:n}".format(rv.completeValue) + ";")
 
             self.tmpfile.write("\n")
             self.lasttime = time.time()
