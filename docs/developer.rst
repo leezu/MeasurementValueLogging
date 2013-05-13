@@ -129,57 +129,57 @@ Directory layout
 ====================
 ::
 
-	.                                     	
-	|-- docs                              	Files used to generate the documentation with sphinx-doc
-	|   |-- conf.py                       	
-	|   |-- developer.rst                 	
-	|   |-- index.rst                     	
-	|   |-- intro.rst                     	
-	|   |-- make.bat                      	
-	|   |-- Makefile                      	Makefiles with options to build the docs to pdf, html etc.
-	|   `-- _templates                    	
-	|       `-- layout.html               	
-	|-- LICENSE.txt                       	GPLv3+
-	|-- MeasurementValueLogging           	Contains the true program
-	|   |-- console.py                    	Console module
-	|   |-- devices                       	Devices module
-	|   |   |-- devicemanager.py          	
-	|   |   |-- devices.py                	
-	|   |   |-- __init__.py               	
-	|   |   `-- si.py                     	
-	|   |-- __init__.py                   	
-	|   |-- Makefile                      	Makefile with options to compile the ui files or generate translation
-	|   |-- ui_data                       	Data used by the gui, ui files are generated with the QT Designer
-	|   |   |-- close.png                 	
-	|   |   |-- close.svg                 	
-	|   |   |-- deviceSettingsDialog.ui   	
-	|   |   |-- displayWidget.ui          	
-	|   |   |-- doReallyDialog.ui         	
-	|   |   |-- i18n                      	Translation files
-	|   |   |   |-- de.qm                 	
-	|   |   |   `-- de.ts                 	
-	|   |   |-- __init__.py               	
-	|   |   |-- mainWindow.ui             	
-	|   |   |-- newDeviceDialog.ui        	
-	|   |   |-- qr.py                     	*.ui files and translations compiled to a QResource file
-	|   |   |-- resource.qrc              	defines the files to be compiled to a QResource
-	|   |   |-- settingsDialog.ui         	
-	|   |   |-- settings.png              	
-	|   |   |-- settings.svg              	
-	|   |   `-- xls200Dialog.ui           	
-	|   |-- ui.py                         	gui module
-	|   |-- webui_data                    	data used by the web-interface
-	|   |   |-- __init__.py               	
-	|   |   |-- routes.py                 	flask routes
-	|   |   |-- static                    	
-	|   |   |   |-- css                   	
-	|   |   |   |   `-- main.css          	
-	|   |   |   `-- js                    	
-	|   |   |       |-- jquery-1.9.1.min.j	
-	|   |   |       `-- measurement.js    	
-	|   |   `-- templates                 	
-	|   |       |-- layout.html           	
-	|   |       `-- measurement.html      	
-	|   `-- webui.py                      	web-interface module
-	|-- README.md                         	
-	`-- setup.py                          	Python Distribution Utilities
+	.                                     
+	|-- docs                              Files used to generate the documentation with sphinx-doc
+	|   |-- conf.py                       
+	|   |-- developer.rst                 
+	|   |-- index.rst                     
+	|   |-- intro.rst                     
+	|   |-- make.bat                      
+	|   |-- Makefile                      Makefiles with options to build the docs to pdf, html etc.
+	|   `-- _templates                    
+	|       `-- layout.html               
+	|-- LICENSE.txt                       GPLv3+
+	|-- MeasurementValueLogging           Contains the true program
+	|   |-- console.py                    Console module
+	|   |-- devices                       Devices module
+	|   |   |-- devicemanager.py          
+	|   |   |-- devices.py                
+	|   |   |-- __init__.py               
+	|   |   `-- si.py                     
+	|   |-- __init__.py                   
+	|   |-- Makefile                      Makefile to compile the ui files or generate translations
+	|   |-- ui_data                       *.ui files are QT Designer files
+	|   |   |-- close.png                 
+	|   |   |-- close.svg                 
+	|   |   |-- deviceSettingsDialog.ui   
+	|   |   |-- displayWidget.ui          
+	|   |   |-- doReallyDialog.ui         
+	|   |   |-- i18n                      Translation files
+	|   |   |   |-- de.qm                 
+	|   |   |   `-- de.ts                 
+	|   |   |-- __init__.py               
+	|   |   |-- mainWindow.ui             
+	|   |   |-- newDeviceDialog.ui        
+	|   |   |-- qr.py                     *.ui files and translations compiled to a QResource file
+	|   |   |-- resource.qrc              Defines the files to be compiled to a QResource
+	|   |   |-- settingsDialog.ui         
+	|   |   |-- settings.png              
+	|   |   |-- settings.svg              
+	|   |   `-- xls200Dialog.ui           
+	|   |-- ui.py                         Gui module
+	|   |-- webui_data                    Data used by the web-interface
+	|   |   |-- __init__.py               
+	|   |   |-- routes.py                 Flask routes
+	|   |   |-- static                    
+	|   |   |   |-- css                   
+	|   |   |   |   `-- main.css          
+	|   |   |   `-- js                    
+	|   |   |       |-- jquery-1.9.1.min.js
+	|   |   |       `-- measurement.js    
+	|   |   `-- templates                 
+	|   |       |-- layout.html           
+	|   |       `-- measurement.html      
+	|   `-- webui.py                      Web-interface module
+	|-- README.md                         
+	`-- setup.py                          Python Distribution Utilities

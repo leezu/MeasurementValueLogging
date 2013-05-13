@@ -26,6 +26,13 @@ import time
 import argparse
 
 def openDevicesFromConsoleArgs(dm):
+    """Open devices specified by command line arguments.
+
+    :param dm: DeviceManager
+    :type dm: DeviceManager
+
+    """
+
     parser = argparse.ArgumentParser(description='Messwerterfassung')
     parser.add_argument('port', help="Serial Port (e.g. /dev/ttyUSB0 or COM1)")
     subparser = parser.add_subparsers(dest="device", help="device to use with port")
@@ -71,6 +78,8 @@ def openDevicesFromConsoleArgs(dm):
 
 
 def main():
+    """Prints values gathered by the devicemanager to standard output."""
+    
     dm = DeviceManager()
     deviceIDs = openDevicesFromConsoleArgs(dm)
     starttime = time.time()
