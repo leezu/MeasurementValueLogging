@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>694</width>
-    <height>402</height>
+    <width>722</width>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -225,22 +225,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="slope">
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="minimum">
-               <double>-100.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>100.000000000000000</double>
-              </property>
-              <property name="value">
-               <double>1.000000000000000</double>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_6">
               <property name="text">
@@ -251,18 +235,48 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QDoubleSpinBox" name="slope">
+                <property name="decimals">
+                 <number>3</number>
+                </property>
+                <property name="minimum">
+                 <double>-100.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>100.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="slopePrefix"/>
+              </item>
+             </layout>
+            </item>
             <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="intercept">
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="minimum">
-               <double>-100.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>100.000000000000000</double>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QDoubleSpinBox" name="intercept">
+                <property name="decimals">
+                 <number>3</number>
+                </property>
+                <property name="minimum">
+                 <double>-100.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>100.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="interceptPrefix"/>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -465,8 +479,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>508</y>
+     <x>266</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -481,8 +495,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>508</y>
+     <x>334</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -498,11 +512,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>421</x>
-     <y>262</y>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
-     <x>77</x>
-     <y>286</y>
+     <x>105</x>
+     <y>271</y>
     </hint>
    </hints>
   </connection>
@@ -513,12 +527,12 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>413</x>
-     <y>301</y>
+     <x>421</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
-     <x>166</x>
-     <y>285</y>
+     <x>194</x>
+     <y>271</y>
     </hint>
    </hints>
   </connection>
@@ -565,8 +579,8 @@
      <y>45</y>
     </hint>
     <hint type="destinationlabel">
-     <x>118</x>
-     <y>108</y>
+     <x>132</x>
+     <y>134</y>
     </hint>
    </hints>
   </connection>
@@ -625,8 +639,8 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>511</x>
-     <y>64</y>
+     <x>420</x>
+     <y>68</y>
     </hint>
     <hint type="destinationlabel">
      <x>36</x>
@@ -641,8 +655,8 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>489</x>
-     <y>99</y>
+     <x>420</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>61</x>
@@ -657,8 +671,8 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>541</x>
-     <y>147</y>
+     <x>420</x>
+     <y>156</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
@@ -673,8 +687,8 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>468</x>
-     <y>194</y>
+     <x>420</x>
+     <y>203</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>

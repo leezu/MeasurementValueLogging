@@ -120,12 +120,7 @@ class DisplayWidget(QtGui.QWidget):
     twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
     slopeInterceptCalibration = 1.0, 0.0
 
-    siNames = si.getSiNames("normal")
-
-    is1PrefixIndex = siNames.index("") # QComboBox Index
-    should1PrefixIndex = siNames.index("") # QComboBox Index
-    is2PrefixIndex = siNames.index("") # QComboBox Index
-    should2PrefixIndex = siNames.index("") # QComboBox Index
+    indexes = {}
 
     is1 = 0
     should1 = 0
@@ -171,8 +166,8 @@ class DisplayWidget(QtGui.QWidget):
         self.rv = rv
         self.crv = self.dm.calibrate(self.rv, self.calibration, self.unit)
 
-        self.lcdNumber.display(self.rv.value)
-        self.label.setText(self.rv.prefix + self.rv.unit)
+        self.lcdNumber.display(self.crv.value)
+        self.label.setText(self.crv.prefix + self.crv.unit)
 
     def close(self):
         """Close the device."""
@@ -230,14 +225,16 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.should2.setValue(self.parent.should2)
 
         # Add prefixes to combobox
-        for i in [self.is1Prefix, self.should1Prefix, self.is2Prefix, self.should2Prefix]:
-            i.clear()
-            i.addItems(self.parent.siNames)
-
-        self.is1Prefix.setCurrentIndex(self.parent.is1PrefixIndex)
-        self.should1Prefix.setCurrentIndex(self.parent.should1PrefixIndex)
-        self.is2Prefix.setCurrentIndex(self.parent.is2PrefixIndex)
-        self.should2Prefix.setCurrentIndex(self.parent.should2PrefixIndex)
+        for box, name in [(self.is1Prefix, "is1Prefix"),
+                (self.should1Prefix, "should1Prefix"),
+                (self.is2Prefix, "is2Prefix"),
+                (self.should2Prefix, "should2Prefix"),
+                (self.slopePrefix, "slopePrefix"),
+                (self.interceptPrefix, "interceptPrefix")]:
+            box.clear()
+            box.addItems(si.getSiNames("normal"))
+            box.setCurrentIndex(self.parent.indexes.get(name,
+                si.getSiNames("normal").index("")))
 
         if self.parent.calibrationType == 1:
             self.slopeInterceptButton.setChecked(True)
@@ -255,10 +252,13 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.parent.is2 = self.is2.value()
         self.parent.should2 = self.should2.value()
 
-        self.parent.is1PrefixIndex = self.is1Prefix.currentIndex()
-        self.parent.should1PrefixIndex = self.should1Prefix.currentIndex()
-        self.parent.is2PrefixIndex = self.is2Prefix.currentIndex()
-        self.parent.should2PrefixIndex = self.should2Prefix.currentIndex()
+        for box, name in [(self.is1Prefix, "is1Prefix"),
+                (self.should1Prefix, "should1Prefix"),
+                (self.is2Prefix, "is2Prefix"),
+                (self.should2Prefix, "should2Prefix"),
+                (self.slopePrefix, "slopePrefix"),
+                (self.interceptPrefix, "interceptPrefix")]:
+            self.parent.indexes[name] = box.currentIndex()
 
         if self.slopeInterceptButton.isChecked():
             self.parent.calibrationType = 1
@@ -275,7 +275,8 @@ class DeviceSettingsDialog(QtGui.QDialog):
             (self.is2.value() * si.getFactor(str(self.is2Prefix.currentText())), 
                 self.should2.value() * si.getFactor(str(self.should2Prefix.currentText()))))
 
-        self.slopeInterceptCalibration = self.slope.value(), self.intercept.value()
+        self.slopeInterceptCalibration = (self.slope.value() * si.getFactor(str(self.slopePrefix.currentText())),
+            self.intercept.value() * si.getFactor(str(self.interceptPrefix.currentText())))
         
         if self.slopeInterceptButton.isChecked():
             self.calibration = self.slopeInterceptCalibration
