@@ -58,7 +58,7 @@ class DeviceManager(object):
         self.queue = Queue.Queue()
 
     def _getIterator(self):
-        i = 0
+        i = 1
         while True:
             yield i
             i += 1
