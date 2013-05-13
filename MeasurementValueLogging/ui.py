@@ -315,6 +315,12 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "should2PrefixIndex", 
             self.should2Prefix.currentIndex())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "slopePrefixIndex", 
+            self.slopePrefix.currentIndex())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "interceptPrefixIndex", 
+            self.interceptPrefix.currentIndex())
 
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "slope",
@@ -328,8 +334,7 @@ class DeviceSettingsDialog(QtGui.QDialog):
             self.unit.text())
 
     def load(self):
-        allItems = [self.is1Prefix.itemText(i) for i in range(self.is1Prefix.count())]
-        emptyStringIndex = allItems.index("")
+        standardIndex = si.getSiNames("normal").index("")
 
         self.is1.setValue(self.settings.value("calibration/" +
             self.slotComboBox.currentText() + "is1", 0).toInt()[0])
@@ -340,13 +345,17 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.should2.setValue(self.settings.value("calibration/" +
             self.slotComboBox.currentText() + "should2", 1).toInt()[0])
         self.is1Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "is1PrefixIndex", emptyStringIndex).toInt()[0])
+            self.slotComboBox.currentText() + "is1PrefixIndex", standardIndex).toInt()[0])
         self.should1Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "should1PrefixIndex", emptyStringIndex).toInt()[0])
+            self.slotComboBox.currentText() + "should1PrefixIndex", standardIndex).toInt()[0])
         self.is2Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "is2PrefixIndex", emptyStringIndex).toInt()[0])
+            self.slotComboBox.currentText() + "is2PrefixIndex", standardIndex).toInt()[0])
         self.should2Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "should2PrefixIndex", emptyStringIndex).toInt()[0])
+            self.slotComboBox.currentText() + "should2PrefixIndex", standardIndex).toInt()[0])
+        self.slopePrefix.setCurrentIndex(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "slopePrefixIndex", standardIndex).toInt()[0])
+        self.interceptPrefix.setCurrentIndex(self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "interceptPrefixIndex", standardIndex).toInt()[0])
 
         self.slope.setValue(self.settings.value("calibration/" +
             self.slotComboBox.currentText() + "slope", 1).toInt()[0])
