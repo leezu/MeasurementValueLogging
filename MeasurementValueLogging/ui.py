@@ -198,7 +198,7 @@ class DeviceSettingsDialog(QtGui.QDialog):
         qfile.open(QtCore.QIODevice.ReadOnly)
         self.ui = uic.loadUi(qfile, self)
 
-        self.parent = displayWidget
+        self.parent = parentDisplayWidget
         self.dm = deviceManager
 
         self.settings = QtCore.QSettings()
