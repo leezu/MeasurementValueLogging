@@ -276,11 +276,17 @@ class DeviceSettingsDialog(QtGui.QDialog):
         elif self.valuesButton.isChecked():
             self.calibration = self.twoValueCalibration
 
-        rv = self.parent.rv
-        self.normalLabel.setText(u"{:n} {}{}".format(rv.value, rv.prefix, rv.unit))
+        try:
+            rv = self.parent.rv
+            self.normalLabel.setText(u"{:n} {}{}".format(rv.value, rv.prefix, rv.unit))
 
-        crv = self.dm.calibrate(rv, self.calibration, self.unit.text())
-        self.calibratedLabel.setText(u"{:n} {}{}".format(crv.value, crv.prefix, crv.unit))
+            crv = self.dm.calibrate(rv, self.calibration, self.unit.text())
+            self.calibratedLabel.setText(u"{:n} {}{}".format(crv.value, crv.prefix, crv.unit))
+
+        except AttributeError:
+            self.normalLabel.setText(self.tr("No Value yet."))
+            self.calibratedLabel.setText(self.tr("No Value yet."))
+
 
 
     def save(self):
@@ -525,7 +531,10 @@ class MainWindow(QtGui.QMainWindow):
         # log    
         if self.log and ((time.time() - self.lasttime) > self.loggingInterval.value()):
             for widget in self.findChildren(DisplayWidget):
-                self.tmpfile.write("{:n}".format(widget.crv.completeValue) + ";")
+                try:
+                    self.tmpfile.write("{:n}".format(widget.crv.completeValue) + ";")
+                except AttributeError:
+                    self.tmpfile.write("0;")
 
             self.tmpfile.write("\n")
             self.lasttime = time.time()
