@@ -125,7 +125,7 @@ def getSiNames(type="normal"):
 
 normalNamesList = ['nano',
                 'micro',
-                'mili',
+                'milli',
                 '',
                 'kilo',
                 'mega']
@@ -137,7 +137,7 @@ allNamesList = ['yocto',
                 'pico',
                 'nano',
                 'micro',
-                'mili',
+                'milli',
                 '',
                 'kilo',
                 'mega',
@@ -155,7 +155,7 @@ _siPrefixValue = { 'y': 1e-24,  # yocto
                 'p': 1e-12,  # pico
                 'n': 1e-9,   # nano
                 u'µ': 1e-6,   # micro
-                'm': 1e-3,   # mili
+                'm': 1e-3,   # milli
                 '' : 1e0,    #
                 'k': 1e3,    # kilo
                 'M': 1e6,    # mega
@@ -173,7 +173,7 @@ _siPrefixName = { 'y': 'yocto',
                 'p': 'pico',
                 'n': 'nano',
                 u'µ': 'micro',
-                'm': 'mili',
+                'm': 'milli',
                 '' : '',
                 'k': 'kilo',
                 'M': 'mega',
@@ -191,7 +191,7 @@ _siNamePrefix = {'yocto': 'y',
                 'pico': 'p',
                 'nano': 'n',
                 'micro': u'µ',
-                'mili': 'm',
+                'milli': 'm',
                 '': '',
                 'kilo': 'k',
                 'mega': 'M',
