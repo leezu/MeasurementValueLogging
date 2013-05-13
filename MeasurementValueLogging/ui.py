@@ -116,7 +116,7 @@ class SettingsDialog(QtGui.QDialog):
 
 class DisplayWidget(QtGui.QWidget):
     """Widget containing a lcd display and buttons to modify or delete a device."""
-    calibrationType = 1 # 0: two values calibration, 1: slope and intercept calibration
+    calibrationType = 1 # 0 = two values calibration, 1 = slope and intercept calibration
     twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
     slopeInterceptCalibration = 1.0, 0.0
 
@@ -164,61 +164,15 @@ class DisplayWidget(QtGui.QWidget):
     def deviceSettings(self):
         """Open a DeviceSettingsDialog."""
 
-        popup = DeviceSettingsDialog(self.deviceID, self.dm)
-
-        popup.slope.setValue(self.slopeInterceptCalibration[0])
-        popup.intercept.setValue(self.slopeInterceptCalibration[1])
-        popup.is1.setValue(self.is1)
-        popup.should1.setValue(self.should1)
-        popup.is2.setValue(self.is2)
-        popup.should2.setValue(self.should2)
-
-        # Add prefixes to combobox
-        for i in [popup.is1Prefix, popup.should1Prefix, popup.is2Prefix, popup.should2Prefix]:
-            i.clear()
-            i.addItems(self.siNames)
-
-        popup.is1Prefix.setCurrentIndex(self.is1PrefixIndex)
-        popup.should1Prefix.setCurrentIndex(self.should1PrefixIndex)
-        popup.is2Prefix.setCurrentIndex(self.is2PrefixIndex)
-        popup.should2Prefix.setCurrentIndex(self.should2PrefixIndex)
-
-        if self.calibrationType == 1:
-            popup.slopeInterceptButton.setChecked(True)
-        elif self.calibrationType == 0:
-            popup.valuesButton.setChecked(True)
-
-        popup.unit.setText(self.unit)
-
-        popup.exec_()
-
-        self.twoValueCalibration = popup.twoValueCalibration
-        self.slopeInterceptCalibration = popup.slopeInterceptCalibration
-
-        self.is1 = popup.is1.value()
-        self.should1 = popup.should1.value()
-        self.is2 = popup.is2.value()
-        self.should2 = popup.should2.value()
-
-        self.is1PrefixIndex = popup.is1Prefix.currentIndex()
-        self.should1PrefixIndex = popup.should1Prefix.currentIndex()
-        self.is2PrefixIndex = popup.is2Prefix.currentIndex()
-        self.should2PrefixIndex = popup.should2Prefix.currentIndex()
-
-        if popup.slopeInterceptButton.isChecked():
-            self.calibrationType = 1
-            self.calibration = self.slopeInterceptCalibration
-        elif popup.valuesButton.isChecked():
-            self.calibrationType = 0
-            self.calibration = self.twoValueCalibration
-
-        self.unit = popup.unit.text()
+        popup = DeviceSettingsDialog(self, self.dm)
+        popup.show()
 
     def update(self, rv):
-        crv = self.dm.calibrate(rv, self.calibration, self.unit)
+        self.rv = rv
+        self.crv = self.dm.calibrate(self.rv, self.calibration, self.unit)
 
-        self.lcdNumber.display(crv.value)
-        self.label.setText(crv.prefix + crv.unit)
+        self.lcdNumber.display(self.rv.value)
+        self.label.setText(self.rv.prefix + self.rv.unit)
 
     def close(self):
         """Close the device."""
@@ -230,13 +184,13 @@ class DisplayWidget(QtGui.QWidget):
 class DeviceSettingsDialog(QtGui.QDialog):
     """Settings dialog for device specific settings."""
 
-    def __init__(self, deviceID, dm, parent=None):
+    def __init__(self, parentDisplayWidget, deviceManager, parent=None):
         """
 
-        :param deviceID: DeviceID
-        :type deviceID: DeviceID
-        :param dm: DeviceManager
-        :type dm: DeviceManager
+        :param parentDisplayWidget: parent/corresponding DisplayWidget
+        :type parentDisplayWidget: DisplayWidget
+        :param deviceManager: DeviceManager
+        :type deviceManager: DeviceManager
 
         """
         QtGui.QDialog.__init__(self, parent)
@@ -244,8 +198,8 @@ class DeviceSettingsDialog(QtGui.QDialog):
         qfile.open(QtCore.QIODevice.ReadOnly)
         self.ui = uic.loadUi(qfile, self)
 
-        self.deviceID = deviceID
-        self.dm = dm
+        self.parent = displayWidget
+        self.dm = deviceManager
 
         self.settings = QtCore.QSettings()
 
@@ -254,14 +208,66 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.saveButton.clicked.connect(self.save)
         self.loadButton.clicked.connect(self.load)
 
+        self.buttonBox.accepted.connect(self.accepted)
+
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.update)
         self.timer.start(50)
 
         self.finished.connect(self._finish)
 
+        self.setUp()
+
     def _finish(self):
         self.timer.stop()
+
+    def setUp(self):
+        self.slope.setValue(self.parent.slopeInterceptCalibration[0])
+        self.intercept.setValue(self.parent.slopeInterceptCalibration[1])
+        self.is1.setValue(self.parent.is1)
+        self.should1.setValue(self.parent.should1)
+        self.is2.setValue(self.parent.is2)
+        self.should2.setValue(self.parent.should2)
+
+        # Add prefixes to combobox
+        for i in [self.is1Prefix, self.should1Prefix, self.is2Prefix, self.should2Prefix]:
+            i.clear()
+            i.addItems(self.parent.siNames)
+
+        self.is1Prefix.setCurrentIndex(self.parent.is1PrefixIndex)
+        self.should1Prefix.setCurrentIndex(self.parent.should1PrefixIndex)
+        self.is2Prefix.setCurrentIndex(self.parent.is2PrefixIndex)
+        self.should2Prefix.setCurrentIndex(self.parent.should2PrefixIndex)
+
+        if self.parent.calibrationType == 1:
+            self.slopeInterceptButton.setChecked(True)
+        elif self.parent.calibrationType == 0:
+            self.valuesButton.setChecked(True)
+
+        self.unit.setText(self.parent.unit)
+
+    def accepted(self):
+        self.parent.twoValueCalibration = self.twoValueCalibration
+        self.parent.slopeInterceptCalibration = self.slopeInterceptCalibration
+
+        self.parent.is1 = self.is1.value()
+        self.parent.should1 = self.should1.value()
+        self.parent.is2 = self.is2.value()
+        self.parent.should2 = self.should2.value()
+
+        self.parent.is1PrefixIndex = self.is1Prefix.currentIndex()
+        self.parent.should1PrefixIndex = self.should1Prefix.currentIndex()
+        self.parent.is2PrefixIndex = self.is2Prefix.currentIndex()
+        self.parent.should2PrefixIndex = self.should2Prefix.currentIndex()
+
+        if self.slopeInterceptButton.isChecked():
+            self.parent.calibrationType = 1
+            self.parent.calibration = self.parent.slopeInterceptCalibration
+        elif self.valuesButton.isChecked():
+            self.parent.calibrationType = 0
+            self.parent.calibration = self.parent.twoValueCalibration
+
+        self.parent.unit = self.unit.text()
 
     def update(self):
         self.twoValueCalibration = ((self.is1.value() * si.getFactor(str(self.is1Prefix.currentText())),
@@ -276,7 +282,7 @@ class DeviceSettingsDialog(QtGui.QDialog):
         elif self.valuesButton.isChecked():
             self.calibration = self.twoValueCalibration
 
-        rv = self.dm.getLastRawValue(self.deviceID)
+        rv = self.parent.rv
         self.normalLabel.setText(u"{:n} {}{}".format(rv.value, rv.prefix, rv.unit))
 
         crv = self.dm.calibrate(rv, self.calibration, self.unit.text())
@@ -353,7 +359,7 @@ class DeviceSettingsDialog(QtGui.QDialog):
             self.slotComboBox.currentText() + "unit", "").toString())
 
     def setCurrentValue1(self):
-        rv = self.dm.getLastRawValue(self.deviceID)
+        rv = self.parent.rv
         self.is1.setValue(rv.value)
 
         index = self.is1Prefix.findText(rv.prefixName)
@@ -361,7 +367,7 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.should1Prefix.setCurrentIndex(index)
 
     def setCurrentValue2(self):
-        rv = self.dm.getLastRawValue(self.deviceID)
+        rv = self.parent.rv
         self.is2.setValue(rv.value)
 
         index = self.is1Prefix.findText(rv.prefixName)
@@ -538,7 +544,7 @@ class MainWindow(QtGui.QMainWindow):
         while not self.dm.queue.empty():
             deviceID, rv = self.dm.queue.get_nowait()
             widget = self.findChild(DisplayWidget,str(deviceID))
-            if widget != 0:
+            if widget != 0 and widget != None:
                 widget.update(rv)
 
             self.latestValues[deviceID] = rv
@@ -546,9 +552,7 @@ class MainWindow(QtGui.QMainWindow):
         # log    
         if self.log and ((time.time() - self.lasttime) > self.loggingInterval.value()):
             for widget in self.findChildren(DisplayWidget):
-                crv = self.dm.calibrate(self.latestValues[widget.deviceID],
-                    widget.calibration, widget.unit)
-                self.tmpfile.write("{:n}".format(crv.completeValue) + ";")
+                self.tmpfile.write("{:n}".format(widget.crv.completeValue) + ";")
 
             self.tmpfile.write("\n")
             self.lasttime = time.time()
