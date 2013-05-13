@@ -120,12 +120,12 @@ class DisplayWidget(QtGui.QWidget):
     twoValueCalibration = (0.0, 0.0), (1.0, 1.0)
     slopeInterceptCalibration = 1.0, 0.0
 
-    indexes = {}
-
     is1 = 0
     should1 = 0
     is2 = 1
     should2 = 1
+    slope = 1.0
+    intercept = 0.0
 
     calibration = slopeInterceptCalibration # either slopeInterceptCalibration or twoValueCalibration
     unit = QtCore.QString()
@@ -217,25 +217,24 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.timer.stop()
 
     def setUp(self):
-        self.slope.setValue(self.parent.slopeInterceptCalibration[0])
-        self.intercept.setValue(self.parent.slopeInterceptCalibration[1])
-        self.is1.setValue(self.parent.is1)
-        self.should1.setValue(self.parent.should1)
-        self.is2.setValue(self.parent.is2)
-        self.should2.setValue(self.parent.should2)
+        for box, prefixBox, storedValue in [(self.is1, self.is1Prefix, self.parent.is1),
+                (self.should1, self.should1Prefix, self.parent.should1),
+                (self.is2, self.is2Prefix, self.parent.is2),
+                (self.should2, self.should2Prefix, self.parent.should2),
+                (self.slope, self.slopePrefix, self.parent.slope),
+                (self.intercept, self.interceptPrefix, self.parent.intercept)]:
 
-        # Add prefixes to combobox
-        for box, name in [(self.is1Prefix, "is1Prefix"),
-                (self.should1Prefix, "should1Prefix"),
-                (self.is2Prefix, "is2Prefix"),
-                (self.should2Prefix, "should2Prefix"),
-                (self.slopePrefix, "slopePrefix"),
-                (self.interceptPrefix, "interceptPrefix")]:
-            box.clear()
-            box.addItems(si.getSiNames("normal"))
-            box.setCurrentIndex(self.parent.indexes.get(name,
-                si.getSiNames("normal").index("")))
+            number, prefix = si.getNumberPrefix(storedValue)
+            print storedValue
+            print str((number, prefix))
 
+            box.setValue(number)
+
+            prefixBox.clear()
+            prefixBox.addItems(si.getSiNames("normal"))
+            index = si.getSiNames("normal").index(si.getName(prefix))
+            prefixBox.setCurrentIndex(index)
+        
         if self.parent.calibrationType == 1:
             self.slopeInterceptButton.setChecked(True)
         elif self.parent.calibrationType == 0:
@@ -247,18 +246,12 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.parent.twoValueCalibration = self.twoValueCalibration
         self.parent.slopeInterceptCalibration = self.slopeInterceptCalibration
 
-        self.parent.is1 = self.is1.value()
-        self.parent.should1 = self.should1.value()
-        self.parent.is2 = self.is2.value()
-        self.parent.should2 = self.should2.value()
-
-        for box, name in [(self.is1Prefix, "is1Prefix"),
-                (self.should1Prefix, "should1Prefix"),
-                (self.is2Prefix, "is2Prefix"),
-                (self.should2Prefix, "should2Prefix"),
-                (self.slopePrefix, "slopePrefix"),
-                (self.interceptPrefix, "interceptPrefix")]:
-            self.parent.indexes[name] = box.currentIndex()
+        self.parent.is1 = self.is1.value() * si.getFactor(str(self.is1Prefix.currentText()))
+        self.parent.should1 = self.should1.value() * si.getFactor(str(self.should1Prefix.currentText()))
+        self.parent.is2 = self.is2.value() * si.getFactor(str(self.is2Prefix.currentText()))
+        self.parent.should2 = self.should2.value() * si.getFactor(str(self.should2Prefix.currentText()))
+        self.parent.slope = self.slope.value() * si.getFactor(str(self.slopePrefix.currentText()))
+        self.parent.intercept = self.intercept.value() * si.getFactor(str(self.interceptPrefix.currentText()))
 
         if self.slopeInterceptButton.isChecked():
             self.parent.calibrationType = 1
@@ -293,80 +286,52 @@ class DeviceSettingsDialog(QtGui.QDialog):
     def save(self):
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "is1", 
-            self.is1.value())
+            self.is1.value() * si.getFactor(str(self.is1Prefix.currentText())))
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "should1", 
-            self.should1.value())
+            self.should1.value() * si.getFactor(str(self.should1Prefix.currentText())))
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "is2", 
-            self.is2.value())
+            self.is2.value() * si.getFactor(str(self.is2Prefix.currentText())))
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "should2", 
-            self.should2.value())
-        self.settings.setValue("calibration/" +
-            self.slotComboBox.currentText() + "is1PrefixIndex", 
-            self.is1Prefix.currentIndex())
-        self.settings.setValue("calibration/" +
-            self.slotComboBox.currentText() + "should1PrefixIndex", 
-            self.should1Prefix.currentIndex())
-        self.settings.setValue("calibration/" +
-            self.slotComboBox.currentText() + "is2PrefixIndex", 
-            self.is2Prefix.currentIndex())
-        self.settings.setValue("calibration/" +
-            self.slotComboBox.currentText() + "should2PrefixIndex", 
-            self.should2Prefix.currentIndex())
-        self.settings.setValue("calibration/" +
-            self.slotComboBox.currentText() + "slopePrefixIndex", 
-            self.slopePrefix.currentIndex())
-        self.settings.setValue("calibration/" +
-            self.slotComboBox.currentText() + "interceptPrefixIndex", 
-            self.interceptPrefix.currentIndex())
-
+            self.should2.value() * si.getFactor(str(self.should2Prefix.currentText())))
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "slope",
-            self.slope.value())
+            self.slope.value() * si.getFactor(str(self.slopePrefix.currentText())))
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "intercept",
-            self.intercept.value())
+            self.intercept.value() * si.getFactor(str(self.interceptPrefix.currentText())))
 
         self.settings.setValue("calibration/" +
             self.slotComboBox.currentText() + "unit",
             self.unit.text())
+        self.settings.setValue("calibration/" +
+            self.slotComboBox.currentText() + "calibrationType",
+            self.slopeInterceptButton.isChecked())
 
     def load(self):
         standardIndex = si.getSiNames("normal").index("")
 
-        self.is1.setValue(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "is1", 0).toInt()[0])
-        self.should1.setValue(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "should1", 0).toInt()[0])
-        self.is2.setValue(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "is2", 1).toInt()[0])
-        self.should2.setValue(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "should2", 1).toInt()[0])
-        self.is1Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "is1PrefixIndex", standardIndex).toInt()[0])
-        self.should1Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "should1PrefixIndex", standardIndex).toInt()[0])
-        self.is2Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "is2PrefixIndex", standardIndex).toInt()[0])
-        self.should2Prefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "should2PrefixIndex", standardIndex).toInt()[0])
-        self.slopePrefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "slopePrefixIndex", standardIndex).toInt()[0])
-        self.interceptPrefix.setCurrentIndex(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "interceptPrefixIndex", standardIndex).toInt()[0])
+        self.parent.is1 = (self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "is1", 0).toDouble()[0])
+        self.parent.should1 = (self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "should1", 0).toDouble()[0])
+        self.parent.is2 = (self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "is2", 1).toDouble()[0])
+        self.parent.should2 = (self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "should2", 1).toDouble()[0])
+        self.parent.slope = (self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "slope", 1).toDouble()[0])
+        self.parent.intercept = (self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "intercept", 0).toDouble()[0])
 
-        self.slope.setValue(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "slope", 1).toInt()[0])
-        self.intercept.setValue(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "intercept", 0).toInt()[0])
-
-        self.intercept.setValue(self.settings.value("calibration/" +
-            self.slotComboBox.currentText() + "unit", 0).toInt()[0])
-
-        self.unit.setText(self.settings.value("calibration/" +
+        self.parent.unit = (self.settings.value("calibration/" +
             self.slotComboBox.currentText() + "unit", "").toString())
+        self.parent.calibrationType = (self.settings.value("calibration/" + self.slotComboBox.currentText() +
+                        "calibrationType", 1).toInt()[0])
+
+        self.setUp()
 
     def setCurrentValue1(self):
         rv = self.parent.rv
