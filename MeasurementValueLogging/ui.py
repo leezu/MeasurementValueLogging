@@ -94,7 +94,7 @@ class SettingsDialog(QtGui.QDialog):
         self.ui = uic.loadUi(qfile, self)
 
         self.pathButton.clicked.connect(self.openFile)
-        self.saveButton.clicked.connect(self.save)
+        self.buttonBox.accepted.connect(self.save)
 
         self.settings = QtCore.QSettings()
 
@@ -420,8 +420,6 @@ class MainWindow(QtGui.QMainWindow):
         self.timer.timeout.connect(self.update)
         self.timer.start(50)
 
-        self.officePath = str(self.settings.value("office/path", "").toString())
-
         self.loggingInterval.setValue(self.settings.value("logging/interval", 1).toInt()[0])
         self.loggingInterval.valueChanged.connect(self.saveLoggingInterval)
 
@@ -434,14 +432,14 @@ class MainWindow(QtGui.QMainWindow):
         popup = SettingsDialog()
         popup.exec_()
 
-        self.officePath = str(self.settings.value("office/path", "").toString())
-
     def openLog(self):
         """Open last log with office."""
         
         if self.pathToLogFile:
-            subprocess.Popen('"' + self.officePath + '"' + ' ' + 
-                '"' + self.pathToLogFile + '"', shell=True)
+            path = os.path.normpath('"' +
+                str(self.settings.value("office/path", "").toString()) +
+                '" "' + self.pathToLogFile + '"')
+            subprocess.Popen(path, shell=True)
                     # FIXME: security flaw: shell=True
         else:
             popup = DoReallyDialog(self.tr("Warning"),
