@@ -148,7 +148,7 @@ Directory layout
 	|   |   |-- __init__.py               
 	|   |   `-- si.py                     
 	|   |-- __init__.py                   
-	|   |-- Makefile                      Makefile to compile the ui files or create translation< files
+	|   |-- Makefile                      Makefile to compile the ui files or create translation files
 	|   |-- ui_data                       *.ui files are QT Designer files
 	|   |   |-- close.png                 
 	|   |   |-- close.svg                 
