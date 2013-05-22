@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Module documentation &mdash; MeasurementValueLogging 0.3 documentation</title>
+    <title>Module documentation &mdash; MeasurementValueLogging 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="MeasurementValueLogging 0.3 documentation" href="index.html" />
+    <link rel="top" title="MeasurementValueLogging 0.4 documentation" href="index.html" />
     <link rel="prev" title="Developer information" href="developer.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -47,7 +47,7 @@
         <li class="right" >
           <a href="developer.html" title="Developer information"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -520,12 +520,10 @@ in which combination DTR and RTS rs232 attributes are set.</p>
 get their most recent measurement values and various other things.</p>
 <dl class="attribute">
 <dt id="devices.devicemanager.DeviceManager.queue">
-<tt class="descname">queue</tt><a class="headerlink" href="#devices.devicemanager.DeviceManager.queue" title="Permalink to this definition">¶</a></dt>
-<dt>
-<tt class="descname">The queue queues all incoming values.</tt></dt>
-<dt>
-<tt class="descname">They are stored in the format (deviceID, value)</tt></dt>
-<dd></dd></dl>
+<tt class="descname">queue</tt><em class="property"> = None</em><a class="headerlink" href="#devices.devicemanager.DeviceManager.queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>The queue queues all incoming values (from the opened devices).</p>
+<p>They are stored in the format (deviceID, value)</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="devices.devicemanager.DeviceManager.calibrate">
@@ -694,6 +692,13 @@ used to compute m and c.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt>
+<tt class="descname">queue</tt><em class="property"> = None</em></dt>
+<dd><p>The queue queues all incoming values (from the opened devices).</p>
+<p>They are stored in the format (deviceID, value)</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="devices.devicemanager.DeviceManager.status">
 <tt class="descname">status</tt><a class="headerlink" href="#devices.devicemanager.DeviceManager.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the status of the deviceManager.</p>
@@ -823,15 +828,15 @@ used to compute m and c.</p>
 <span id="ui"></span><h2>UI<a class="headerlink" href="#module-ui" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="ui.DeviceSettingsDialog">
-<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">DeviceSettingsDialog</tt><big>(</big><em>deviceID</em>, <em>dm</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#ui.DeviceSettingsDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">ui.</tt><tt class="descname">DeviceSettingsDialog</tt><big>(</big><em>parentDisplayWidget</em>, <em>deviceManager</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#ui.DeviceSettingsDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Settings dialog for device specific settings.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deviceID</strong> (<em>DeviceID</em>) &#8211; DeviceID</li>
-<li><strong>dm</strong> (<em>DeviceManager</em>) &#8211; DeviceManager</li>
+<li><strong>parentDisplayWidget</strong> (<em>DisplayWidget</em>) &#8211; parent/corresponding DisplayWidget</li>
+<li><strong>deviceManager</strong> (<em>DeviceManager</em>) &#8211; DeviceManager</li>
 </ul>
 </td>
 </tr>
@@ -971,6 +976,26 @@ used to compute m and c.</p>
 <div class="section" id="module-console">
 <span id="console"></span><h2>Console<a class="headerlink" href="#module-console" title="Permalink to this headline">¶</a></h2>
 <p>This module contains a console interface.</p>
+<dl class="function">
+<dt id="console.main">
+<tt class="descclassname">console.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#console.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints values gathered by the devicemanager to standard output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="console.openDevicesFromConsoleArgs">
+<tt class="descclassname">console.</tt><tt class="descname">openDevicesFromConsoleArgs</tt><big>(</big><em>dm</em><big>)</big><a class="headerlink" href="#console.openDevicesFromConsoleArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open devices specified by command line arguments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dm</strong> (<em>DeviceManager</em>) &#8211; DeviceManager</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -1024,7 +1049,7 @@ used to compute m and c.</p>
         <li class="right" >
           <a href="developer.html" title="Developer information"
              >previous</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
 

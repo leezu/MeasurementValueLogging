@@ -6,7 +6,7 @@ Structure
 =========
 MeasurementValueLogging is divided into two parts: The devices backend, which contains the logic to gather values and manage devices as well as the frontend part which includes various frontends (command line, GUI, website) which use the backend to display measurement values and configure devices.
 
-To provide it's functionality MeasurementValueLogging uses some third-party tools. They are used for example to generate documentation, provide stand-alone executables or gain (simple & multi-platform) access to serial ports.
+To provide it's functionality MeasurementValueLogging uses some third-party tools. They are used for example to create documentation, provide stand-alone executables or gain (simple & multi-platform) access to serial ports.
 
 Third-party tools and modules
 ------------------------------
@@ -20,11 +20,11 @@ Wikipedia describes Sphinx as follows:
 
 	Since its introduction in 2008, Sphinx was adopted by many other important Python projects, such as Bazaar, SQLAlchemy, MayaVi, Sage, SciPy, Django and Pylons; it is also used for the Blender Python API documentation. In an effort to make maintenance of software documentation easier, the Read the Docs project was created. It automates the process of building and uploading Sphinx documentation after every commit. It is sponsored by the Python Software Foundation.
 
-A gh-pages option has been added to the Makefile in docs/ . This allows to automatically update the `Github MeasurementValueLogging <https://github.com/leezu/MeasurementValueLogging>`_ page with the most recent Sphinx documentation as described by `Nikhil on his blog <http://blog.nikhilism.com/2012/08/automatic-github-pages-generation-from.html>`_.
+A gh-pages option has been added to the Makefile in docs/ . This allows to automatically update the `Github MeasurementValueLogging <http://leezu.github.io/MeasurementValueLogging/>`_ page with the most recent Sphinx documentation as described by `Nikhil on his blog <http://blog.nikhilism.com/2012/08/automatic-github-pages-generation-from.html>`_.
 
 QT
 ^^
-MeasurementValueLogging uses `QT <https://qt-project.org/>`_ (`PyQt <www.riverbankcomputing.co.uk/software/pyqt/>`_) for it's graphical user interface. The gui is made with help of the `QT Designer <http://qt-project.org/doc/qt-4.8/designer-manual.html>`_ (see the .ui files in ui/). Furthermore `QResources <http://qt-project.org/doc/qt-4.8/qresource.html>`_, `QSettings <http://qt-project.org/doc/qt-4.8/qsettings.html>`_ and the `QT Internationalization capabilities <http://qt-project.org/doc/qt-4.8/internationalization.html>`__ are used. QResources allow to pack arbitrary data in a python module, so that it's more easily accessible and, more important allows to easily package MeasurementValueLogging in a single executable. QSettings provice persistent platform-independent application settings. The internationalization files can be found in the i18n/ directory.
+MeasurementValueLogging uses `QT <https://qt-project.org/>`_ (`PyQt <www.riverbankcomputing.co.uk/software/pyqt/>`_) for it's graphical user interface. The gui is made with help of the `QT Designer <http://qt-project.org/doc/qt-4.8/designer-manual.html>`_ (see the .ui files in MeasurementValueLogging/ui_data/). Furthermore `QResources <http://qt-project.org/doc/qt-4.8/qresource.html>`_, `QSettings <http://qt-project.org/doc/qt-4.8/qsettings.html>`_ and the `QT Internationalization capabilities <http://qt-project.org/doc/qt-4.8/internationalization.html>`__ are used. QResources allow to pack arbitrary data in a python module, so that it's more easily accessible and, more important allows to easily package MeasurementValueLogging in a single executable with `PyInstaller <www.pyinstaller.org>`_, as PyInstaller does not work with non-python files. QSettings provides persistent platform-independent application settings. The internationalization files can be found in the MeasurementValueLogging/ui_data/i18n/ directory.
 
 Python Distribution Utilities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -36,11 +36,11 @@ PyInstaller
 
 	pyinstaller --onefile --name=MeasurementValueLogging --windowed path/to/ui.py
 
-Please see the `PyInstaller documentation <www.pyinstaller.org/export/v2.0/project/doc/Manual.html>`_ for more information. The stand-alone executables can be found on `SourceForge <http://sphinx.pocoo.org>`_.
+Please see the `PyInstaller documentation <www.pyinstaller.org/export/v2.0/project/doc/Manual.html>`_ for more information. The stand-alone executables can be found on `SourceForge <http://sourceforge.net/projects/measurement-log/files/>`_.
 
 PySerial
 ^^^^^^^^^
-Last but not least MeasurementValueLogging uses the `PySerial module <http://pyserial.sourceforge.net/>`_ by Chris Liechti for its serial communication with the devices.
+Last but not least MeasurementValueLogging uses the `PySerial module <http://pyserial.sourceforge.net/>`_ by Chris Liechti for its serial communication with the devices. The PySerial module gives a single and simple interface for the from platform to platform changing APIs to access the serial ports.
 
 
 MeasurementValueLogging Modules
@@ -48,13 +48,13 @@ MeasurementValueLogging Modules
 
 .. _devices-module:
 
-Devices module
-^^^^^^^^^^^^^^^
-The devices module contains the logic to gather measurement values from various devices and manage them. In addition there is a module which helps converting between SI stuff. The devices module is divided into
+Backend
+^^^^^^^^
+The devices module contains the logic to gather measurement values from various devices and manage them. In addition there is a module which helps converting between SI stuff. The devices module is divided into three sub-modules:
 
 devices.devices
 """""""""""""""""
-The devices.devices module contains classes, representing phyiscal devices as well as their measurement values. The Device objects have varoius methods, for example to return a measurement value (a Value object). 
+The devices.devices module contains classes, representing physical devices as well as their measurement values. The Device objects have various methods, for example to return a measurement value (a Value object). 
 
 .. automethod:: devices.devices.Device.getRawValue
 
@@ -70,7 +70,7 @@ Furthermore there are so called MutliboxDevices like the `XLS200 <http://www.xls
 .. automethod:: devices.devices.MultiboxDevice.openDevice
 .. automethod:: devices.devices.MultiboxDevice.closeDevice
 
-Some devices, like balances provide - in additon to the base device methods - more methods.
+Some devices, like balances provide - in addition to the base device methods - more methods.
 
 .. automethod:: devices.devices.Balance.setTypeOfValue
 
@@ -93,7 +93,7 @@ For a complete overview please see the :class:`devices.devicemanager.DeviceManag
 
 devices.si
 """""""""""
-The si module contains method to convert between different representations of SI prefixes, factors etc.
+The si module contains methods to convert between different representations of SI prefixes, factors etc.
 
 .. autofunction:: devices.si.getPrefix
 .. autofunction:: devices.si.getName
@@ -129,57 +129,57 @@ Directory layout
 ====================
 ::
 
-	.                                     	
-	|-- docs                              	Files used to generate the documentation with sphinx-doc
-	|   |-- conf.py                       	
-	|   |-- developer.rst                 	
-	|   |-- index.rst                     	
-	|   |-- intro.rst                     	
-	|   |-- make.bat                      	
-	|   |-- Makefile                      	Makefiles with options to build the docs to pdf, html etc.
-	|   `-- _templates                    	
-	|       `-- layout.html               	
-	|-- LICENSE.txt                       	GPLv3+
-	|-- MeasurementValueLogging           	Contains the true program
-	|   |-- console.py                    	Console module
-	|   |-- devices                       	Devices module
-	|   |   |-- devicemanager.py          	
-	|   |   |-- devices.py                	
-	|   |   |-- __init__.py               	
-	|   |   `-- si.py                     	
-	|   |-- __init__.py                   	
-	|   |-- Makefile                      	Makefile with options to compile the ui files or generate translation
-	|   |-- ui_data                       	Data used by the gui, ui files are generated with the QT Designer
-	|   |   |-- close.png                 	
-	|   |   |-- close.svg                 	
-	|   |   |-- deviceSettingsDialog.ui   	
-	|   |   |-- displayWidget.ui          	
-	|   |   |-- doReallyDialog.ui         	
-	|   |   |-- i18n                      	Translation files
-	|   |   |   |-- de.qm                 	
-	|   |   |   `-- de.ts                 	
-	|   |   |-- __init__.py               	
-	|   |   |-- mainWindow.ui             	
-	|   |   |-- newDeviceDialog.ui        	
-	|   |   |-- qr.py                     	*.ui files and translations compiled to a QResource file
-	|   |   |-- resource.qrc              	defines the files to be compiled to a QResource
-	|   |   |-- settingsDialog.ui         	
-	|   |   |-- settings.png              	
-	|   |   |-- settings.svg              	
-	|   |   `-- xls200Dialog.ui           	
-	|   |-- ui.py                         	gui module
-	|   |-- webui_data                    	data used by the web-interface
-	|   |   |-- __init__.py               	
-	|   |   |-- routes.py                 	flask routes
-	|   |   |-- static                    	
-	|   |   |   |-- css                   	
-	|   |   |   |   `-- main.css          	
-	|   |   |   `-- js                    	
-	|   |   |       |-- jquery-1.9.1.min.j	
-	|   |   |       `-- measurement.js    	
-	|   |   `-- templates                 	
-	|   |       |-- layout.html           	
-	|   |       `-- measurement.html      	
-	|   `-- webui.py                      	web-interface module
-	|-- README.md                         	
-	`-- setup.py                          	Python Distribution Utilities
+	.                                     
+	|-- docs                              Files used to create the documentation with sphinx-doc
+	|   |-- conf.py                       
+	|   |-- developer.rst                 
+	|   |-- index.rst                     
+	|   |-- intro.rst                     
+	|   |-- make.bat                      
+	|   |-- Makefile                      Makefiles with options to build the docs to pdf, html etc.
+	|   `-- _templates                    
+	|       `-- layout.html               
+	|-- LICENSE.txt                       GPLv3+
+	|-- MeasurementValueLogging           Contains the true program
+	|   |-- console.py                    Console module
+	|   |-- devices                       Devices module
+	|   |   |-- devicemanager.py          
+	|   |   |-- devices.py                
+	|   |   |-- __init__.py               
+	|   |   `-- si.py                     
+	|   |-- __init__.py                   
+	|   |-- Makefile                      Makefile to compile the ui files or create translation< files
+	|   |-- ui_data                       *.ui files are QT Designer files
+	|   |   |-- close.png                 
+	|   |   |-- close.svg                 
+	|   |   |-- deviceSettingsDialog.ui   
+	|   |   |-- displayWidget.ui          
+	|   |   |-- doReallyDialog.ui         
+	|   |   |-- i18n                      Translation files
+	|   |   |   |-- de.qm                 
+	|   |   |   `-- de.ts                 
+	|   |   |-- __init__.py               
+	|   |   |-- mainWindow.ui             
+	|   |   |-- newDeviceDialog.ui        
+	|   |   |-- qr.py                     *.ui files and translations compiled to a QResource file
+	|   |   |-- resource.qrc              Defines the files to be compiled to a QResource
+	|   |   |-- settingsDialog.ui         
+	|   |   |-- settings.png              
+	|   |   |-- settings.svg              
+	|   |   `-- xls200Dialog.ui           
+	|   |-- ui.py                         Gui module
+	|   |-- webui_data                    Data used by the web-interface
+	|   |   |-- __init__.py               
+	|   |   |-- routes.py                 Flask routes
+	|   |   |-- static                    
+	|   |   |   |-- css                   
+	|   |   |   |   `-- main.css          
+	|   |   |   `-- js                    
+	|   |   |       |-- jquery-1.9.1.min.js
+	|   |   |       `-- measurement.js    
+	|   |   `-- templates                 
+	|   |       |-- layout.html           
+	|   |       `-- measurement.html      
+	|   `-- webui.py                      Web-interface module
+	|-- README.md                         
+	`-- setup.py                          Python Distribution Utilities

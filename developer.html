@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developer information &mdash; MeasurementValueLogging 0.3 documentation</title>
+    <title>Developer information &mdash; MeasurementValueLogging 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="MeasurementValueLogging 0.3 documentation" href="index.html" />
+    <link rel="top" title="MeasurementValueLogging 0.4 documentation" href="index.html" />
     <link rel="next" title="Module documentation" href="modules.html" />
     <link rel="prev" title="Installation" href="intro.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -51,7 +51,7 @@
         <li class="right" >
           <a href="intro.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -65,7 +65,7 @@
 <div class="section" id="structure">
 <h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
 <p>MeasurementValueLogging is divided into two parts: The devices backend, which contains the logic to gather values and manage devices as well as the frontend part which includes various frontends (command line, GUI, website) which use the backend to display measurement values and configure devices.</p>
-<p>To provide it&#8217;s functionality MeasurementValueLogging uses some third-party tools. They are used for example to generate documentation, provide stand-alone executables or gain (simple &amp; multi-platform) access to serial ports.</p>
+<p>To provide it&#8217;s functionality MeasurementValueLogging uses some third-party tools. They are used for example to create documentation, provide stand-alone executables or gain (simple &amp; multi-platform) access to serial ports.</p>
 <div class="section" id="third-party-tools-and-modules">
 <h3>Third-party tools and modules<a class="headerlink" href="#third-party-tools-and-modules" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="sphinx">
@@ -76,36 +76,36 @@ Wikipedia describes Sphinx as follows:</p>
 <div><p>Sphinx is a documentation generator which converts reStructuredText files into HTML websites and other formats including PDF, EPub and man. It exploits the extensible nature of reStructuredText through a number of extensions (e.g. for autogenerating documentation from source code, writing mathematical notation or highlighting source code). The first public release, version 0.1.61611, was announced on March 21, 2008. It was developed for, and used extensively by, the Python project for documentation.</p>
 <p>Since its introduction in 2008, Sphinx was adopted by many other important Python projects, such as Bazaar, SQLAlchemy, MayaVi, Sage, SciPy, Django and Pylons; it is also used for the Blender Python API documentation. In an effort to make maintenance of software documentation easier, the Read the Docs project was created. It automates the process of building and uploading Sphinx documentation after every commit. It is sponsored by the Python Software Foundation.</p>
 </div></blockquote>
-<p>A gh-pages option has been added to the Makefile in docs/ . This allows to automatically update the <a class="reference external" href="https://github.com/leezu/MeasurementValueLogging">Github MeasurementValueLogging</a> page with the most recent Sphinx documentation as described by <a class="reference external" href="http://blog.nikhilism.com/2012/08/automatic-github-pages-generation-from.html">Nikhil on his blog</a>.</p>
+<p>A gh-pages option has been added to the Makefile in docs/ . This allows to automatically update the <a class="reference external" href="http://leezu.github.io/MeasurementValueLogging/">Github MeasurementValueLogging</a> page with the most recent Sphinx documentation as described by <a class="reference external" href="http://blog.nikhilism.com/2012/08/automatic-github-pages-generation-from.html">Nikhil on his blog</a>.</p>
 </div>
 <div class="section" id="qt">
 <h4>QT<a class="headerlink" href="#qt" title="Permalink to this headline">¶</a></h4>
-<p>MeasurementValueLogging uses <a class="reference external" href="https://qt-project.org/">QT</a> (<a class="reference external" href="www.riverbankcomputing.co.uk/software/pyqt/">PyQt</a>) for it&#8217;s graphical user interface. The gui is made with help of the <a class="reference external" href="http://qt-project.org/doc/qt-4.8/designer-manual.html">QT Designer</a> (see the .ui files in ui/). Furthermore <a class="reference external" href="http://qt-project.org/doc/qt-4.8/qresource.html">QResources</a>, <a class="reference external" href="http://qt-project.org/doc/qt-4.8/qsettings.html">QSettings</a> and the <a class="reference external" href="http://qt-project.org/doc/qt-4.8/internationalization.html">QT Internationalization capabilities</a> are used. QResources allow to pack arbitrary data in a python module, so that it&#8217;s more easily accessible and, more important allows to easily package MeasurementValueLogging in a single executable. QSettings provice persistent platform-independent application settings. The internationalization files can be found in the i18n/ directory.</p>
+<p>MeasurementValueLogging uses <a class="reference external" href="https://qt-project.org/">QT</a> (<a class="reference external" href="www.riverbankcomputing.co.uk/software/pyqt/">PyQt</a>) for it&#8217;s graphical user interface. The gui is made with help of the <a class="reference external" href="http://qt-project.org/doc/qt-4.8/designer-manual.html">QT Designer</a> (see the .ui files in MeasurementValueLogging/ui_data/). Furthermore <a class="reference external" href="http://qt-project.org/doc/qt-4.8/qresource.html">QResources</a>, <a class="reference external" href="http://qt-project.org/doc/qt-4.8/qsettings.html">QSettings</a> and the <a class="reference external" href="http://qt-project.org/doc/qt-4.8/internationalization.html">QT Internationalization capabilities</a> are used. QResources allow to pack arbitrary data in a python module, so that it&#8217;s more easily accessible and, more important allows to easily package MeasurementValueLogging in a single executable with <a class="reference external" href="www.pyinstaller.org">PyInstaller</a>, as PyInstaller does not work with non-python files. QSettings provides persistent platform-independent application settings. The internationalization files can be found in the MeasurementValueLogging/ui_data/i18n/ directory.</p>
 </div>
 <div class="section" id="python-distribution-utilities">
 <h4>Python Distribution Utilities<a class="headerlink" href="#python-distribution-utilities" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference external" href="http://docs.python.org/3/distutils/">Python Distutils</a> are used to create Python packages distributed on <a class="reference external" href="https://pypi.python.org/pypi/MeasurementValueLogging">PyPi</a>.</p>
 </div>
-<div class="section" id="pyinstaller">
-<h4>PyInstaller<a class="headerlink" href="#pyinstaller" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id3">
+<h4>PyInstaller<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference external" href="www.pyinstaller.org">PyInstaller</a> is used to package MeasurementValueLogging into stand-alone executables. This is done by calling the following command:</p>
 <div class="highlight-python"><pre>pyinstaller --onefile --name=MeasurementValueLogging --windowed path/to/ui.py</pre>
 </div>
-<p>Please see the <a class="reference external" href="www.pyinstaller.org/export/v2.0/project/doc/Manual.html">PyInstaller documentation</a> for more information. The stand-alone executables can be found on <a class="reference external" href="http://sphinx.pocoo.org">SourceForge</a>.</p>
+<p>Please see the <a class="reference external" href="www.pyinstaller.org/export/v2.0/project/doc/Manual.html">PyInstaller documentation</a> for more information. The stand-alone executables can be found on <a class="reference external" href="http://sourceforge.net/projects/measurement-log/files/">SourceForge</a>.</p>
 </div>
 <div class="section" id="pyserial">
 <h4>PySerial<a class="headerlink" href="#pyserial" title="Permalink to this headline">¶</a></h4>
-<p>Last but not least MeasurementValueLogging uses the <a class="reference external" href="http://pyserial.sourceforge.net/">PySerial module</a> by Chris Liechti for its serial communication with the devices.</p>
+<p>Last but not least MeasurementValueLogging uses the <a class="reference external" href="http://pyserial.sourceforge.net/">PySerial module</a> by Chris Liechti for its serial communication with the devices. The PySerial module gives a single and simple interface for the from platform to platform changing APIs to access the serial ports.</p>
 </div>
 </div>
 <div class="section" id="measurementvaluelogging-modules">
 <h3>MeasurementValueLogging Modules<a class="headerlink" href="#measurementvaluelogging-modules" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="devices-module">
-<span id="id4"></span><h4>Devices module<a class="headerlink" href="#devices-module" title="Permalink to this headline">¶</a></h4>
-<p>The devices module contains the logic to gather measurement values from various devices and manage them. In addition there is a module which helps converting between SI stuff. The devices module is divided into</p>
+<div class="section" id="backend">
+<span id="devices-module"></span><h4>Backend<a class="headerlink" href="#backend" title="Permalink to this headline">¶</a></h4>
+<p>The devices module contains the logic to gather measurement values from various devices and manage them. In addition there is a module which helps converting between SI stuff. The devices module is divided into three sub-modules:</p>
 <div class="section" id="devices-devices">
 <h5>devices.devices<a class="headerlink" href="#devices-devices" title="Permalink to this headline">¶</a></h5>
-<p>The devices.devices module contains classes, representing phyiscal devices as well as their measurement values. The Device objects have varoius methods, for example to return a measurement value (a Value object).</p>
+<p>The devices.devices module contains classes, representing physical devices as well as their measurement values. The Device objects have various methods, for example to return a measurement value (a Value object).</p>
 <dl class="method">
 <dt id="devices.devices.Device.getRawValue">
 <tt class="descclassname">Device.</tt><tt class="descname">getRawValue</tt><big>(</big><big>)</big><a class="headerlink" href="#devices.devices.Device.getRawValue" title="Permalink to this definition">¶</a></dt>
@@ -221,7 +221,7 @@ Wikipedia describes Sphinx as follows:</p>
 </table>
 </dd></dl>
 
-<p>Some devices, like balances provide - in additon to the base device methods - more methods.</p>
+<p>Some devices, like balances provide - in addition to the base device methods - more methods.</p>
 <dl class="method">
 <dt id="devices.devices.Balance.setTypeOfValue">
 <tt class="descclassname">Balance.</tt><tt class="descname">setTypeOfValue</tt><big>(</big><em>typeOfValue</em><big>)</big><a class="headerlink" href="#devices.devices.Balance.setTypeOfValue" title="Permalink to this definition">¶</a></dt>
@@ -279,13 +279,15 @@ For more information please see the Device&#8217;s manual.</p>
 <dl class="attribute">
 <dt id="devices.devicemanager.DeviceManager.queue">
 <tt class="descclassname">DeviceManager.</tt><tt class="descname">queue</tt><em class="property"> = None</em><a class="headerlink" href="#devices.devicemanager.DeviceManager.queue" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The queue queues all incoming values (from the opened devices).</p>
+<p>They are stored in the format (deviceID, value)</p>
+</dd></dl>
 
 <p>For a complete overview please see the <a class="reference internal" href="modules.html#devices.devicemanager.DeviceManager" title="devices.devicemanager.DeviceManager"><tt class="xref py py-class docutils literal"><span class="pre">devices.devicemanager.DeviceManager</span></tt></a> documentation.</p>
 </div>
 <div class="section" id="devices-si">
 <h5>devices.si<a class="headerlink" href="#devices-si" title="Permalink to this headline">¶</a></h5>
-<p>The si module contains method to convert between different representations of SI prefixes, factors etc.</p>
+<p>The si module contains methods to convert between different representations of SI prefixes, factors etc.</p>
 <dl class="function">
 <dt id="devices.si.getPrefix">
 <tt class="descclassname">devices.si.</tt><tt class="descname">getPrefix</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#devices.si.getPrefix" title="Permalink to this definition">¶</a></dt>
@@ -369,59 +371,59 @@ For more information see <a class="reference internal" href="modules.html#module
 <div class="section" id="directory-layout">
 <h2>Directory layout<a class="headerlink" href="#directory-layout" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><pre>.
-|-- docs                                Files used to generate the documentation with sphinx-doc
+|-- docs                              Files used to create the documentation with sphinx-doc
 |   |-- conf.py
 |   |-- developer.rst
 |   |-- index.rst
 |   |-- intro.rst
 |   |-- make.bat
-|   |-- Makefile                        Makefiles with options to build the docs to pdf, html etc.
+|   |-- Makefile                      Makefiles with options to build the docs to pdf, html etc.
 |   `-- _templates
 |       `-- layout.html
-|-- LICENSE.txt                         GPLv3+
-|-- MeasurementValueLogging             Contains the true program
-|   |-- console.py                      Console module
-|   |-- devices                         Devices module
+|-- LICENSE.txt                       GPLv3+
+|-- MeasurementValueLogging           Contains the true program
+|   |-- console.py                    Console module
+|   |-- devices                       Devices module
 |   |   |-- devicemanager.py
 |   |   |-- devices.py
 |   |   |-- __init__.py
 |   |   `-- si.py
 |   |-- __init__.py
-|   |-- Makefile                        Makefile with options to compile the ui files or generate translation
-|   |-- ui_data                         Data used by the gui, ui files are generated with the QT Designer
+|   |-- Makefile                      Makefile to compile the ui files or create translation&lt; files
+|   |-- ui_data                       *.ui files are QT Designer files
 |   |   |-- close.png
 |   |   |-- close.svg
 |   |   |-- deviceSettingsDialog.ui
 |   |   |-- displayWidget.ui
 |   |   |-- doReallyDialog.ui
-|   |   |-- i18n                        Translation files
+|   |   |-- i18n                      Translation files
 |   |   |   |-- de.qm
 |   |   |   `-- de.ts
 |   |   |-- __init__.py
 |   |   |-- mainWindow.ui
 |   |   |-- newDeviceDialog.ui
-|   |   |-- qr.py                       *.ui files and translations compiled to a QResource file
-|   |   |-- resource.qrc                defines the files to be compiled to a QResource
+|   |   |-- qr.py                     *.ui files and translations compiled to a QResource file
+|   |   |-- resource.qrc              Defines the files to be compiled to a QResource
 |   |   |-- settingsDialog.ui
 |   |   |-- settings.png
 |   |   |-- settings.svg
 |   |   `-- xls200Dialog.ui
-|   |-- ui.py                           gui module
-|   |-- webui_data                      data used by the web-interface
+|   |-- ui.py                         Gui module
+|   |-- webui_data                    Data used by the web-interface
 |   |   |-- __init__.py
-|   |   |-- routes.py                   flask routes
+|   |   |-- routes.py                 Flask routes
 |   |   |-- static
 |   |   |   |-- css
 |   |   |   |   `-- main.css
 |   |   |   `-- js
-|   |   |       |-- jquery-1.9.1.min.j
+|   |   |       |-- jquery-1.9.1.min.js
 |   |   |       `-- measurement.js
 |   |   `-- templates
 |   |       |-- layout.html
 |   |       `-- measurement.html
-|   `-- webui.py                        web-interface module
+|   `-- webui.py                      Web-interface module
 |-- README.md
-`-- setup.py                            Python Distribution Utilities</pre>
+`-- setup.py                          Python Distribution Utilities</pre>
 </div>
 </div>
 </div>
@@ -440,12 +442,12 @@ For more information see <a class="reference internal" href="modules.html#module
 <li><a class="reference internal" href="#sphinx">Sphinx</a></li>
 <li><a class="reference internal" href="#qt">QT</a></li>
 <li><a class="reference internal" href="#python-distribution-utilities">Python Distribution Utilities</a></li>
-<li><a class="reference internal" href="#pyinstaller">PyInstaller</a></li>
+<li><a class="reference internal" href="#id3">PyInstaller</a></li>
 <li><a class="reference internal" href="#pyserial">PySerial</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#measurementvaluelogging-modules">MeasurementValueLogging Modules</a><ul>
-<li><a class="reference internal" href="#devices-module">Devices module</a><ul>
+<li><a class="reference internal" href="#backend">Backend</a><ul>
 <li><a class="reference internal" href="#devices-devices">devices.devices</a></li>
 <li><a class="reference internal" href="#devices-devicemanager">devices.devicemanager</a></li>
 <li><a class="reference internal" href="#devices-si">devices.si</a></li>
@@ -504,7 +506,7 @@ For more information see <a class="reference internal" href="modules.html#module
         <li class="right" >
           <a href="intro.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="index.html">MeasurementValueLogging 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">MeasurementValueLogging 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
 
