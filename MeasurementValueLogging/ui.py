@@ -225,8 +225,6 @@ class DeviceSettingsDialog(QtGui.QDialog):
                 (self.intercept, self.interceptPrefix, self.parent.intercept)]:
 
             number, prefix = si.getNumberPrefix(storedValue)
-            print storedValue
-            print str((number, prefix))
 
             box.setValue(number)
 
