@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>722</width>
-    <height>406</height>
+    <width>731</width>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -305,6 +305,44 @@
          </spacer>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <layout class="QFormLayout" name="formLayout_5">
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="roundCheckBox">
+              <property name="text">
+               <string>Round</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="round">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QLabel" name="label">
@@ -476,6 +514,31 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>is1</tabstop>
+  <tabstop>should1</tabstop>
+  <tabstop>is2</tabstop>
+  <tabstop>should2</tabstop>
+  <tabstop>slope</tabstop>
+  <tabstop>intercept</tabstop>
+  <tabstop>roundCheckBox</tabstop>
+  <tabstop>round</tabstop>
+  <tabstop>valuesButton</tabstop>
+  <tabstop>get1</tabstop>
+  <tabstop>get2</tabstop>
+  <tabstop>slopeInterceptButton</tabstop>
+  <tabstop>should2Prefix</tabstop>
+  <tabstop>should1Prefix</tabstop>
+  <tabstop>is2Prefix</tabstop>
+  <tabstop>is1Prefix</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>slopePrefix</tabstop>
+  <tabstop>interceptPrefix</tabstop>
+  <tabstop>unit</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>loadButton</tabstop>
+  <tabstop>slotComboBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -485,8 +548,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>392</y>
+     <x>275</x>
+     <y>445</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -501,8 +564,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>392</y>
+     <x>343</x>
+     <y>445</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -517,8 +580,8 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>255</y>
+     <x>357</x>
+     <y>256</y>
     </hint>
     <hint type="destinationlabel">
      <x>105</x>
@@ -533,12 +596,12 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>294</y>
+     <x>357</x>
+     <y>297</y>
     </hint>
     <hint type="destinationlabel">
-     <x>194</x>
-     <y>271</y>
+     <x>184</x>
+     <y>273</y>
     </hint>
    </hints>
   </connection>

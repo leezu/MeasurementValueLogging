@@ -287,6 +287,27 @@ class DeviceManager(object):
             if len(config["subDevices"]) == 0 and config["deviceName"] == "XLS200":
                 self.closeDevice(i)
 
+    def round(self, rv, places):
+        class __Value(devicesModule.Value):
+            value = None
+            prefix = None
+            unit = None
+            time = None
+            @property
+            def factor(self):
+                return si.getFactor(self.prefix)
+
+        result = __Value()
+
+        value, result.prefix = si.getNumberPrefix(rv.completeValue)
+        result.time = rv.time
+        result.unit = rv.unit
+
+        result.value = round(value, places)
+
+        return result
+
+
     def calibrate(self, rv, calibration, unit=""):
         """Return a calibrated version of the value.
         

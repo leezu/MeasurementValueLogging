@@ -100,6 +100,7 @@ class SettingsDialog(QtGui.QDialog):
 
         self.path.setText(self.settings.value("office/path", "").toString())
         self.languageComboBox.setCurrentIndex(self.settings.value("i18n", -1).toInt()[0])
+        self.fontsize.setValue(self.settings.value("fontsize", 0).toInt()[0])
 
     def openFile(self):
         """Open a QFileDialog and save the path."""
@@ -112,7 +113,7 @@ class SettingsDialog(QtGui.QDialog):
 
         self.settings.setValue("office/path", self.path.text())
         self.settings.setValue("i18n", self.languageComboBox.currentIndex())
-
+        self.settings.setValue("fontsize", self.fontsize.value())
 
 class DisplayWidget(QtGui.QWidget):
     """Widget containing a lcd display and buttons to modify or delete a device."""
@@ -126,6 +127,8 @@ class DisplayWidget(QtGui.QWidget):
     should2 = 1
     slope = 1.0
     intercept = 0.0
+
+    round = None
 
     calibration = slopeInterceptCalibration # either slopeInterceptCalibration or twoValueCalibration
     unit = QtCore.QString()
@@ -166,6 +169,9 @@ class DisplayWidget(QtGui.QWidget):
         self.rv = rv
         self.crv = self.dm.calibrate(self.rv, self.calibration, self.unit)
 
+        if self.round != None:
+            self.crv = self.dm.round(self.crv, self.round)
+
         self.lcdNumber.display(self.crv.value)
         self.label.setText(self.crv.prefix + self.crv.unit)
 
@@ -203,6 +209,8 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.saveButton.clicked.connect(self.save)
         self.loadButton.clicked.connect(self.load)
 
+        self.roundCheckBox.stateChanged.connect(self.roundState)
+
         self.buttonBox.accepted.connect(self.accepted)
 
         self.timer = QtCore.QTimer()
@@ -230,7 +238,9 @@ class DeviceSettingsDialog(QtGui.QDialog):
 
             prefixBox.clear()
             prefixBox.addItems(si.getSiNames("normal"))
-            index = si.getSiNames("normal").index(si.getName(prefix))
+            if si.getName(prefix) not in si.getSiNames("normal"):
+                prefixBox.addItem(si.getName(prefix))
+            index = prefixBox.findText(si.getName(prefix))
             prefixBox.setCurrentIndex(index)
         
         if self.parent.calibrationType == 1:
@@ -239,6 +249,12 @@ class DeviceSettingsDialog(QtGui.QDialog):
             self.valuesButton.setChecked(True)
 
         self.unit.setText(self.parent.unit)
+
+        if self.parent.round != None:
+            self.roundCheckBox.setChecked(True)
+            self.round.setValue(self.parent.round)
+        elif self.parent.round == None:
+            self.roundCheckBox.setChecked(False)
 
     def accepted(self):
         self.parent.twoValueCalibration = self.twoValueCalibration
@@ -257,6 +273,11 @@ class DeviceSettingsDialog(QtGui.QDialog):
         elif self.valuesButton.isChecked():
             self.parent.calibrationType = 0
             self.parent.calibration = self.parent.twoValueCalibration
+
+        if self.roundCheckBox.isChecked():
+            self.parent.round = self.round.value()
+        elif not self.roundCheckBox.isChecked():
+            self.parent.round = None
 
         self.parent.unit = self.unit.text()
 
@@ -279,6 +300,8 @@ class DeviceSettingsDialog(QtGui.QDialog):
             self.normalLabel.setText(u"{:n} {}{}".format(rv.value, rv.prefix, rv.unit))
 
             crv = self.dm.calibrate(rv, self.calibration, self.unit.text())
+            if self.roundCheckBox.isChecked():
+                crv = self.dm.round(crv, self.round.value())
             self.calibratedLabel.setText(u"{:n} {}{}".format(crv.value, crv.prefix, crv.unit))
 
         except AttributeError:
@@ -314,6 +337,15 @@ class DeviceSettingsDialog(QtGui.QDialog):
             self.slotComboBox.currentText() + "calibrationType",
             self.slopeInterceptButton.isChecked())
 
+        if self.roundCheckBox.isChecked():
+            self.settings.setValue("calibration/" +
+                self.slotComboBox.currentText() + "round",
+                self.round.value())
+        elif not self.roundCheckBox.isChecked():
+            self.settings.setValue("calibration/" +
+                self.slotComboBox.currentText() + "round",
+                -1)
+
     def load(self):
         standardIndex = si.getSiNames("normal").index("")
 
@@ -335,6 +367,13 @@ class DeviceSettingsDialog(QtGui.QDialog):
         self.parent.calibrationType = (self.settings.value("calibration/" + self.slotComboBox.currentText() +
                         "calibrationType", 1).toInt()[0])
 
+        rnd = self.settings.value("calibration/" +
+            self.slotComboBox.currentText() + "round", -1).toInt()[0]
+        if rnd >= 0:
+            self.parent.round = rnd
+        elif rnd < 0:
+            self.parent.round = None
+
         self.setUp()
 
     def setCurrentValue1(self):
@@ -352,6 +391,13 @@ class DeviceSettingsDialog(QtGui.QDialog):
         index = self.is1Prefix.findText(rv.prefixName)
         self.is2Prefix.setCurrentIndex(index)
         self.should2Prefix.setCurrentIndex(index)
+
+    def roundState(self, state):
+        if state:
+            self.round.setEnabled(True)
+
+        elif not state:
+            self.round.setEnabled(False)
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -569,6 +615,11 @@ def main():
     if langVal == 1:
         translator.load(":/i18n/de.qm")
         app.installTranslator(translator)
+
+    font = QtGui.QFont()
+    font.setPointSize(font.pointSize() +
+        QtCore.QSettings().value("fontsize", 0).toInt()[0])
+    app.setFont(font)
 
     app.setup()
     app.exec_()

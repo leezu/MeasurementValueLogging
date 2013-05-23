@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>164</height>
+    <height>191</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,6 +66,35 @@
          <string>German</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="toolTip">
+        <string>Relative to the system font-size.</string>
+       </property>
+       <property name="text">
+        <string>Font-size</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="fontsize">
+       <property name="toolTip">
+        <string>Relative to the system font-size.</string>
+       </property>
+       <property name="suffix">
+        <string> pt</string>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
+       <property name="minimum">
+        <number>-10</number>
+       </property>
+       <property name="maximum">
+        <number>10</number>
+       </property>
       </widget>
      </item>
     </layout>

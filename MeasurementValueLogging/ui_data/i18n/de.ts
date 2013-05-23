@@ -3,7 +3,7 @@
 <context>
     <name>DeviceSettingsDialog</name>
     <message>
-        <location filename="ui.py" line="288"/>
+        <location filename="ui.py" line="309"/>
         <source>No Value yet.</source>
         <translation>Noch kein Messwert.</translation>
     </message>
@@ -51,7 +51,7 @@
         <translation>Y-Achsenabschnitt</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="312"/>
+        <location filename="deviceSettingsDialog.ui" line="350"/>
         <source>Unit</source>
         <translation>Einheit</translation>
     </message>
@@ -101,42 +101,42 @@
         <translation>Hole 2</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="349"/>
+        <location filename="deviceSettingsDialog.ui" line="387"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="356"/>
+        <location filename="deviceSettingsDialog.ui" line="394"/>
         <source>Load</source>
         <translation>Laden</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="365"/>
+        <location filename="deviceSettingsDialog.ui" line="403"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="373"/>
+        <location filename="deviceSettingsDialog.ui" line="411"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="378"/>
+        <location filename="deviceSettingsDialog.ui" line="416"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="383"/>
+        <location filename="deviceSettingsDialog.ui" line="421"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="410"/>
+        <location filename="deviceSettingsDialog.ui" line="448"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="deviceSettingsDialog.ui" line="417"/>
+        <location filename="deviceSettingsDialog.ui" line="455"/>
         <source>Calibrated</source>
         <translation>Kalibriert</translation>
     </message>
@@ -144,6 +144,11 @@
         <location filename="deviceSettingsDialog.ui" line="14"/>
         <source>Device settings</source>
         <translation>Geräteeinstellungen</translation>
+    </message>
+    <message>
+        <location filename="deviceSettingsDialog.ui" line="314"/>
+        <source>Round</source>
+        <translation>Runden</translation>
     </message>
 </context>
 <context>
@@ -157,34 +162,34 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="ui.py" line="510"/>
+        <location filename="ui.py" line="554"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="ui.py" line="416"/>
+        <location filename="ui.py" line="460"/>
         <source>You have not saved a log yet.</source>
         <translation>Sie haben bisher keine Aufnahme gespeichert.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="478"/>
+        <location filename="ui.py" line="522"/>
         <source>Overwrite last log</source>
         <translation>Letzte Aufnahme überschreiben</translation>
     </message>
     <message>
-        <location filename="ui.py" line="478"/>
+        <location filename="ui.py" line="522"/>
         <source>Do you really want to overwrite the last (unsaved) log?
 </source>
         <translation>Möchten Sie wirklich die letzte - möglicherweise ungespeicherte - Aufnahme verwerfen?
 </translation>
     </message>
     <message>
-        <location filename="ui.py" line="478"/>
+        <location filename="ui.py" line="522"/>
         <source>If not, please cancel and save it first.</source>
         <translation>Sie können die letzte Aufnahme mit dem &quot;Speichern&quot; Knopf sichern.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="489"/>
+        <location filename="ui.py" line="533"/>
         <source>Stop logging</source>
         <translation>Aufnahme stoppen</translation>
     </message>
@@ -194,12 +199,12 @@
         <translation>Aufnahme starten</translation>
     </message>
     <message>
-        <location filename="ui.py" line="500"/>
+        <location filename="ui.py" line="544"/>
         <source>Save file</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="ui.py" line="510"/>
+        <location filename="ui.py" line="554"/>
         <source>You first have to log something, to save it.</source>
         <translation>Keine Aufnahme vorhanden, die gespeichert werden könnte.</translation>
     </message>
@@ -239,12 +244,12 @@
         <translation> Sekunden</translation>
     </message>
     <message>
-        <location filename="ui.py" line="438"/>
+        <location filename="ui.py" line="482"/>
         <source>No device</source>
         <translation>Kein Gerät</translation>
     </message>
     <message>
-        <location filename="ui.py" line="500"/>
+        <location filename="ui.py" line="544"/>
         <source>log</source>
         <comment>Default filename of the exported log</comment>
         <translation>aufnahme</translation>
@@ -263,7 +268,7 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="ui.py" line="108"/>
+        <location filename="ui.py" line="109"/>
         <source>Search Office</source>
         <translation>Office suchen</translation>
     </message>
@@ -309,6 +314,21 @@
         <location filename="settingsDialog.ui" line="41"/>
         <source>Search the spreadsheet executable.</source>
         <translation>Suche die Tabellenkalkulations Executable.</translation>
+    </message>
+    <message>
+        <location filename="settingsDialog.ui" line="84"/>
+        <source>Relative to the system font-size.</source>
+        <translation>Relativ zu der System-Standard Schriftgröße.</translation>
+    </message>
+    <message>
+        <location filename="settingsDialog.ui" line="77"/>
+        <source>Font-size</source>
+        <translation>Schriftgröße</translation>
+    </message>
+    <message>
+        <location filename="settingsDialog.ui" line="87"/>
+        <source> pt</source>
+        <translation></translation>
     </message>
 </context>
 </TS>
