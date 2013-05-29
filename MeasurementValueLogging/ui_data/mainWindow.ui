@@ -25,21 +25,27 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="loggingInterval">
-        <property name="suffix">
-         <string> seconds</string>
-        </property>
+       <widget class="QDoubleSpinBox" name="loggingInterval">
         <property name="prefix">
          <string/>
         </property>
-        <property name="minimum">
+        <property name="suffix">
+         <string> seconds</string>
+        </property>
+        <property name="decimals">
          <number>1</number>
+        </property>
+        <property name="minimum">
+         <double>0.100000000000000</double>
         </property>
         <property name="maximum">
-         <number>100000</number>
+         <double>86400.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
-         <number>1</number>
+         <double>0.500000000000000</double>
         </property>
        </widget>
       </item>
