@@ -364,8 +364,8 @@ class DeviceSettingsDialog(QtGui.QDialog):
 
         self.parent.unit = (self.settings.value("calibration/" +
             self.slotComboBox.currentText() + "unit", "").toString())
-        self.parent.calibrationType = (self.settings.value("calibration/" + self.slotComboBox.currentText() +
-                        "calibrationType", 1).toInt()[0])
+        self.parent.calibrationType = int(self.settings.value("calibration/" + self.slotComboBox.currentText() +
+                        "calibrationType", 1).toBool())
 
         rnd = self.settings.value("calibration/" +
             self.slotComboBox.currentText() + "round", -1).toInt()[0]
