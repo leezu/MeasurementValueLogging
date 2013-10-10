@@ -24,9 +24,10 @@ import si
 import serial
 import re
 import time
+import random
 
 deviceClassNames = ("TecpelDMM8061", "VoltcraftVC840",
-    "XLS200", "KernPCB", "BS600")
+    "XLS200", "KernPCB", "BS600", "TestDevice")
 
 class Device(object):
     """The base device class.
@@ -288,6 +289,46 @@ class NullValue(Value):
     unit = ""
     time = time.time()
 
+
+class TestDevice(Device):
+    """This class represents a testing device, which just returns random values."""
+
+    class __Value(Value):
+        time = None
+        value = None
+        unit = "t"
+        factor = None
+
+    def __init__(self, ser):
+        pass
+
+    @classmethod
+    def openRS232(cls, *args, **kwargs):
+        return cls(None)
+
+    @property
+    def status(self):
+        return True
+
+    def __repr__(self):
+        return "TestDevice(serial=None)"
+
+    def __str__(self):
+        return self.__repr__()
+
+    def close(self):
+        pass
+
+    def getRawValue(self):
+        result = self.__Value()
+
+        result.time = time.time()
+        result.value = random.randint(0, 10) + 0.1 * random.randint(0, 10)
+        result.factor = random.choice((1e-9, 1e-6, 1e-3, 1e0, 1e3, 1e6, 1e9))
+
+        time.sleep(0.1)
+
+        return result
 
 class TecpelDMM8061(Device):
     """This class represents a TECPEL DMM 8061 multimeter."""

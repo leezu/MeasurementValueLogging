@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="de_DE" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="de_DE">
 <context>
     <name>DeviceSettingsDialog</name>
     <message>
-        <location filename="ui.py" line="309"/>
+        <location filename="ui.py" line="312"/>
         <source>No Value yet.</source>
         <translation>Noch kein Messwert.</translation>
     </message>
@@ -162,49 +163,49 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="ui.py" line="554"/>
+        <location filename="ui.py" line="566"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="ui.py" line="460"/>
+        <location filename="ui.py" line="464"/>
         <source>You have not saved a log yet.</source>
         <translation>Sie haben bisher keine Aufnahme gespeichert.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="522"/>
+        <location filename="ui.py" line="534"/>
         <source>Overwrite last log</source>
         <translation>Letzte Aufnahme überschreiben</translation>
     </message>
     <message>
-        <location filename="ui.py" line="522"/>
+        <location filename="ui.py" line="534"/>
         <source>Do you really want to overwrite the last (unsaved) log?
 </source>
         <translation>Möchten Sie wirklich die letzte - möglicherweise ungespeicherte - Aufnahme verwerfen?
 </translation>
     </message>
     <message>
-        <location filename="ui.py" line="522"/>
+        <location filename="ui.py" line="534"/>
         <source>If not, please cancel and save it first.</source>
         <translation>Sie können die letzte Aufnahme mit dem &quot;Speichern&quot; Knopf sichern.</translation>
     </message>
     <message>
-        <location filename="ui.py" line="533"/>
+        <location filename="ui.py" line="545"/>
         <source>Stop logging</source>
         <translation>Aufnahme stoppen</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="71"/>
+        <location filename="mainWindow.ui" line="77"/>
         <source>Start logging</source>
         <translation>Aufnahme starten</translation>
     </message>
     <message>
-        <location filename="ui.py" line="544"/>
+        <location filename="ui.py" line="556"/>
         <source>Save file</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="ui.py" line="554"/>
+        <location filename="ui.py" line="566"/>
         <source>You first have to log something, to save it.</source>
         <translation>Keine Aufnahme vorhanden, die gespeichert werden könnte.</translation>
     </message>
@@ -214,22 +215,22 @@
         <translation>Messwerterfassung</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="128"/>
+        <location filename="mainWindow.ui" line="134"/>
         <source>Add devices</source>
         <translation>Geräte hinzufügen</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="147"/>
+        <location filename="mainWindow.ui" line="153"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="156"/>
+        <location filename="mainWindow.ui" line="163"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="161"/>
+        <location filename="mainWindow.ui" line="168"/>
         <source>Devicemanager</source>
         <translation>Geräteverwaltung</translation>
     </message>
@@ -239,36 +240,41 @@
         <translation>Aufnahmeintervall</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="30"/>
+        <location filename="mainWindow.ui" line="33"/>
         <source> seconds</source>
         <translation> Sekunden</translation>
     </message>
     <message>
-        <location filename="ui.py" line="482"/>
+        <location filename="ui.py" line="486"/>
         <source>No device</source>
         <translation>Kein Gerät</translation>
     </message>
     <message>
-        <location filename="ui.py" line="544"/>
+        <location filename="ui.py" line="556"/>
         <source>log</source>
         <comment>Default filename of the exported log</comment>
         <translation>aufnahme</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="90"/>
+        <location filename="mainWindow.ui" line="96"/>
         <source>Save log</source>
         <translation>Aufnahme speichern</translation>
     </message>
     <message>
-        <location filename="mainWindow.ui" line="109"/>
+        <location filename="mainWindow.ui" line="115"/>
         <source>Open in spreadsheet</source>
         <translation>Aufnahme mit Tabellenkalkulation öffnen</translation>
+    </message>
+    <message>
+        <location filename="mainWindow.ui" line="173"/>
+        <source>Add Test Device</source>
+        <translation>Füge Testgerät hinzu</translation>
     </message>
 </context>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="ui.py" line="109"/>
+        <location filename="ui.py" line="112"/>
         <source>Search Office</source>
         <translation>Office suchen</translation>
     </message>

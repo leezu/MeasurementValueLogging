@@ -432,6 +432,7 @@ class MainWindow(QtGui.QMainWindow):
         self.openButton.clicked.connect(self.openLog)
 
         self.actionSettings.triggered.connect(self.settingsDialog)
+        self.actionTestDevice.triggered.connect(self.addTestDevice)
 
         self.dm = DeviceManager()
         self.timer = QtCore.QTimer()
@@ -516,6 +517,14 @@ class MainWindow(QtGui.QMainWindow):
                 if deviceID != None:
                     deviceWidget = DisplayWidget(deviceID, self.dm, parent = self)
                     self.verticalLayout.addWidget(deviceWidget)
+
+    def addTestDevice(self):
+                deviceID = self.dm.openDevice("TestDevice", "doesn't matter")
+
+                if deviceID != None:
+                    deviceWidget = DisplayWidget(deviceID, self.dm, parent = self)
+                    self.verticalLayout.addWidget(deviceWidget)
+
 
     def startStopLogging(self):
         """Start/Stop logging."""

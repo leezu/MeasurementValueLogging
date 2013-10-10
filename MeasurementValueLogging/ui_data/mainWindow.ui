@@ -145,7 +145,7 @@
      <x>0</x>
      <y>0</y>
      <width>488</width>
-     <height>27</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -153,6 +153,7 @@
      <string>Edit</string>
     </property>
     <addaction name="actionSettings"/>
+    <addaction name="actionTestDevice"/>
    </widget>
    <addaction name="menuSettings"/>
   </widget>
@@ -165,6 +166,11 @@
   <action name="actionDevicemanager">
    <property name="text">
     <string>Devicemanager</string>
+   </property>
+  </action>
+  <action name="actionTestDevice">
+   <property name="text">
+    <string>Add Test Device</string>
    </property>
   </action>
  </widget>
