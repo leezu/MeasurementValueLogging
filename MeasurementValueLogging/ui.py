@@ -588,44 +588,42 @@ class MainWindow(QtGui.QMainWindow):
         
 
 class App(QtGui.QApplication):
-    def __init__(self, *args, **kwargs):
-        QtGui.QApplication.__init__(self, *args, **kwargs)
-        self.connect(self, QtCore.SIGNAL("lastWindowClosed()"), self.byebye )
+    def __init__(self, args):
+        super(App, self).__init__(args)
 
-    def setup(self):
-        self.main = MainWindow()
-        self.main.show()
+        self.setOrganizationName("Lausen")
+        self.setOrganizationDomain("lausen.nl")
+        self.setApplicationName("MeasurementValueLogging")
 
-    def byebye(self):
-        self.exit(0)
+        self.font()
+        self.translate()
+        self.addWidgets()
 
-def main():
-    app = App(sys.argv)
+        self.exec_()
 
-    QtCore.QCoreApplication.setOrganizationName("Lausen")
-    QtCore.QCoreApplication.setOrganizationDomain("lausen.nl")
-    QtCore.QCoreApplication.setApplicationName("MeasurementValueLogging")
+    def addWidgets(self):
+        self.mainWindow = MainWindow()
+        self.mainWindow.show()
 
-    translator = QtCore.QTranslator()
-    langVal = QtCore.QSettings().value("i18n", -1).toInt()[0]
+    def font(self):
+        font = QtGui.QFont()
+        font.setPointSize(font.pointSize() +
+            QtCore.QSettings().value("fontsize", 0).toInt()[0])
+        self.setFont(font)
 
-    locale.setlocale(locale.LC_ALL, '')
-    
-    if langVal == -1:
-        loc = QtCore.QLocale.system().name()
-        if translator.load(":/i18n/" + loc + "qm"):
-            app.installTranslator(translator)
-    if langVal == 1:
-        translator.load(":/i18n/de.qm")
-        app.installTranslator(translator)
+    def translate(self):
+        self.translator = QtCore.QTranslator()
+        langVal = QtCore.QSettings().value("i18n", -1).toInt()[0]
 
-    font = QtGui.QFont()
-    font.setPointSize(font.pointSize() +
-        QtCore.QSettings().value("fontsize", 0).toInt()[0])
-    app.setFont(font)
+        locale.setlocale(locale.LC_ALL, '')
 
-    app.setup()
-    app.exec_()
+        if langVal == -1:
+            loc = QtCore.QLocale.system().name()
+            if self.translator.load(":/i18n/" + loc):
+                self.installTranslator(self.translator)
+        if langVal == 1:
+            self.translator.load(":/i18n/de")
+            self.installTranslator(self.translator)
 
 if __name__ == "__main__":
-    main()
+    app = App(sys.argv)
