@@ -495,26 +495,26 @@ class MainWindow(QtGui.QMainWindow):
                         if xls200Popup.subdevice1ComboBox.currentIndex() != 0:
                             sub1 = unicode(xls200Popup.subdevice1ComboBox.currentText())
                             deviceID = self.dm.openSubdevice(sub1, xls200ID, 1)
-                            sub1Widget = DisplayWidget(deviceID, self.dm)
+                            sub1Widget = DisplayWidget(deviceID, self.dm, parent = self)
                             self.verticalLayout.addWidget(sub1Widget)
 
                         if xls200Popup.subdevice2ComboBox.currentIndex() != 0:
                             sub2 = unicode(xls200Popup.subdevice2ComboBox.currentText())
                             deviceID = self.dm.openSubdevice(sub2, xls200ID, 2)
-                            sub2Widget = DisplayWidget(deviceID, self.dm)
+                            sub2Widget = DisplayWidget(deviceID, self.dm, parent = self)
                             self.verticalLayout.addWidget(sub2Widget)
 
                         if xls200Popup.subdevice3ComboBox.currentIndex() != 0:
                             sub3 = unicode(xls200Popup.subdevice3ComboBox.currentText())
                             deviceID = self.dm.openSubdevice(sub3, xls200ID, 3)
-                            sub3Widget = DisplayWidget(deviceID, self.dm)
+                            sub3Widget = DisplayWidget(deviceID, self.dm, parent = self)
                             self.verticalLayout.addWidget(sub3Widget)
 
             else:
                 deviceID = self.dm.openDevice(device, port)
 
                 if deviceID != None:
-                    deviceWidget = DisplayWidget(deviceID, self.dm)
+                    deviceWidget = DisplayWidget(deviceID, self.dm, parent = self)
                     self.verticalLayout.addWidget(deviceWidget)
 
     def startStopLogging(self):
@@ -569,8 +569,8 @@ class MainWindow(QtGui.QMainWindow):
         # update widgets
         while not self.dm.queue.empty():
             deviceID, rv = self.dm.queue.get_nowait()
-            widget = self.findChild(DisplayWidget,str(deviceID))
-            if widget != 0 and widget != None:
+            widget = self.findChild(DisplayWidget, str(deviceID))
+            if widget:
                 widget.update(rv)
 
             self.latestValues[deviceID] = rv
